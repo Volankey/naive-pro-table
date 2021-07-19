@@ -27,9 +27,10 @@ import { defineComponent } from 'vue'
 import { NGrid, NGi, NIcon } from 'naive-ui'
 import { InformationCircle } from '@vicons/ionicons5'
 import { RenderHelper } from '../utils'
-import { headerProps } from '@/commonProps'
+import { headerPropsDefine } from '@/commonProps'
 
 export default defineComponent({
+  name: 'ProHeader',
   components: {
     NGrid,
     NGi,
@@ -38,7 +39,7 @@ export default defineComponent({
     RenderHelper
   },
   props: {
-    ...headerProps
+    ...headerPropsDefine
   }
 })
 </script>

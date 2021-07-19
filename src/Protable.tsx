@@ -1,17 +1,44 @@
-import { defineComponent, h, VNode, PropType } from 'vue'
+import { defineComponent, h, VNode, PropType, computed } from 'vue'
 import { DataTableProps, NDataTable } from 'naive-ui'
+import { dataTableProps } from 'naive-ui/lib/data-table/src/DataTable.js'
 import { renderDataTable } from './utils'
-import { headerProps } from './commonProps'
+import { headerPropsDefine } from './commonProps'
 import { ProColumn } from './interface'
+import ProHeader from './Header/ProHeader.vue'
 
 export default defineComponent({
   name: 'NProTable',
   props: {
-    ...headerProps,
-    columns: Array as PropType<ProColumn<any>[]>
+    ...dataTableProps,
+    ...headerPropsDefine,
+    columns: {
+      type: Array as PropType<ProColumn<any>[]>,
+      default: () => []
+    }
   },
-  setup(props, context) {},
+  setup(props, context) {
+    const hasHeaderRef = computed(() => {
+      return props.headerTitle || props.toolBars?.length
+    })
+    const headerPropsRef = computed(() => {
+      const { headerTitle, headerTitleToolTip, toolBars } = props
+      return {
+        headerTitle,
+        headerTitleToolTip,
+        toolBars
+      }
+    })
+    return {
+      hasHeader: hasHeaderRef,
+      headerProps: headerPropsRef
+    }
+  },
   render() {
-    return <NDataTable columns={columns}></NDataTable>
+    return (
+      <div>
+        <ProHeader {...this.headerProps} />
+        <NDataTable columns={[]}></NDataTable>
+      </div>
+    )
   }
 })

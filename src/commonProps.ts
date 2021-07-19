@@ -1,7 +1,12 @@
 import { VNode, PropType } from 'vue'
-import {} from 'naive-ui'
-export const headerProps = {
-  headerTitle: [String, Function] as PropType<string | (() => VNode)>,
+
+export const headerPropsDefine = {
+  headerTitle: [String, Function] as PropType<
+    string | (() => VNode) | undefined
+  >,
   headerTitleToolTip: String,
-  toolBars: Array as PropType<(() => VNode)[]>
+  toolBars: {
+    type: Array as PropType<(() => VNode)[]>,
+    default: () => []
+  }
 }

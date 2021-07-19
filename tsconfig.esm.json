@@ -4,10 +4,10 @@
     "declaration": true,
     "outDir": "es",
     "module": "esnext",
-    "target": "ES6"
+    "target": "ES6",
+    "moduleResolution": "node",
+    "strict": true,
+    "jsx": "preserve"
   },
-  "exclude": [
-    "__tests__",
-    "**/demo/*"
-  ]
+  "exclude": ["__tests__", "**/demo/*"]
 }
