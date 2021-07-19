@@ -458,6 +458,11 @@
     "@typescript-eslint/types" "4.28.3"
     eslint-visitor-keys "^2.0.0"
 
+"@vicons/ionicons5@^0.10.0":
+  version "0.10.0"
+  resolved "https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/@vicons/ionicons5/-/ionicons5-0.10.0.tgz#94641a71850d9e251f1059b67da4c19326bce962"
+  integrity sha1-lGQacYUNniUfEFm2faTBkya86WI=
+
 "@vitejs/plugin-vue@^1.2.3":
   version "1.2.5"
   resolved "https://registry.nlark.com/@vitejs/plugin-vue/download/@vitejs/plugin-vue-1.2.5.tgz#ef7dc4a92e53fe866b54bcc1266788513262ac09"

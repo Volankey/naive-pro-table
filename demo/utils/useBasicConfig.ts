@@ -1,4 +1,4 @@
-import type { BasicConfig } from './types'
+import type { BasicConfig } from '../types'
 import { h, Ref, ref } from 'vue'
 import { NButton } from 'naive-ui'
 
