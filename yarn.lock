@@ -3817,9 +3817,9 @@ vooks@^0.2.4, vooks@^0.2.6:
     evtd "^0.2.2"
 
 vue-eslint-parser@^7.6.0, vue-eslint-parser@^7.8.0:
-  version "7.8.0"
-  resolved "https://registry.nlark.com/vue-eslint-parser/download/vue-eslint-parser-7.8.0.tgz?cache=0&sync_timestamp=1625567311428&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fvue-eslint-parser%2Fdownload%2Fvue-eslint-parser-7.8.0.tgz#43850bf856c9a69d62c0e12769609c338423684b"
-  integrity sha1-Q4UL+FbJpp1iwOEnaWCcM4QjaEs=
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.9.0.tgz#5eeedc71f22ebc7b18b957d1ab171acf29a41e64"
+  integrity sha512-QBlhZ5LteDRVy2dISfQhNEmmcqph+GTaD4SH41bYzXcVHFPJ9p34zCG6QAqOZVa8PKaVgbomFnoZpGJRZi14vg==
   dependencies:
     debug "^4.1.1"
     eslint-scope "^5.1.1"
