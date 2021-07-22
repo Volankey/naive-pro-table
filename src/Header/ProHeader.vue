@@ -1,8 +1,16 @@
 <template>
   <slot>
-    <n-grid cols="1 s:1 m:1 l:2 xl:2 2xl:2" :responsive="'screen'">
+    <n-grid
+      cols="2 s:2 m:2 l:2 xl:2 2xl:2"
+      :responsive="'screen'"
+      style="padding: 16px 0; align-items: center"
+    >
       <n-gi>
-        <render-helper v-if="headerTitle" :render="headerTitle" />
+        <slot name="header-title">
+          <n-h4 style="margin: 0">
+            <render-helper v-if="headerTitle" :render="headerTitle" />
+          </n-h4>
+        </slot>
         <n-tooltip v-if="headerTitleToolTip">
           <template #trigger>
             <n-icon style="margin-left: 20px">
@@ -12,11 +20,16 @@
           {{ headerTitleToolTip }}
         </n-tooltip>
       </n-gi>
-      <n-gi v-if="toolBars && toolBars.length" style="flex: end">
-        <render-helper
-          v-for="toolBarRender in toolBars"
-          :render="toolBarRender"
-        />
+      <n-gi
+        v-if="toolBars && toolBars.length"
+        style="display: flex; justify-content: flex-end"
+      >
+        <slot name="header-toolbars">
+          <render-helper
+            v-for="toolBarRender in toolBars"
+            :render="toolBarRender"
+          />
+        </slot>
       </n-gi>
     </n-grid>
   </slot>
@@ -24,10 +37,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { NGrid, NGi, NIcon } from 'naive-ui'
+import { NGrid, NGi, NIcon, NTooltip, NH4 } from 'naive-ui'
 import { InformationCircle } from '@vicons/ionicons5'
 import { RenderHelper } from '../utils'
-import { headerPropsDefine } from '@/commonProps'
+import { headerPropsDefine } from '../commonProps'
 
 export default defineComponent({
   name: 'ProHeader',
@@ -36,7 +49,9 @@ export default defineComponent({
     NGi,
     NIcon,
     InformationCircle,
-    RenderHelper
+    RenderHelper,
+    NTooltip,
+    NH4
   },
   props: {
     ...headerPropsDefine

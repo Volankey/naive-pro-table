@@ -18,7 +18,6 @@ type RenderCell<T> = (
 
 export type ProTableBasicColumn<T = InternalRowData> = {
   title: TableColumnTitle
-  tooltip: string
   ellipsis: DataTableColumn['ellipsis']
   editable: boolean | RenderCell<T>
   valueEnum: ValueEnum
