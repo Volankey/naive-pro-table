@@ -2925,9 +2925,9 @@ ms@^2.1.1:
   integrity sha1-V0yBOM4dK1hh8LRFedut1gxmFbI=
 
 naive-ui@^2.15.5:
-  version "2.15.5"
-  resolved "https://registry.nlark.com/naive-ui/download/naive-ui-2.15.5.tgz#50ffc1834fd64765621a31f0b09e64d72770cd6c"
-  integrity sha1-UP/Bg0/WR2ViGjHwsJ5k1ydwzWw=
+  version "2.15.8"
+  resolved "https://registry.yarnpkg.com/naive-ui/-/naive-ui-2.15.8.tgz#af59f1ac2272169230c745fd94090b28d1837646"
+  integrity sha512-DMvfk6pvDfyDMNABjO7pGUNYtab3ar9tUqfivqQ42W6RXL3A8DfNAN/+tp/5rOapxbRUfCUJlFcEQJjVBcPexA==
   dependencies:
     "@css-render/plugin-bem" "^0.15.4"
     "@css-render/vue3-ssr" "^0.15.4"
