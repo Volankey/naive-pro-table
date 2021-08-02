@@ -17,14 +17,20 @@ type RenderCell<T> = (
 ) => VNodeChild
 
 export type ProTableBasicColumn<T = InternalRowData> = {
-  title: TableColumnTitle
-  ellipsis: DataTableColumn['ellipsis']
-  editable: boolean | RenderCell<T>
-  valueEnum: ValueEnum
-  copyable: boolean | RenderCell<T>
+  title?: TableColumnTitle
+  editable?: boolean | RenderCell<T>
+  valueEnum?: ValueEnum
+  copyable?: boolean | RenderCell<T>
+  dataIndex: string
+  ellipsis?: DataTableColumn['ellipsis']
   // valueType: string // TODO:
-  render: (text: any, rowData: T, rowIndex: number, actions: any) => VNodeChild //TODO: actions
-  filters: true | Array<{ label: string; value: string | number }>
+  render?: (
+    text: any,
+    rowData: T,
+    rowIndex: number,
+    actions?: any
+  ) => VNodeChild //TODO: actions
+  filters?: true | Array<{ label: string; value: string | number }>
 }
 
 export type ProColumn<T> = ProTableBasicColumn<T>

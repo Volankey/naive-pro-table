@@ -4,6 +4,7 @@ import { dataTableProps } from 'naive-ui/lib/data-table/src/DataTable.js'
 import { headerPropsDefine } from './commonProps'
 import { ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
+import { handleColumn } from './utils'
 
 export default defineComponent({
   name: 'NProTable',
@@ -27,20 +28,28 @@ export default defineComponent({
         toolBars
       }
     })
+
+    const mergedColumnsRef = computed(() => {
+      const { columns } = props
+      return columns.map(handleColumn)
+    })
+
     return {
       hasHeader: hasHeaderRef,
-      headerProps: headerPropsRef
+      headerProps: headerPropsRef,
+      mergedColumns: mergedColumnsRef
     }
   },
   render() {
     const { headerTitle, headerToolbars } = this.$slots
+    const {mergedColumns} = this
     return (
       <div>
         <ProHeader
           {...this.headerProps}
           v-slots={{ headerTitle, headerToolbars }}
         />
-        <NDataTable columns={[]}></NDataTable>
+        <NDataTable columns={mergedColumns}></NDataTable>
       </div>
     )
   }

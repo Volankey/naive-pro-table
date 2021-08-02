@@ -1,4 +1,4 @@
-import ProTable from './ProTable'
+import ProTable from './Protable'
 
 export default ProTable
 // export * from './binder/src'
