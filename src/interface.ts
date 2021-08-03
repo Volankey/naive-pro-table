@@ -1,6 +1,7 @@
 import type { VNodeChild } from 'vue'
 
-import type { DataTableColumn, SelectOption } from 'naive-ui'
+import type { DataTableColumn, } from 'naive-ui'
+import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
 interface InternalRowData {
   [key: string]: unknown
 }
@@ -34,6 +35,12 @@ export type ProTableBasicColumn<T = InternalRowData> = {
 }
 
 export type ProColumn<T> = ProTableBasicColumn<T>
+
+export type ApiRequestArgs = [params:unknown | null, sort:SortState | null, filter:FilterState | null, page:number, pageSize:number]
+
+export type ApiRequest = (...args:ApiRequestArgs)=>any
+
+export type Mutable<T> = { -readonly [P in keyof T ]: T[P] };
 
 // {
 //     title //,
