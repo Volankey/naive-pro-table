@@ -1,7 +1,40 @@
 {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "stylelint.autoFix": true,
+    "editor.tabSize": 2,
+    "editor.detectIndentation":false,
+    "vetur.format.defaultFormatter.js": "none",
+    "vetur.format.defaultFormatter.html": "none",
+    "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
-}
+    "editor.formatOnType": false,
+    "editor.fontFamily": "Fira Code, Droid Sans Mono, monospace,  Droid Sans Fallback",
+    "editor.fontLigatures": true,
+    "editor.rulers": [
+      80,
+      120
+    ],
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "vetur.validation.script": false,
+    "git.autofetch": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    },
+    "eslint.options": {
+      "extensions": [
+        ".js",
+        ".ts",
+        ".tsx"
+      ],
+      "parserOptions": {
+        "parse": "babel-eslint"
+      }
+    },
+    "eslint.validate": [
+      "javascript",
+      "typescript",
+      "typescriptreact"
+    ],
+    "javascript.format.enable": false,
+    "vetur.validation.template": false,
+  }

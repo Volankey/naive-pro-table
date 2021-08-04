@@ -10,22 +10,28 @@
 <script lang="ts">
 import { NButton, NTag } from 'naive-ui'
 import { defineComponent, h, ref } from 'vue'
-import ProTable, {ApiRequest} from '../src/index'
+import ProTable, { ApiRequest } from '../src/index'
 import type { ProColumn } from '../src/interface'
 
-const createSourceData = (params: unknown, sort: any, filter: any, page: number, pageSize: number,):{pageSize:number, pageCount:number, data:Column[]}=>{
-  const data:Column[] = new Array(10).fill(1).map((_, idx)=>({
-    name:'Jonny' + ((page-1)*10+idx),
-    age:10+idx,
-    sex:'man',
-    favorates:['pinao', 'gita'],
-    otherInfo:{
-      parents:['Jan', 'Pony']
+const createSourceData = (
+  params: unknown,
+  sort: any,
+  filter: any,
+  page: number,
+  pageSize: number
+): { pageSize: number; pageCount: number; data: Column[] } => {
+  const data: Column[] = new Array(10).fill(1).map((_, idx) => ({
+    name: 'Jonny' + ((page - 1) * 10 + idx),
+    age: 10 + idx,
+    sex: 'man',
+    favorates: ['pinao', 'gita'],
+    otherInfo: {
+      parents: ['Jan', 'Pony']
     }
   }))
   return {
-    pageSize:10,
-    pageCount:5,
+    pageSize: 10,
+    pageCount: 5,
     data
   }
 }
@@ -35,8 +41,8 @@ type Column = {
   age: number
   sex: 'man' | 'woman'
   favorates: string[]
-  otherInfo:{
-    parents:string[]
+  otherInfo: {
+    parents: string[]
   }
 }
 
@@ -48,7 +54,9 @@ export default defineComponent({
     const columns = ref<ProColumn<Column>[]>([
       {
         title: 'name',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        ellipsis: true,
+        copyable: true
       },
       {
         title: 'age',
@@ -61,13 +69,15 @@ export default defineComponent({
       {
         title: 'favoraties',
         dataIndex: 'favorates',
-        render(favorates){
-          return favorates.map((favorate:string)=>h(NTag, {style:{marginRight:'10px'}},favorate))
+        render(favorates) {
+          return favorates.map((favorate: string) =>
+            h(NTag, { style: { marginRight: '10px' } }, favorate)
+          )
         }
       },
       {
         title: 'parents',
-        dataIndex:'otherInfo.parents'
+        dataIndex: 'otherInfo.parents'
       }
     ])
     const renderToolBars = ref([
@@ -80,8 +90,8 @@ export default defineComponent({
           }
         )
     ])
-    const apiRequest:ApiRequest = (params, sort, filter, page, pageSize,)=>{
-      return createSourceData(params, sort, filter, page, pageSize,)
+    const apiRequest: ApiRequest = (params, sort, filter, page, pageSize) => {
+      return createSourceData(params, sort, filter, page, pageSize)
     }
     return {
       renderToolBars,

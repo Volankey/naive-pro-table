@@ -1,8 +1,14 @@
-import { computed, createTextVNode, h, ref, VNode, watchEffect } from 'vue'
-import { ApiRequest, ApiRequestArgs, Mutable, ProColumn, ProTableBasicColumn } from './interface'
+import { computed, createTextVNode, ref, VNode, VNodeChild, h } from 'vue'
+import type {
+  ApiRequestArgs,
+  Mutable,
+  ProColumn,
+  ProTableBasicColumn
+} from './interface'
 import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
+import { Copy } from './components/Copy'
 
 export const RenderHelper = (context: { render: string | (() => VNode) }) => {
   const { render } = context
@@ -15,14 +21,32 @@ export const RenderHelper = (context: { render: string | (() => VNode) }) => {
 
 const getMergedColumnRender = (column: ProColumn<any>) => {
   return (rowData: unknown, rowIndex: any) => {
-    let render = null
+    let render:
+      | null
+      | ((
+          text: any,
+          rowData: any,
+          rowIndex: number,
+          actions?: any
+        ) => VNodeChild) = null
     const dataIndex = column.dataIndex
+    let renderContent = get(rowData, dataIndex)
     if (!column.render) {
-      render = () => [get(rowData, column.dataIndex)]
+      renderContent = get(rowData, column.dataIndex)
+      render = () => renderContent
     } else {
       render = column.render
     }
-    return render(get(rowData, dataIndex), rowData, rowIndex)
+    let renderResult = render(renderContent, rowData, rowIndex)
+    if (column.copyable) {
+      renderResult = [
+        renderResult,
+        h(Copy, {
+          text: renderContent
+        })
+      ]
+    }
+    return renderResult
   }
 }
 
@@ -36,7 +60,7 @@ export const handleColumn = (
     title: column.title ?? '',
     key: column.dataIndex,
     ellipsis: column.ellipsis,
-    render,
+    render
   }
   return tmpColumn as DataTableColumn<any>
 }
@@ -46,30 +70,32 @@ export const useTableRequest = () => {
   const sortRef = ref<SortState | null>(null)
   const filterRef = ref<FilterState | null>(null)
   const paginationRef = ref<Mutable<PaginationProps>>({
-    page: 1,
+    page: 1
   })
-  const tableApiRequestArgsRef = computed(() => [
-    paramsRef.value,
-    sortRef.value,
-    filterRef.value,
-    paginationRef.value.page,
-    paginationRef.value.pageSize
-  ] as ApiRequestArgs)
+  const tableApiRequestArgsRef = computed(
+    () =>
+      [
+        paramsRef.value,
+        sortRef.value,
+        filterRef.value,
+        paginationRef.value.page,
+        paginationRef.value.pageSize
+      ] as ApiRequestArgs
+  )
 
-
-  const handleSortChange = (sort:SortState | null) => {
+  const handleSortChange = (sort: SortState | null) => {
     sortRef.value = sort
   }
-  const handleFilterChange = (filter:FilterState | null) => {
+  const handleFilterChange = (filter: FilterState | null) => {
     filterRef.value = filter
   }
-  const handleParamsChange = (params:any) => {
+  const handleParamsChange = (params: any) => {
     paramsRef.value = params
   }
-  const handlePageChange = (page:number) => {
+  const handlePageChange = (page: number) => {
     paginationRef.value.page = page
   }
-  const handlePageSizeChange = (size:number) => {
+  const handlePageSizeChange = (size: number) => {
     paginationRef.value.pageSize = size
   }
 
