@@ -64,7 +64,18 @@ export default defineComponent({
       },
       {
         title: 'sex',
-        dataIndex: 'sex'
+        dataIndex: 'sex',
+        filter: true,
+        valueEnum: {
+          all: { label: '全部', hah: true },
+          man: {
+            label: '男'
+          },
+          woman: {
+            label: '女',
+            disabled: true
+          }
+        }
       },
       {
         title: 'favoraties',

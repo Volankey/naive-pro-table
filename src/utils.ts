@@ -1,14 +1,17 @@
 import { computed, createTextVNode, ref, VNode, VNodeChild, h } from 'vue'
-import type {
-  ApiRequestArgs,
-  Mutable,
-  ProColumn,
-  ProTableBasicColumn
-} from './interface'
+import type { ApiRequestArgs, Mutable, ProColumn } from './interface'
 import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
 import { Copy } from './components/Copy'
+
+interface RenderOptions {
+  result: VNodeChild
+  text: string | number
+  index: number
+  rowData: any
+  column: ProColumn<any>
+}
 
 export const RenderHelper = (context: { render: string | (() => VNode) }) => {
   const { render } = context
@@ -17,6 +20,45 @@ export const RenderHelper = (context: { render: string | (() => VNode) }) => {
   } else {
     return render()
   }
+}
+const columnRenderHandler = {
+  copyable(renderOptions: RenderOptions) {
+    const { result, text, column } = renderOptions
+    if (column.copyable) {
+      renderOptions.result = [
+        result,
+        h(Copy, {
+          text: text
+        })
+      ]
+    }
+  }
+}
+const columnConfigHandlers = {
+  valueEnum(column: ProColumn<any>) {
+    if (column.valueEnum) {
+      const valueEnum = column.valueEnum
+      const filterOptions = Object.entries(valueEnum).map(([key, data]) => ({
+        value: key,
+        ...data
+      }))
+      column.filterOptions = filterOptions
+    }
+  }
+}
+
+const setColumnRenderConfig = (renderOptions: RenderOptions) => {
+  Object.keys(columnRenderHandler).forEach((key) => {
+    columnRenderHandler[key as keyof typeof columnRenderHandler](renderOptions)
+  })
+}
+
+const setColumnConfig = (column: ProColumn<any>) => {
+  Object.keys(columnConfigHandlers).forEach((key) => {
+    if (column[key as keyof ProColumn<any>] !== undefined) {
+      columnConfigHandlers[key as keyof typeof columnConfigHandlers](column)
+    }
+  })
 }
 
 const getMergedColumnRender = (column: ProColumn<any>) => {
@@ -30,38 +72,41 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
           actions?: any
         ) => VNodeChild) = null
     const dataIndex = column.dataIndex
-    let renderContent = get(rowData, dataIndex)
+    let text = get(rowData, dataIndex)
     if (!column.render) {
-      renderContent = get(rowData, column.dataIndex)
-      render = () => renderContent
+      text = get(rowData, column.dataIndex)
+      render = () => text
     } else {
       render = column.render
     }
-    let renderResult = render(renderContent, rowData, rowIndex)
-    if (column.copyable) {
-      renderResult = [
-        renderResult,
-        h(Copy, {
-          text: renderContent
-        })
-      ]
+    const result = render(text, rowData, rowIndex)
+    const renderOptions = {
+      result,
+      text,
+      index: rowIndex,
+      rowData,
+      column
     }
-    return renderResult
+
+    // add some vnode change render result
+    setColumnRenderConfig(renderOptions)
+
+    return renderOptions.result
   }
 }
 
-export const handleColumn = (
-  column: ProTableBasicColumn<any>
-): DataTableColumn<any> => {
-  const render = getMergedColumnRender(column)
-
+export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   const tmpColumn = {
     ...column,
     title: column.title ?? '',
     key: column.dataIndex,
     ellipsis: column.ellipsis,
-    render
-  }
+    render: getMergedColumnRender(column)
+  } as ProColumn<any>
+
+  setColumnConfig(tmpColumn)
+  console.log('🚀 ~ file: utils.ts ~ line 111 ~ tmpColumn', tmpColumn)
+
   return tmpColumn as DataTableColumn<any>
 }
 
@@ -72,22 +117,40 @@ export const useTableRequest = () => {
   const paginationRef = ref<Mutable<PaginationProps>>({
     page: 1
   })
-  const tableApiRequestArgsRef = computed(
-    () =>
-      [
-        paramsRef.value,
-        sortRef.value,
-        filterRef.value,
-        paginationRef.value.page,
-        paginationRef.value.pageSize
-      ] as ApiRequestArgs
-  )
+  const tableApiRequestArgsRef = computed(() => {
+    return [
+      paramsRef.value,
+      sortRef.value,
+      filterRef.value,
+      paginationRef.value.page,
+      paginationRef.value.pageSize
+    ] as ApiRequestArgs
+  })
 
   const handleSortChange = (sort: SortState | null) => {
     sortRef.value = sort
   }
   const handleFilterChange = (filter: FilterState | null) => {
-    filterRef.value = filter
+    let tmpFilter = {}
+    if (filter) {
+      // 处理 filterValues 无选项的时候返回 null
+      tmpFilter = Object.entries(filter).reduce(
+        (result, [key, filterValues]) => {
+          if (
+            !(
+              filterValues &&
+              Array.isArray(filterValues) &&
+              filterValues?.length === 0
+            )
+          ) {
+            result[key] = filterValues
+          }
+          return result
+        },
+        {} as any
+      )
+    }
+    filterRef.value = Object.keys(tmpFilter).length === 0 ? null : filter
   }
   const handleParamsChange = (params: any) => {
     paramsRef.value = params

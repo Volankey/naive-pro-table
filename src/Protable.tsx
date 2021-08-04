@@ -1,4 +1,12 @@
-import { defineComponent, h, VNode, PropType, computed, ref, watchEffect } from 'vue'
+import {
+  defineComponent,
+  h,
+  VNode,
+  PropType,
+  computed,
+  ref,
+  watchEffect
+} from 'vue'
 import { NDataTable, PaginationProps } from 'naive-ui'
 import { dataTableProps } from 'naive-ui/lib/data-table/src/DataTable.js'
 import { headerPropsDefine } from './commonProps'
@@ -58,9 +66,8 @@ export default defineComponent({
       sort,
       filter,
       tableApiRequestArgs,
-      pagination: paginationRef,
+      pagination: paginationRef
     } = useTableRequest()
-
 
     watchEffect(async () => {
       if (!props.apiRequest) {
@@ -69,6 +76,7 @@ export default defineComponent({
       loadingRef.value = true
       try {
         const resp = await props.apiRequest(...tableApiRequestArgs.value)
+        console.log(tableApiRequestArgs.value)
         tableDataRef.value = resp.data
         paginationRef.value.pageCount = resp.pageCount
       } catch (error) {
@@ -76,7 +84,6 @@ export default defineComponent({
       }
       loadingRef.value = false
     })
-
 
     return {
       hasHeader: hasHeaderRef,
@@ -93,11 +100,20 @@ export default defineComponent({
   },
   render() {
     const { headerTitle, headerToolbars } = this.$slots
-    const { mergedColumns, loading, tableData, mergedPagination,
-      handlePageChange, handlePageSizeChange, remote, handleFilterChange, handleSortChange } = this
+    const {
+      mergedColumns,
+      loading,
+      tableData,
+      mergedPagination,
+      handlePageChange,
+      handlePageSizeChange,
+      remote,
+      handleFilterChange,
+      handleSortChange
+    } = this
     const changeProps = {
       'onUpdate:page': handlePageChange,
-      'onUpdate:pageSize': handlePageSizeChange,
+      'onUpdate:pageSize': handlePageSizeChange
     }
     return (
       <div>
@@ -114,8 +130,7 @@ export default defineComponent({
           {...changeProps}
           onUpdateFilters={handleFilterChange}
           onUpdateSorter={handleSortChange}
-        >
-        </NDataTable>
+        ></NDataTable>
       </div>
     )
   }

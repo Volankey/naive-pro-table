@@ -5,8 +5,14 @@ import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
 interface InternalRowData {
   [key: string]: unknown
 }
-interface ValueEnum {
+type ValueEnumItem = {
+  label: string
+  disabled?: boolean
+} & {
   [key: string]: unknown
+}
+interface ValueEnum {
+  [key: string]: ValueEnumItem
 }
 type RenderColumnCell = (column: ProTableBasicColumn) => VNodeChild
 type TableColumnTitle = string | RenderColumnCell
