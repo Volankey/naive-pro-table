@@ -111,10 +111,7 @@ export default defineComponent({
       handleFilterChange,
       handleSortChange
     } = this
-    const changeProps = {
-      'onUpdate:page': handlePageChange,
-      'onUpdate:pageSize': handlePageSizeChange
-    }
+
     return (
       <div>
         <ProHeader
@@ -127,9 +124,10 @@ export default defineComponent({
           data={tableData}
           loading={loading}
           columns={mergedColumns}
-          {...changeProps}
           onUpdateFilters={handleFilterChange}
           onUpdateSorter={handleSortChange}
+          onUpdatePageSize={handlePageSizeChange}
+          onUpdatePage={handlePageChange}
         ></NDataTable>
       </div>
     )

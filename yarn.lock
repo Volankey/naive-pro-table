@@ -2993,10 +2993,10 @@ ms@^2.1.1:
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.3.tgz?cache=0&sync_timestamp=1607433856030&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha1-V0yBOM4dK1hh8LRFedut1gxmFbI=
 
-naive-ui@^2.15.5:
-  version "2.15.5"
-  resolved "https://registry.nlark.com/naive-ui/download/naive-ui-2.15.5.tgz#50ffc1834fd64765621a31f0b09e64d72770cd6c"
-  integrity sha1-UP/Bg0/WR2ViGjHwsJ5k1ydwzWw=
+naive-ui@^2.16.1:
+  version "2.16.1"
+  resolved "https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/naive-ui/-/naive-ui-2.16.1.tgz#0599e6748f498ad8f4f2f4c6c0637c1f1d860827"
+  integrity sha1-BZnmdI9Jitj08vTGwGN8Hx2GCCc=
   dependencies:
     "@css-render/plugin-bem" "^0.15.4"
     "@css-render/vue3-ssr" "^0.15.4"

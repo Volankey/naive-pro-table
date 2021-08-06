@@ -3,7 +3,7 @@ import type { ApiRequestArgs, Mutable, ProColumn } from './interface'
 import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
-import { Copy } from './components/Copy'
+import { Copy } from './Components/Copy'
 
 interface RenderOptions {
   result: VNodeChild
