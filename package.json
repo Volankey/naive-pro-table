@@ -23,6 +23,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.14.5",
     "@types/jasmine": "^3.5.14",
+    "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "@vicons/ionicons5": "^0.10.0",
@@ -56,7 +57,9 @@
     "vue-router": "^4.0.0-beta.13",
     "vue-tsc": "^0.0.24"
   },
-  "dependencies": {},
+  "dependencies": {
+    "qs": "^6.10.1"
+  },
   "peerDependencies": {
     "vue": "^3.0.11"
   }

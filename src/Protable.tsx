@@ -13,6 +13,7 @@ import { headerPropsDefine } from './commonProps'
 import { ApiRequest, Mutable, ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
 import { handleColumn, useTableRequest } from './utils'
+import ParamsStore from './ParamsStore'
 
 export default defineComponent({
   name: 'NProTable',
@@ -30,6 +31,19 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const paramsStore = new ParamsStore({
+      defaultQuery: 'page=1&search=i79800&sex=man',
+      rules: {
+        page: {
+          type: 'number'
+        },
+        sex: {
+          type: 'string'
+        }
+      }
+    })
+    const routerQueryRef = paramsStore.queryRef
+    console.log('routerQueryRef', routerQueryRef)
     const loadingRef = ref(false)
     const hasHeaderRef = computed(() => {
       return props.headerTitle || props.toolBars?.length
