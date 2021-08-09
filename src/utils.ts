@@ -4,6 +4,8 @@ import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
 import { Copy } from './Components/Copy'
+import ParamsStore from './ParamsStore'
+import { Rules } from './ParamsStore/interface'
 
 interface RenderOptions {
   result: VNodeChild
@@ -110,7 +112,7 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   return tmpColumn as DataTableColumn<any>
 }
 
-export const useTableRequest = () => {
+export const useTableRequest = (paramsStoreRef: Ref<ParamsStore>) => {
   const paramsRef = ref(null)
   const sortRef = ref<SortState | null>(null)
   const filterRef = ref<FilterState | null>(null)
@@ -174,4 +176,48 @@ export const useTableRequest = () => {
     handlePageChange,
     handlePageSizeChange
   }
+}
+// FIXME: why not have filter type?
+export const getRouteRuleFilter = (
+  column: ProColumn<any>,
+  rules: Rules
+): Rules => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignorets-ignore
+  if (column.filter && column.syncRouteFilter) {
+    const { name, rule } = column.syncRouteFilter
+    if (rules[name]) {
+      console.warn('pro/table:', `${name} has already existed.`)
+    }
+    return {
+      [name]: rule
+    }
+  }
+  return {}
+}
+// FIXME: why not have filter type?
+export const getRouteRuleSorter = (
+  column: ProColumn<any>,
+  rules: Rules
+): Rules => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignorets-ignore
+  if (column.sorter && column.syncRouteSorter) {
+    const { name, rule } = column.syncRouteSorter
+    if (rules[name]) {
+      console.warn('pro/table:', `${name} has already existed.`)
+    }
+    return {
+      [name]: rule
+    }
+  }
+  return {}
+}
+export const getColumnsRouteRules = (columns: ProColumn<any>[]): Rules => {
+  return columns.reduce((result, column) => {
+    const filter = getRouteRuleFilter(column, result)
+    const sorter = getRouteRuleSorter(column, result)
+    Object.assign(result, filter, sorter)
+    return result
+  }, {})
 }

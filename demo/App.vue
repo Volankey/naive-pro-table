@@ -60,12 +60,26 @@ export default defineComponent({
       },
       {
         title: 'age',
-        dataIndex: 'age'
+        dataIndex: 'age',
+        sorter: true,
+        sortOrder: false,
+        syncRouteSorter: {
+          name: 'age',
+          rule: {
+            type: 'string'
+          }
+        }
       },
       {
         title: 'sex',
         dataIndex: 'sex',
         filter: true,
+        syncRouteFilter: {
+          name: 'name',
+          rule: {
+            type: 'array'
+          }
+        },
         valueEnum: {
           all: { label: '全部', hah: true },
           man: {

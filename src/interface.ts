@@ -2,6 +2,8 @@ import type { VNodeChild } from 'vue'
 
 import type { DataTableColumn } from 'naive-ui'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
+import { Rule, Rules } from './ParamsStore/interface'
+
 interface InternalRowData {
   [key: string]: unknown
 }
@@ -29,6 +31,14 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
+  syncRouteSorter?: {
+    name: string
+    rule: Rule
+  }
+  syncRouteFilter?: {
+    name: string
+    rule: Rule
+  }
   // valueType: string // TODO:
   render?: (
     text: any,
