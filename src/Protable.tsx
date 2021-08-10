@@ -14,6 +14,7 @@ import { ApiRequest, Mutable, ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import ParamsStore from './ParamsStore'
+import { TableColumns } from 'naive-ui/lib/data-table/src/interface'
 
 export default defineComponent({
   name: 'NProTable',
@@ -66,7 +67,17 @@ export default defineComponent({
 
     const mergedColumnsRef = computed(() => {
       const { columns } = props
-      return columns.map(handleColumn)
+      return columns.map(handleColumn) as TableColumns
+    })
+
+    const columnKeyMapColumnRef = computed(() => {
+      return mergedColumnsRef.value.reduce((result, column) => {
+        return Object.assign(result, {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          [column.key]: column
+        })
+      }, {})
     })
 
     const {
@@ -80,7 +91,7 @@ export default defineComponent({
       filter,
       tableApiRequestArgs,
       pagination: paginationRef
-    } = useTableRequest(paramsStoreRef)
+    } = useTableRequest(paramsStoreRef, syncRouteRuleRef, columnKeyMapColumnRef)
 
     watchEffect(async () => {
       if (!props.apiRequest) {

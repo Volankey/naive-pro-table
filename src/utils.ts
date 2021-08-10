@@ -1,11 +1,20 @@
-import { computed, createTextVNode, ref, VNode, VNodeChild, h } from 'vue'
+import {
+  computed,
+  createTextVNode,
+  ref,
+  VNode,
+  VNodeChild,
+  h,
+  ComputedRef,
+  Ref
+} from 'vue'
 import type { ApiRequestArgs, Mutable, ProColumn } from './interface'
 import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
 import { Copy } from './Components/Copy'
-import ParamsStore from './ParamsStore'
-import { Rules } from './ParamsStore/interface'
+import type ParamsStore from './ParamsStore'
+import { Rule, Rules } from './ParamsStore/interface'
 
 interface RenderOptions {
   result: VNodeChild
@@ -101,7 +110,9 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   const tmpColumn = {
     ...column,
     title: column.title ?? '',
-    key: column.dataIndex,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    key: column.key || column.dataIndex,
     ellipsis: column.ellipsis,
     render: getMergedColumnRender(column)
   } as ProColumn<any>
@@ -112,7 +123,13 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   return tmpColumn as DataTableColumn<any>
 }
 
-export const useTableRequest = (paramsStoreRef: Ref<ParamsStore>) => {
+export const useTableRequest = (
+  paramsStoreRef: Ref<ParamsStore>,
+  syncRouteRuleRef: ComputedRef<Rules>,
+  columnKeyMapColumnRef: ComputedRef<{
+    [key: string]: ProColumn
+  }>
+) => {
   const paramsRef = ref(null)
   const sortRef = ref<SortState | null>(null)
   const filterRef = ref<FilterState | null>(null)
@@ -129,8 +146,24 @@ export const useTableRequest = (paramsStoreRef: Ref<ParamsStore>) => {
     ] as ApiRequestArgs
   })
 
+  const handleSyncRouteSorter = (
+    syncRouteSorter: { name: string; rule: Rule } | undefined,
+    sort: SortState | null
+  ) => {
+    if (syncRouteSorter) {
+      const { name, rule } = syncRouteSorter
+      paramsStoreRef.value.updateQuery(name, sort?.order, rule)
+    }
+  }
+
   const handleSortChange = (sort: SortState | null) => {
     sortRef.value = sort
+    const columnKey = sort?.columnKey
+    const columnKeyMapColumn = columnKeyMapColumnRef.value
+    if (columnKey) {
+      const column = columnKeyMapColumn[columnKey]
+      handleSyncRouteSorter(column.syncRouteSorter, sort)
+    }
   }
   const handleFilterChange = (filter: FilterState | null) => {
     let tmpFilter = {}

@@ -33,6 +33,10 @@ export default class ParamsStore {
     return qs.parse(queryStr, { ignoreQueryPrefix: true })
   }
   updateQuery(key: string, value: any, rule: Rule): void {
+    if (value === undefined) {
+      delete this.queryRef.value[key]
+      return
+    }
     value = transformByRuleType(value, rule.type)
     if (rule.validator && rule.validator(value)) {
       this.queryRef.value[key] = value
