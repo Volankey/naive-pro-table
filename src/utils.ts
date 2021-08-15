@@ -11,7 +11,11 @@ import {
 import type { ApiRequestArgs, Mutable, ProColumn } from './interface'
 import { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
-import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
+import {
+  FilterOptionValue,
+  FilterState,
+  SortState
+} from 'naive-ui/lib/data-table/src/interface'
 import { Copy } from './Components/Copy'
 import type ParamsStore from './ParamsStore'
 import { Rule, Rules } from './ParamsStore/interface'
@@ -146,24 +150,18 @@ export const useTableRequest = (
     ] as ApiRequestArgs
   })
 
-  const handleSyncRouteSorter = (
-    syncRouteSorter: { name: string; rule: Rule } | undefined,
-    sort: SortState | null
+  const handleSyncRouteFilter = (
+    syncRouteFilter: { name: string; rule: Rule } | undefined,
+    filterValue: FilterOptionValue | FilterOptionValue[] | null | undefined
   ) => {
-    if (syncRouteSorter) {
-      const { name, rule } = syncRouteSorter
-      paramsStoreRef.value.updateQuery(name, sort?.order, rule)
+    if (syncRouteFilter) {
+      const { name, rule } = syncRouteFilter
+      paramsStoreRef.value.updateQuery(name, filterValue, rule)
     }
   }
 
   const handleSortChange = (sort: SortState | null) => {
     sortRef.value = sort
-    const columnKey = sort?.columnKey
-    const columnKeyMapColumn = columnKeyMapColumnRef.value
-    if (columnKey) {
-      const column = columnKeyMapColumn[columnKey]
-      handleSyncRouteSorter(column.syncRouteSorter, sort)
-    }
   }
   const handleFilterChange = (filter: FilterState | null) => {
     let tmpFilter = {}
@@ -186,6 +184,18 @@ export const useTableRequest = (
       )
     }
     filterRef.value = Object.keys(tmpFilter).length === 0 ? null : filter
+    const columnKeyMapColumn = columnKeyMapColumnRef.value
+
+    if (filterRef.value) {
+      Object.entries(filterRef.value).forEach(
+        ([filterColumnKey, filterValue]) => {
+          const syncRouteFilter =
+            columnKeyMapColumn[filterColumnKey].syncRouteFilter
+          handleSyncRouteFilter(syncRouteFilter, filterValue)
+        }
+      )
+      console.log(paramsStoreRef.value)
+    }
   }
   const handleParamsChange = (params: any) => {
     paramsRef.value = params

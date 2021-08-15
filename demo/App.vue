@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { NButton, NTag } from 'naive-ui'
+import { NButton, NTag, useNotification } from 'naive-ui'
 import { defineComponent, h, ref } from 'vue'
 import ProTable, { ApiRequest } from '../src/index'
 import type { ProColumn } from '../src/interface'
@@ -96,7 +96,11 @@ export default defineComponent({
         dataIndex: 'favorates',
         render(favorates) {
           return favorates.map((favorate: string) =>
-            h(NTag, { style: { marginRight: '10px' } }, favorate)
+            h(
+              NTag,
+              { style: { marginRight: '10px' } },
+              { default: () => favorate }
+            )
           )
         }
       },

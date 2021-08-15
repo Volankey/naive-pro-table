@@ -5,7 +5,8 @@ import {
   PropType,
   computed,
   ref,
-  watchEffect
+  watchEffect,
+  watch
 } from 'vue'
 import { NDataTable, PaginationProps } from 'naive-ui'
 import { dataTableProps } from 'naive-ui/lib/data-table/src/DataTable.js'
@@ -14,7 +15,8 @@ import { ApiRequest, Mutable, ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import ParamsStore from './ParamsStore'
-import { TableColumns } from 'naive-ui/lib/data-table/src/interface'
+import { SortState, TableColumns } from 'naive-ui/lib/data-table/src/interface'
+import { Rule } from './ParamsStore/interface'
 
 export default defineComponent({
   name: 'NProTable',
@@ -64,20 +66,19 @@ export default defineComponent({
         toolBars
       }
     })
-
-    const mergedColumnsRef = computed(() => {
-      const { columns } = props
-      return columns.map(handleColumn) as TableColumns
+    const mergedColumnsRef = ref(props.columns.map(handleColumn))
+    watch(props.columns, () => {
+      mergedColumnsRef.value = props.columns.map(handleColumn) as TableColumns
     })
 
     const columnKeyMapColumnRef = computed(() => {
       return mergedColumnsRef.value.reduce((result, column) => {
         return Object.assign(result, {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           [column.key]: column
         })
-      }, {})
+      }, {}) as {
+        [key: string]: ProColumn<any>
+      }
     })
 
     const {
@@ -93,11 +94,28 @@ export default defineComponent({
       pagination: paginationRef
     } = useTableRequest(paramsStoreRef, syncRouteRuleRef, columnKeyMapColumnRef)
 
+    const handleSyncRouteSorter = (sort: SortState | null) => {
+      const columnKey = sort?.columnKey
+      const columnKeyMapColumn = columnKeyMapColumnRef.value
+      console.log('columnKeyMapColumnRef', mergedColumnsRef.value)
+      if (columnKey) {
+        const column = columnKeyMapColumn[columnKey]
+        column.sortOrder = sort?.order
+        const syncRouteSorter = column.syncRouteSorter
+        if (syncRouteSorter) {
+          // 单列排序，未来需要支持多列排序
+          const { name, rule } = syncRouteSorter
+          paramsStoreRef.value.updateQuery(name, sort?.order, rule)
+        }
+      }
+    }
+
     watchEffect(async () => {
       if (!props.apiRequest) {
         return
       }
       loadingRef.value = true
+      handleSyncRouteSorter(sort.value)
       try {
         const resp = await props.apiRequest(...tableApiRequestArgs.value)
         console.log(tableApiRequestArgs.value)
