@@ -27,7 +27,9 @@ interface RenderOptions {
   rowData: any
   column: ProColumn<any>
 }
-
+interface DataColumnBasic {
+  key: string | number
+}
 export const RenderHelper = (context: { render: string | (() => VNode) }) => {
   const { render } = context
   if (typeof render === 'string') {
@@ -220,14 +222,11 @@ export const useTableRequest = (
     handlePageSizeChange
   }
 }
-// FIXME: why not have filter type?
 export const getRouteRuleFilter = (
   column: ProColumn<any>,
   rules: Rules
 ): Rules => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignorets-ignore
-  if (column.filter && column.syncRouteFilter) {
+  if ('filter' in column && column.syncRouteFilter) {
     const { name, rule } = column.syncRouteFilter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)
@@ -238,14 +237,9 @@ export const getRouteRuleFilter = (
   }
   return {}
 }
-// FIXME: why not have filter type?
-export const getRouteRuleSorter = (
-  column: ProColumn<any>,
-  rules: Rules
-): Rules => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignorets-ignore
-  if (column.sorter && column.syncRouteSorter) {
+
+export const getRouteRuleSorter = (column: ProColumn, rules: Rules): Rules => {
+  if ('sorter' in column && column.syncRouteSorter) {
     const { name, rule } = column.syncRouteSorter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)

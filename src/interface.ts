@@ -49,7 +49,7 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   filters?: true | Array<{ label: string; value: string | number }>
 }
 
-export type ProColumn<T = any> = Partial<DataTableColumn> &
+export type ProColumn<T = InternalRowData> = Partial<DataTableColumn<T>> &
   ProTableBasicColumn<T>
 
 export type ApiRequestArgs = [
