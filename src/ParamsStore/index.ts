@@ -32,15 +32,23 @@ export default class ParamsStore {
   queryDeserialization(queryStr: string): any {
     return qs.parse(queryStr, { ignoreQueryPrefix: true })
   }
+  clearQuery(key: string): void {
+    delete this.queryRef.value[key]
+  }
   updateQuery(key: string, value: any, rule: Rule): void {
-    if (value === undefined) {
+    if (value === undefined || value === null) {
       delete this.queryRef.value[key]
       return
     }
     value = transformByRuleType(value, rule.type)
-    if (rule.validator && rule.validator(value)) {
-      this.queryRef.value[key] = value
-    } else if (!rule.validator) {
+    if (rule.validator) {
+      const isValid = rule.validator(value)
+      if (isValid) {
+        this.queryRef.value[key] = value
+      } else {
+        // clear invalid route query
+      }
+    } else {
       this.queryRef.value[key] = value
     }
   }

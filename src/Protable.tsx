@@ -15,7 +15,12 @@ import { ApiRequest, Mutable, ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import ParamsStore from './ParamsStore'
-import { SortState, TableColumns } from 'naive-ui/lib/data-table/src/interface'
+import {
+  FilterOptionValue,
+  FilterState,
+  SortState,
+  TableColumns
+} from 'naive-ui/lib/data-table/src/interface'
 import { Rule } from './ParamsStore/interface'
 
 export default defineComponent({
@@ -87,26 +92,59 @@ export default defineComponent({
       handleParamsChange,
       handlePageChange,
       handlePageSizeChange,
-      params,
-      sort,
-      filter,
-      tableApiRequestArgs,
-      pagination: paginationRef
-    } = useTableRequest(paramsStoreRef, syncRouteRuleRef, columnKeyMapColumnRef)
+      paramsRef,
+      sortRef,
+      filterRef,
+      tableApiRequestArgsRef,
+      paginationRef
+    } = useTableRequest()
 
     const handleSyncRouteSorter = (sort: SortState | null) => {
       const columnKey = sort?.columnKey
       const columnKeyMapColumn = columnKeyMapColumnRef.value
-      console.log('columnKeyMapColumnRef', mergedColumnsRef.value)
+      const paramsStore = paramsStoreRef.value
+
       if (columnKey) {
         const column = columnKeyMapColumn[columnKey]
-        column.sortOrder = sort?.order
-        const syncRouteSorter = column.syncRouteSorter
-        if (syncRouteSorter) {
-          // 单列排序，未来需要支持多列排序
-          const { name, rule } = syncRouteSorter
-          paramsStoreRef.value.updateQuery(name, sort?.order, rule)
+        if ('sortOrder' in column) {
+          column.sortOrder = sort?.order
+          const syncRouteSorter = column.syncRouteSorter
+          if (syncRouteSorter) {
+            // 单列排序，未来需要支持多列排序
+            const { name, rule } = syncRouteSorter
+            if (sort?.order === false) {
+              paramsStore.clearQuery(name)
+            } else {
+              paramsStore.updateQuery(name, sort?.order, rule)
+            }
+          }
         }
+      }
+    }
+
+    const handleSyncRouteFilter = (filterValue: FilterState | null) => {
+      const columnKeyMapColumn = columnKeyMapColumnRef.value
+      const paramsStore = paramsStoreRef.value
+      if (filterValue) {
+        Object.entries(filterValue).forEach(
+          ([filterColumnKey, filterValue]) => {
+            const syncRouteFilter =
+              columnKeyMapColumn[filterColumnKey].syncRouteFilter
+            if (syncRouteFilter) {
+              const { name, rule } = syncRouteFilter
+              paramsStore.updateQuery(name, filterValue, rule)
+            }
+          }
+        )
+      } else {
+        // clear all
+        Object.values(columnKeyMapColumn).forEach((column) => {
+          const syncRouteFilter = column.syncRouteFilter
+          if (syncRouteFilter) {
+            const { name } = syncRouteFilter
+            paramsStore.clearQuery(name)
+          }
+        })
       }
     }
 
@@ -115,10 +153,12 @@ export default defineComponent({
         return
       }
       loadingRef.value = true
-      handleSyncRouteSorter(sort.value)
+      handleSyncRouteSorter(sortRef.value)
+      handleSyncRouteFilter(filterRef.value)
       try {
-        const resp = await props.apiRequest(...tableApiRequestArgs.value)
-        console.log(tableApiRequestArgs.value)
+        const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
+        console.log(tableApiRequestArgsRef.value)
+        console.log(paramsStoreRef.value.queryRef.value)
         tableDataRef.value = resp.data
         paginationRef.value.pageCount = resp.pageCount
       } catch (error) {

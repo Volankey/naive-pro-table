@@ -129,13 +129,7 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   return tmpColumn as DataTableColumn<any>
 }
 
-export const useTableRequest = (
-  paramsStoreRef: Ref<ParamsStore>,
-  syncRouteRuleRef: ComputedRef<Rules>,
-  columnKeyMapColumnRef: ComputedRef<{
-    [key: string]: ProColumn
-  }>
-) => {
+export const useTableRequest = () => {
   const paramsRef = ref(null)
   const sortRef = ref<SortState | null>(null)
   const filterRef = ref<FilterState | null>(null)
@@ -151,16 +145,6 @@ export const useTableRequest = (
       paginationRef.value.pageSize
     ] as ApiRequestArgs
   })
-
-  const handleSyncRouteFilter = (
-    syncRouteFilter: { name: string; rule: Rule } | undefined,
-    filterValue: FilterOptionValue | FilterOptionValue[] | null | undefined
-  ) => {
-    if (syncRouteFilter) {
-      const { name, rule } = syncRouteFilter
-      paramsStoreRef.value.updateQuery(name, filterValue, rule)
-    }
-  }
 
   const handleSortChange = (sort: SortState | null) => {
     sortRef.value = sort
@@ -186,18 +170,6 @@ export const useTableRequest = (
       )
     }
     filterRef.value = Object.keys(tmpFilter).length === 0 ? null : filter
-    const columnKeyMapColumn = columnKeyMapColumnRef.value
-
-    if (filterRef.value) {
-      Object.entries(filterRef.value).forEach(
-        ([filterColumnKey, filterValue]) => {
-          const syncRouteFilter =
-            columnKeyMapColumn[filterColumnKey].syncRouteFilter
-          handleSyncRouteFilter(syncRouteFilter, filterValue)
-        }
-      )
-      console.log(paramsStoreRef.value)
-    }
   }
   const handleParamsChange = (params: any) => {
     paramsRef.value = params
@@ -210,11 +182,11 @@ export const useTableRequest = (
   }
 
   return {
-    params: paramsRef,
-    sort: sortRef,
-    filter: filterRef,
-    tableApiRequestArgs: tableApiRequestArgsRef,
-    pagination: paginationRef,
+    paramsRef,
+    sortRef,
+    filterRef,
+    tableApiRequestArgsRef,
+    paginationRef,
     handleSortChange,
     handleFilterChange,
     handleParamsChange,
