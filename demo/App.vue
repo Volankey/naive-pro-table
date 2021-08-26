@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { NButton, NTag, useNotification } from 'naive-ui'
+import { NButton, NTag } from 'naive-ui'
 import { defineComponent, h, ref } from 'vue'
 import ProTable, { ApiRequest } from '../src/index'
 import type { ProColumn } from '../src/interface'
@@ -51,7 +51,7 @@ export default defineComponent({
     ProTable
   },
   setup() {
-    const columns = ref<ProColumn<Column>[]>([
+    const columnsRef = ref<ProColumn<Column>[]>([
       {
         title: 'name',
         dataIndex: 'name',
@@ -75,7 +75,7 @@ export default defineComponent({
         dataIndex: 'sex',
         filter: true,
         syncRouteFilter: {
-          name: 'name',
+          name: 'sex',
           rule: {
             type: 'array'
           }
@@ -124,7 +124,7 @@ export default defineComponent({
     }
     return {
       renderToolBars,
-      columns,
+      columns: columnsRef,
       apiRequest
     }
   }

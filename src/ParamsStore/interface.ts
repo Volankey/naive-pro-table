@@ -1,8 +1,11 @@
+import { Router } from 'vue-router'
+
 export interface Options {
   defaultQuery: string
   rules: Rules
   // TODO: impl adapter
   adapter?: any
+  router: Router
 }
 export interface Rules {
   [name: string]: Rule

@@ -21,7 +21,9 @@ import {
   SortState,
   TableColumns
 } from 'naive-ui/lib/data-table/src/interface'
-import { Rule } from './ParamsStore/interface'
+import { Rules } from './ParamsStore/interface'
+import { useRoute, useRouter } from 'vue-router'
+import { stringify as qsStringify } from 'qs'
 
 export default defineComponent({
   name: 'NProTable',
@@ -39,14 +41,29 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const syncRouteRuleRef = computed(() => {
+    const syncRouteRuleColumnRef = computed(() => {
       return getColumnsRouteRules(props.columns)
     })
+    const syncRouteRuleRef = computed(() => {
+      return Object.entries(syncRouteRuleColumnRef.value).reduce(
+        (result, item) => {
+          const [key, ruleColumn] = item
+          result[key] = ruleColumn.rule
+          return result
+        },
+        {} as Rules
+      )
+    })
+    const router = useRouter()
+    const route = useRoute()
+    const defaultQuery = route.query
     const paramsStoreRef = computed(
       () =>
         new ParamsStore({
-          defaultQuery: 'page=1&search=i79800&sex=man',
-          rules: syncRouteRuleRef.value
+          // defaultQuery: 'page=1&search=i79800&sex[]=man&sex[]=all]',
+          defaultQuery: qsStringify(defaultQuery),
+          rules: syncRouteRuleRef.value,
+          router
         })
     )
     const routerQueryRef = paramsStoreRef.value.queryRef.value

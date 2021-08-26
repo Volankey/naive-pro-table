@@ -1,4 +1,4 @@
-import { Rule } from './interface'
+import { Rule, Rules } from './interface'
 
 export const transformByRuleType = (
   originValue: any,
@@ -16,4 +16,21 @@ export const transformByRuleType = (
     default:
       return originValue
   }
+}
+
+export const mergeQueryByRule = (
+  query: any,
+  targetQuery: any,
+  rules: Rules
+) => {
+  const clonedQuery = {
+    ...targetQuery,
+    ...query
+  }
+  Object.keys(clonedQuery).forEach((key) => {
+    if (rules[key]) {
+      clonedQuery[key] = query[key]
+    }
+  })
+  return clonedQuery
 }

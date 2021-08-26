@@ -1,18 +1,40 @@
 import { Options, Rule, Rules } from './interface'
 import qs from 'qs'
-import { ref, Ref } from 'vue'
-import { transformByRuleType } from './utils'
+import { ref, Ref, watch, watchEffect } from 'vue'
+import { transformByRuleType, mergeQueryByRule } from './utils'
+import { Router } from 'vue-router'
 
 export default class ParamsStore {
   rules: Rules
   defaultQuery: string
   queryRef: Ref<qs.ParsedQs> = ref({})
+  router: Router
   constructor(ops: Options) {
     this.rules = ops.rules
     this.defaultQuery = ops.defaultQuery
+    this.router = ops.router
     this.parseQueryByRules(
       this.queryDeserialization(this.defaultQuery),
       this.rules
+    )
+    console.log('param init')
+    watch(
+      this.queryRef,
+      () => {
+        const currentRoute = this.router.currentRoute.value
+        // router 同步
+        this.router.replace({
+          path: currentRoute.fullPath,
+          query: mergeQueryByRule(
+            this.queryRef.value,
+            currentRoute.query,
+            this.rules
+          )
+        })
+      },
+      {
+        deep: true
+      }
     )
   }
   parseQueryByRules(
@@ -21,6 +43,7 @@ export default class ParamsStore {
   ): void {
     if (query) {
       Object.entries(rules).forEach(([key, rule]) => {
+        console.log(key, query, rules)
         this.updateQuery(key, query[key], rule)
       })
     }
@@ -47,6 +70,7 @@ export default class ParamsStore {
         this.queryRef.value[key] = value
       } else {
         // clear invalid route query
+        delete this.queryRef.value[key]
       }
     } else {
       this.queryRef.value[key] = value

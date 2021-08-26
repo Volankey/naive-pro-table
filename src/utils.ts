@@ -194,35 +194,41 @@ export const useTableRequest = () => {
     handlePageSizeChange
   }
 }
+
+type ColumnRule = { [name: string]: { rule: Rule; column: ProColumn<any> } }
+
 export const getRouteRuleFilter = (
   column: ProColumn<any>,
   rules: Rules
-): Rules => {
+): ColumnRule => {
   if ('filter' in column && column.syncRouteFilter) {
     const { name, rule } = column.syncRouteFilter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: rule
+      [name]: { rule, column }
     }
   }
   return {}
 }
 
-export const getRouteRuleSorter = (column: ProColumn, rules: Rules): Rules => {
+export const getRouteRuleSorter = (
+  column: ProColumn,
+  rules: Rules
+): ColumnRule => {
   if ('sorter' in column && column.syncRouteSorter) {
     const { name, rule } = column.syncRouteSorter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: rule
+      [name]: { rule, column }
     }
   }
   return {}
 }
-export const getColumnsRouteRules = (columns: ProColumn<any>[]): Rules => {
+export const getColumnsRouteRules = (columns: ProColumn<any>[]): ColumnRule => {
   return columns.reduce((result, column) => {
     const filter = getRouteRuleFilter(column, result)
     const sorter = getRouteRuleSorter(column, result)
