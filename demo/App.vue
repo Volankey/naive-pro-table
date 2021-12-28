@@ -55,12 +55,14 @@ export default defineComponent({
       {
         title: 'name',
         dataIndex: 'name',
+        key: 'name',
         ellipsis: true,
         copyable: true
       },
       {
         title: 'age',
         dataIndex: 'age',
+        key: 'age',
         sorter: true,
         sortOrder: false,
         syncRouteSorter: {
@@ -73,7 +75,17 @@ export default defineComponent({
       {
         title: 'sex',
         dataIndex: 'sex',
+        key: 'sex',
         filter: true,
+        sorter: true,
+        sortOrder: false,
+        syncRouteSorter: {
+          name: 'sex',
+          rule: {
+            type: 'string'
+          }
+        },
+
         syncRouteFilter: {
           name: 'sex',
           rule: {
@@ -94,6 +106,7 @@ export default defineComponent({
       {
         title: 'favoraties',
         dataIndex: 'favorates',
+        key: 'favorates',
         render(favorates) {
           return favorates.map((favorate: string) =>
             h(
@@ -106,6 +119,7 @@ export default defineComponent({
       },
       {
         title: 'parents',
+        key: 'parents',
         dataIndex: 'otherInfo.parents'
       }
     ])

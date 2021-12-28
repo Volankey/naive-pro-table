@@ -1,6 +1,6 @@
 import { Options, Rule, Rules } from './interface'
 import qs from 'qs'
-import { ref, Ref, watch, watchEffect } from 'vue'
+import { ref, Ref, watch } from 'vue'
 import { transformByRuleType, mergeQueryByRule } from './utils'
 import { Router } from 'vue-router'
 
@@ -18,24 +18,14 @@ export default class ParamsStore {
       this.rules
     )
     console.log('param init')
-    watch(
-      this.queryRef,
-      () => {
-        const currentRoute = this.router.currentRoute.value
-        // router 同步
-        this.router.replace({
-          path: currentRoute.fullPath,
-          query: mergeQueryByRule(
-            this.queryRef.value,
-            currentRoute.query,
-            this.rules
-          )
-        })
-      },
-      {
-        deep: true
-      }
-    )
+  }
+  updateRouterQuery(query: any) {
+    const currentRoute = this.router.currentRoute.value
+    // router 同步
+    this.router.replace({
+      path: currentRoute.fullPath,
+      query: mergeQueryByRule(query, currentRoute.query, this.rules)
+    })
   }
   parseQueryByRules(
     query: ParamsStore['queryRef']['value'],
@@ -43,7 +33,6 @@ export default class ParamsStore {
   ): void {
     if (query) {
       Object.entries(rules).forEach(([key, rule]) => {
-        console.log(key, query, rules)
         this.updateQuery(key, query[key], rule)
       })
     }
@@ -58,7 +47,12 @@ export default class ParamsStore {
   clearQuery(key: string): void {
     delete this.queryRef.value[key]
   }
-  updateQuery(key: string, value: any, rule: Rule): void {
+  updateQuery(
+    key: string,
+    value: any,
+    rule: Rule,
+    type: 'filter' | 'sorter' | 'page'
+  ): void {
     if (value === undefined || value === null) {
       delete this.queryRef.value[key]
       return

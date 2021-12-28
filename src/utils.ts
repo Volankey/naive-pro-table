@@ -19,6 +19,7 @@ import {
 import { Copy } from './Components/Copy'
 import type ParamsStore from './ParamsStore'
 import { Rule, Rules } from './ParamsStore/interface'
+import { TableParamsStore } from './TableParamsStore'
 
 interface RenderOptions {
   result: VNodeChild
@@ -129,27 +130,33 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   return tmpColumn as DataTableColumn<any>
 }
 
-export const useTableRequest = () => {
-  const paramsRef = ref(null)
-  const sortRef = ref<SortState | null>(null)
-  const filterRef = ref<FilterState | null>(null)
-  const paginationRef = ref<Mutable<PaginationProps>>({
-    page: 1
-  })
+export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
   const tableApiRequestArgsRef = computed(() => {
-    return [
-      paramsRef.value,
-      sortRef.value,
-      filterRef.value,
-      paginationRef.value.page,
-      paginationRef.value.pageSize
-    ] as ApiRequestArgs
+    const paramsStore = paramsStoreRef.value
+    const query = paramsStore.queryRef.value
+    const { sort, filter, params, page, pageSize } = query
+    return [params, sort, filter, page, pageSize] as ApiRequestArgs
+  })
+  const paginationRef = computed(() => {
+    const query = paramsStoreRef.value.queryRef.value
+    return {
+      pageSize: query.pageSize,
+      page: query.page
+    } as PaginationProps
   })
 
   const handleSortChange = (sort: SortState | null) => {
-    sortRef.value = sort
+    const paramsStore = paramsStoreRef.value
+    if (sort) {
+      // TODO: 使用ColumnKey
+      paramsStore.updateQuery(sort.columnKey as string, sort?.order, 'sort')
+    } else {
+      paramsStore.clearQuery('sort')
+    }
   }
   const handleFilterChange = (filter: FilterState | null) => {
+    const paramsStore = paramsStoreRef.value
+
     let tmpFilter = {}
     if (filter) {
       // 处理 filterValues 无选项的时候返回 null
@@ -163,35 +170,31 @@ export const useTableRequest = () => {
             )
           ) {
             result[key] = filterValues
+            paramsStore.updateQuery(key, filterValues, 'filter')
+          } else {
+            paramsStore.updateQuery(key, undefined, 'filter')
           }
           return result
         },
         {} as any
       )
     }
-    filterRef.value = Object.keys(tmpFilter).length === 0 ? null : filter
   }
-  const handleParamsChange = (params: any) => {
-    paramsRef.value = params
-  }
+  const handleParamsChange = (params: any) => {}
   const handlePageChange = (page: number) => {
-    paginationRef.value.page = page
+    const paramsStore = paramsStoreRef.value
+    paramsStore.updatePage(page)
   }
-  const handlePageSizeChange = (size: number) => {
-    paginationRef.value.pageSize = size
-  }
+  const handlePageSizeChange = (size: number) => {}
 
   return {
-    paramsRef,
-    sortRef,
-    filterRef,
     tableApiRequestArgsRef,
-    paginationRef,
     handleSortChange,
     handleFilterChange,
     handleParamsChange,
     handlePageChange,
-    handlePageSizeChange
+    handlePageSizeChange,
+    paginationRef
   }
 }
 

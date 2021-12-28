@@ -24,6 +24,7 @@ import {
 import { Rules } from './ParamsStore/interface'
 import { useRoute, useRouter } from 'vue-router'
 import { stringify as qsStringify } from 'qs'
+import { TableParamsStore } from './TableParamsStore'
 
 export default defineComponent({
   name: 'NProTable',
@@ -59,24 +60,22 @@ export default defineComponent({
     const defaultQuery = route.query
     const paramsStoreRef = computed(
       () =>
-        new ParamsStore({
-          // defaultQuery: 'page=1&search=i79800&sex[]=man&sex[]=all]',
-          defaultQuery: qsStringify(defaultQuery),
-          rules: syncRouteRuleRef.value,
-          router
+        new TableParamsStore({
+          keyMapColumnAndRule: syncRouteRuleColumnRef.value
         })
     )
-    const routerQueryRef = paramsStoreRef.value.queryRef.value
-    console.log('routerQueryRef', routerQueryRef)
+
     const loadingRef = ref(false)
     const hasHeaderRef = computed(() => {
       return props.headerTitle || props.toolBars?.length
     })
+    const pageCountRef = ref(0)
 
     const mergedPaginationRef = computed(() => {
       return {
         ...props.pagination,
-        ...paginationRef.value
+        ...paginationRef.value,
+        pageCount: pageCountRef.value
       }
     })
     const tableDataRef = ref([])
@@ -102,87 +101,61 @@ export default defineComponent({
         [key: string]: ProColumn<any>
       }
     })
-
     const {
       handleSortChange,
       handleFilterChange,
       handleParamsChange,
       handlePageChange,
       handlePageSizeChange,
-      paramsRef,
-      sortRef,
-      filterRef,
       tableApiRequestArgsRef,
       paginationRef
-    } = useTableRequest()
+    } = useTableRequest(paramsStoreRef)
 
-    const handleSyncRouteSorter = (sort: SortState | null) => {
-      const columnKey = sort?.columnKey
-      const columnKeyMapColumn = columnKeyMapColumnRef.value
-      const paramsStore = paramsStoreRef.value
+    // console.log(
+    //   'init',
+    //   sortRef.value,
+    //   filterRef.value,
+    //   paramsStoreRef.value.queryRef.value
+    // )
 
-      if (columnKey) {
-        const column = columnKeyMapColumn[columnKey]
-        if ('sortOrder' in column) {
-          column.sortOrder = sort?.order
-          const syncRouteSorter = column.syncRouteSorter
-          if (syncRouteSorter) {
-            // 单列排序，未来需要支持多列排序
-            const { name, rule } = syncRouteSorter
-            if (sort?.order === false) {
-              paramsStore.clearQuery(name)
-            } else {
-              paramsStore.updateQuery(name, sort?.order, rule)
-            }
-          }
-        }
-      }
-    }
+    // Object.entries(paramsStoreRef.value.queryRef.value).forEach(
+    //   ([key, value]) => {
+    //     const syncRouteRuleColumn = syncRouteRuleColumnRef.value
+    //     const columnAndRule = syncRouteRuleColumn[key]
+    //     console.log(
+    //       '🚀 ~ file: Protable.tsx ~ line 126 ~ Object.entries ~ columnAndRule',
+    //       columnAndRule
+    //     )
+    //   }
+    // )
 
-    const handleSyncRouteFilter = (filterValue: FilterState | null) => {
-      const columnKeyMapColumn = columnKeyMapColumnRef.value
-      const paramsStore = paramsStoreRef.value
-      if (filterValue) {
-        Object.entries(filterValue).forEach(
-          ([filterColumnKey, filterValue]) => {
-            const syncRouteFilter =
-              columnKeyMapColumn[filterColumnKey].syncRouteFilter
-            if (syncRouteFilter) {
-              const { name, rule } = syncRouteFilter
-              paramsStore.updateQuery(name, filterValue, rule)
-            }
-          }
-        )
-      } else {
-        // clear all
-        Object.values(columnKeyMapColumn).forEach((column) => {
-          const syncRouteFilter = column.syncRouteFilter
-          if (syncRouteFilter) {
-            const { name } = syncRouteFilter
-            paramsStore.clearQuery(name)
-          }
-        })
-      }
-    }
+    const handleSyncRouteSorter = (sort: SortState | null) => {}
 
-    watchEffect(async () => {
+    const handleSyncRouteFilter = (filterValue: FilterState | null) => {}
+    const handleFetchTableData = async () => {
       if (!props.apiRequest) {
         return
       }
       loadingRef.value = true
-      handleSyncRouteSorter(sortRef.value)
-      handleSyncRouteFilter(filterRef.value)
+
       try {
         const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
-        console.log(tableApiRequestArgsRef.value)
         console.log(paramsStoreRef.value.queryRef.value)
         tableDataRef.value = resp.data
-        paginationRef.value.pageCount = resp.pageCount
+        // paginationRef.value.pageCount = resp.pageCount
+        pageCountRef.value = resp.pageCount
       } catch (error) {
         console.error(error)
       }
       loadingRef.value = false
-    })
+    }
+    watch(
+      () => [paramsStoreRef.value.queryRef.value, tableApiRequestArgsRef.value],
+      handleFetchTableData,
+      {
+        immediate: true
+      }
+    )
 
     return {
       hasHeader: hasHeaderRef,

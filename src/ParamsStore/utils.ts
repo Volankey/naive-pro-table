@@ -10,7 +10,7 @@ export const transformByRuleType = (
     case 'number':
       return Number(originValue)
     case 'array':
-      return originValue
+      return [].concat(originValue)
     case 'object':
       return originValue
     default:

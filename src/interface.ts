@@ -26,6 +26,7 @@ type RenderCell<T> = (
 ) => VNodeChild
 
 export type ProTableBasicColumn<T = InternalRowData> = {
+  key: any
   title?: TableColumnTitle
   editable?: boolean | RenderCell<T>
   valueEnum?: ValueEnum
