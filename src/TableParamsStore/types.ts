@@ -23,4 +23,11 @@ export interface KeyMapColumnAndRule {
   [columnKey: string]: { rule: Rule; column: ProColumn }
 }
 
-export type ParamsType = 'filter' | 'sort' | 'page'
+export type ParamsType = 'filter'
+export interface QueryOptions {
+  params?: unknown | null
+  sort?: any
+  filter?: any
+  page?: number
+  pageSize?: number
+}

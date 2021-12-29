@@ -25,6 +25,7 @@ import { Rules } from './ParamsStore/interface'
 import { useRoute, useRouter } from 'vue-router'
 import { stringify as qsStringify } from 'qs'
 import { TableParamsStore } from './TableParamsStore'
+import { syncRouter } from './TableParamsStore/routerSync'
 
 export default defineComponent({
   name: 'NProTable',
@@ -58,10 +59,12 @@ export default defineComponent({
     const router = useRouter()
     const route = useRoute()
     const defaultQuery = route.query
+    const handleUpdateQuery = syncRouter()
     const paramsStoreRef = computed(
       () =>
         new TableParamsStore({
-          keyMapColumnAndRule: syncRouteRuleColumnRef.value
+          keyMapColumnAndRule: syncRouteRuleColumnRef.value,
+          onUpdateQuery: handleUpdateQuery
         })
     )
 

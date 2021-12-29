@@ -148,8 +148,8 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
   const handleSortChange = (sort: SortState | null) => {
     const paramsStore = paramsStoreRef.value
     if (sort) {
-      // TODO: 使用ColumnKey
-      paramsStore.updateQuery(sort.columnKey as string, sort?.order, 'sort')
+      // TODO: 使用type ColumnKey
+      paramsStore.updateSort(sort.columnKey as string, sort?.order)
     } else {
       paramsStore.clearQuery('sort')
     }
@@ -170,9 +170,9 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
             )
           ) {
             result[key] = filterValues
-            paramsStore.updateQuery(key, filterValues, 'filter')
+            paramsStore.updateFilter(key, filterValues)
           } else {
-            paramsStore.updateQuery(key, undefined, 'filter')
+            paramsStore.updateFilter(key, undefined)
           }
           return result
         },
@@ -180,7 +180,10 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
       )
     }
   }
-  const handleParamsChange = (params: any) => {}
+  const handleParamsChange = (params: any) => {
+    const paramsStore = paramsStoreRef.value
+    paramsStore.updateParams(params)
+  }
   const handlePageChange = (page: number) => {
     const paramsStore = paramsStoreRef.value
     paramsStore.updatePage(page)
