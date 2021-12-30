@@ -125,7 +125,6 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   } as ProColumn<any>
 
   setColumnConfig(tmpColumn)
-  console.log('🚀 ~ file: utils.ts ~ line 111 ~ tmpColumn', tmpColumn)
 
   return tmpColumn as DataTableColumn<any>
 }

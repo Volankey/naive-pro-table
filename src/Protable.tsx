@@ -6,26 +6,19 @@ import {
   computed,
   ref,
   watchEffect,
-  watch
+  watch,
+  onMounted
 } from 'vue'
-import { NDataTable, PaginationProps } from 'naive-ui'
+import { NDataTable } from 'naive-ui'
 import { dataTableProps } from 'naive-ui/lib/data-table/src/DataTable.js'
 import { headerPropsDefine } from './commonProps'
-import { ApiRequest, Mutable, ProColumn } from './interface'
+import { ApiRequest, ProColumn } from './interface'
 import ProHeader from './Header/ProHeader.vue'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
-import ParamsStore from './ParamsStore'
-import {
-  FilterOptionValue,
-  FilterState,
-  SortState,
-  TableColumns
-} from 'naive-ui/lib/data-table/src/interface'
-import { Rules } from './ParamsStore/interface'
-import { useRoute, useRouter } from 'vue-router'
-import { stringify as qsStringify } from 'qs'
+import { TableColumns } from 'naive-ui/lib/data-table/src/interface'
 import { TableParamsStore } from './TableParamsStore'
-import { syncRouter } from './TableParamsStore/routerSync'
+import { syncFromRouter, syncRouterQuery } from './TableParamsStore/routerSync'
+import { QueryOptions } from './TableParamsStore/types'
 
 export default defineComponent({
   name: 'NProTable',
@@ -43,23 +36,15 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const syncRouteRuleColumnRef = computed(() => {
-      return getColumnsRouteRules(props.columns)
+    const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
+    watch(props.columns, () => {
+      syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
     })
-    const syncRouteRuleRef = computed(() => {
-      return Object.entries(syncRouteRuleColumnRef.value).reduce(
-        (result, item) => {
-          const [key, ruleColumn] = item
-          result[key] = ruleColumn.rule
-          return result
-        },
-        {} as Rules
-      )
-    })
-    const router = useRouter()
-    const route = useRoute()
-    const defaultQuery = route.query
-    const handleUpdateQuery = syncRouter()
+    const handleSyncRouterQuery = syncRouterQuery()
+    const handleUpdateQuery = (query: QueryOptions<false>) => {
+      handleSyncRouterQuery(query)
+      handleFetchTableData()
+    }
     const paramsStoreRef = computed(
       () =>
         new TableParamsStore({
@@ -95,15 +80,6 @@ export default defineComponent({
       mergedColumnsRef.value = props.columns.map(handleColumn) as TableColumns
     })
 
-    const columnKeyMapColumnRef = computed(() => {
-      return mergedColumnsRef.value.reduce((result, column) => {
-        return Object.assign(result, {
-          [column.key]: column
-        })
-      }, {}) as {
-        [key: string]: ProColumn<any>
-      }
-    })
     const {
       handleSortChange,
       handleFilterChange,
@@ -114,36 +90,17 @@ export default defineComponent({
       paginationRef
     } = useTableRequest(paramsStoreRef)
 
-    // console.log(
-    //   'init',
-    //   sortRef.value,
-    //   filterRef.value,
-    //   paramsStoreRef.value.queryRef.value
-    // )
+    paramsStoreRef.value.initQuery(syncFromRouter())
 
-    // Object.entries(paramsStoreRef.value.queryRef.value).forEach(
-    //   ([key, value]) => {
-    //     const syncRouteRuleColumn = syncRouteRuleColumnRef.value
-    //     const columnAndRule = syncRouteRuleColumn[key]
-    //     console.log(
-    //       '🚀 ~ file: Protable.tsx ~ line 126 ~ Object.entries ~ columnAndRule',
-    //       columnAndRule
-    //     )
-    //   }
-    // )
-
-    const handleSyncRouteSorter = (sort: SortState | null) => {}
-
-    const handleSyncRouteFilter = (filterValue: FilterState | null) => {}
-    const handleFetchTableData = async () => {
+    async function handleFetchTableData() {
       if (!props.apiRequest) {
         return
       }
       loadingRef.value = true
 
       try {
+        console.log('fetch params-> ', tableApiRequestArgsRef.value)
         const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
-        console.log(paramsStoreRef.value.queryRef.value)
         tableDataRef.value = resp.data
         // paginationRef.value.pageCount = resp.pageCount
         pageCountRef.value = resp.pageCount
@@ -152,13 +109,9 @@ export default defineComponent({
       }
       loadingRef.value = false
     }
-    watch(
-      () => [paramsStoreRef.value.queryRef.value, tableApiRequestArgsRef.value],
-      handleFetchTableData,
-      {
-        immediate: true
-      }
-    )
+    onMounted(() => {
+      handleFetchTableData()
+    })
 
     return {
       hasHeader: hasHeaderRef,
@@ -170,7 +123,9 @@ export default defineComponent({
       handlePageChange,
       handlePageSizeChange,
       handleFilterChange,
-      handleSortChange
+      handleSortChange,
+      tableApiRequestArgsRef,
+      paramsStoreRef
     }
   },
   render() {

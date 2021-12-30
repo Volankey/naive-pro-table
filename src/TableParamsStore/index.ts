@@ -1,13 +1,13 @@
 import { ref, Ref } from 'vue'
 import { Router } from 'vue-router'
-import { ParamsType, KeyMapColumnAndRule, QueryOptions } from './types'
-
-function _getParamsKey(key: string, type: ParamsType): string {
-  return key + '.' + type
-}
+import {
+  ParamsType,
+  KeyMapColumnAndRule,
+  QueryOptions,
+  RoueQueryParsed
+} from './types'
 
 export class TableParamsStore {
-  getParamsKey: typeof _getParamsKey = _getParamsKey
   keyMapColumnAndRule: KeyMapColumnAndRule
   queryRef: Ref<{
     params?: unknown | null
@@ -19,31 +19,33 @@ export class TableParamsStore {
   onUpdateQuery: (query: QueryOptions) => void
 
   constructor({
-    getParamsKey,
     keyMapColumnAndRule,
     onUpdateQuery
   }: {
-    getParamsKey?: typeof _getParamsKey
     keyMapColumnAndRule: KeyMapColumnAndRule
     onUpdateQuery: (query: QueryOptions) => void
   }) {
-    this.getParamsKey = getParamsKey || _getParamsKey
     this.keyMapColumnAndRule = keyMapColumnAndRule
     this.onUpdateQuery = onUpdateQuery
   }
-  initQuery(query: qs.ParsedQs) {
-    Object.entries(this.keyMapColumnAndRule).forEach(([key, columnAndRule]) => {
-      const { column } = columnAndRule
-      if (column.syncRouteFilter) {
-        const filterKey = column.key
-        query[filterKey] &&
-          this._updateFilterValue(column.key, query[filterKey])
-      }
-      if (column.syncRouteSorter) {
-        const sorterKey = column.key
-        query[sorterKey] &&
-          this._updateSorterValue(column.key, query[sorterKey])
-      }
+  initQuery(routeQueryParsed: RoueQueryParsed) {
+    const keyMapColumnAndRule = this.keyMapColumnAndRule
+    Object.values(routeQueryParsed).forEach((queryItems) => {
+      queryItems.forEach((queryItem) => {
+        const { key, value, type } = queryItem
+        if (keyMapColumnAndRule[key]) {
+          const columnAndRule = keyMapColumnAndRule[key]
+          const { column } = columnAndRule
+          if (column.syncRouteFilter && type === 'filter') {
+            value && this._updateFilterValue(column.key, value)
+          }
+          if (column.syncRouteSorter && type === 'sort') {
+            value && this._updateSorterValue(column.key, value)
+          }
+        } else if (type === 'page' && value) {
+          this.updatePage(+value)
+        }
+      })
     })
   }
   _updateFilterValue(columnKey: string, value: any) {

@@ -1,5 +1,5 @@
 import { ProColumn } from '@/interface'
-import { Router } from 'vue-router'
+import { LocationQueryValue, Router } from 'vue-router'
 
 export interface Options {
   defaultQuery: string
@@ -24,10 +24,19 @@ export interface KeyMapColumnAndRule {
 }
 
 export type ParamsType = 'filter'
-export interface QueryOptions {
-  params?: unknown | null
+export interface QueryOptions<T = false> {
+  params?: T extends false ? Record<string, any> : T
   sort?: any
   filter?: any
   page?: number
   pageSize?: number
 }
+
+export type RoueQueryParsed = Record<
+  string,
+  {
+    key: string
+    value: LocationQueryValue | LocationQueryValue[]
+    type: string
+  }[]
+>
