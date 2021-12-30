@@ -10,11 +10,32 @@ function getSortQuery(
   const res: Record<string, string> = {}
   Object.entries(sort).forEach(([key, value]) => {
     console.log('routeQuery', routeQuery)
-    delete routeQuery[key]
+    const k = _getParamsKey(key, 'sort')
+    delete routeQuery[k]
     if (value !== false) {
-      res[key] = value
+      res[k] = value
+    } else {
+      res[k] = null
     }
   })
+  return res
+}
+function getFilterQuery(
+  filter: Record<string, string | false>,
+  routeQuery: LocationQuery
+) {
+  const res: Record<string, string> = {}
+  filter &&
+    Object.entries(filter).forEach(([key, value]) => {
+      console.log('routeQuery', routeQuery)
+      const k = _getParamsKey(key, 'filter')
+      delete routeQuery[k]
+      if (value !== false) {
+        res[k] = value
+      } else {
+        res[k] = null
+      }
+    })
   return res
 }
 export function syncRouter() {
@@ -24,17 +45,16 @@ export function syncRouter() {
     const routeQuery = route.query
     route.query = {}
     const query = {
+      ...routeQuery,
       ...getSortQuery(tableQuery.sort, routeQuery),
-      ...tableQuery.filter,
-      page: tableQuery.page,
-      ...routeQuery
+      ...getFilterQuery(tableQuery.filter, routeQuery),
+      page: tableQuery.page
     }
-    console.log('nextQuery', query)
 
-    router.replace({
-      name: route.name,
-      params: route.params,
+    const path = router.resolve({
+      ...router.currentRoute.value,
       query
     })
+    router.replace(path)
   }
 }
