@@ -39,9 +39,13 @@ export default defineComponent({
   },
   setup(props, context) {
     const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
-    watch(props.columns, () => {
-      syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
-    })
+    watch(
+      () => props.columns,
+      () => {
+        syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
+      }
+    )
+
     const handleSyncRouterQuery = syncRouterQuery()
     const handleUpdateQuery = (query: QueryOptions<false>) => {
       handleSyncRouterQuery(query)
@@ -101,10 +105,8 @@ export default defineComponent({
       loadingRef.value = true
 
       try {
-        console.log('fetch params-> ', tableApiRequestArgsRef.value)
         const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
         tableDataRef.value = resp.data
-        // paginationRef.value.pageCount = resp.pageCount
         pageCountRef.value = resp.pageCount
       } catch (error) {
         console.error(error)

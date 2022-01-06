@@ -145,6 +145,14 @@ export default defineComponent({
         )
     ])
     const apiRequest: ApiRequest = (params, sort, filter, page, pageSize) => {
+      console.log(
+        '🚀 ~ file: App.vue ~ line 148 ~ setup ~ params, sort, filter, page, pageSize',
+        params,
+        sort,
+        filter,
+        page,
+        pageSize
+      )
       return createSourceData(params, sort, filter, page, pageSize)
     }
     return {

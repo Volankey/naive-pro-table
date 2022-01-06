@@ -106,6 +106,7 @@ export class TableParamsStore {
     this.handleQueryUpdate()
   }
   clearQuery(type: 'filter' | 'sort') {
+    debugger
     const query = this.queryRef.value
     if (type === 'filter') {
       query.filter = undefined
