@@ -23,7 +23,9 @@ import { QueryOptions } from './TableParamsStore/types'
 export default defineComponent({
   name: 'NProTable',
   props: {
-    ...dataTableProps,
+    dataTableProps: {
+      type: Object as PropType<typeof dataTableProps>
+    },
     ...headerPropsDefine,
     apiRequest: Function as PropType<ApiRequest>,
     columns: {
@@ -149,6 +151,7 @@ export default defineComponent({
           v-slots={{ headerTitle, headerToolbars }}
         />
         <NDataTable
+          {...this.dataTableProps}
           remote={remote}
           pagination={mergedPagination}
           data={tableData}

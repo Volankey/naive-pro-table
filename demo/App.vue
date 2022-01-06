@@ -4,6 +4,9 @@
     :header-title="'高级表格'"
     :tool-bars="renderToolBars"
     :api-request="apiRequest"
+    :data-table-props="{
+      rowClassName: rowClassName
+    }"
   />
 </template>
 
@@ -12,6 +15,7 @@ import { NButton, NTag } from 'naive-ui'
 import { defineComponent, h, ref } from 'vue'
 import ProTable, { ApiRequest } from '../src/index'
 import type { ProColumn } from '../src/interface'
+import EditableTableCell from './EditableTableCell/EditableTableCell.vue'
 
 const createSourceData = (
   params: unknown,
@@ -70,6 +74,14 @@ export default defineComponent({
           rule: {
             type: 'string'
           }
+        },
+        render(age, raw) {
+          return h(EditableTableCell, {
+            textValue: '' + age,
+            updateValue(v) {
+              raw.age = +v
+            }
+          })
         }
       },
       {
@@ -85,7 +97,6 @@ export default defineComponent({
             type: 'string'
           }
         },
-
         syncRouteFilter: {
           name: 'sex',
           rule: {
@@ -139,10 +150,17 @@ export default defineComponent({
     return {
       renderToolBars,
       columns: columnsRef,
-      apiRequest
+      apiRequest,
+      rowClassName() {
+        return 'td-relative'
+      }
     }
   }
 })
 </script>
 
-<style></style>
+<style>
+.td-relative .n-data-table-td {
+  position: relative;
+}
+</style>

@@ -2,7 +2,7 @@ import type { VNodeChild } from 'vue'
 
 import type { DataTableColumn } from 'naive-ui'
 import { FilterState, SortState } from 'naive-ui/lib/data-table/src/interface'
-import { Rule, Rules } from './ParamsStore/interface'
+import { Rule } from './TableParamsStore/types'
 
 interface InternalRowData {
   [key: string]: unknown
@@ -41,16 +41,17 @@ export type ProTableBasicColumn<T = InternalRowData> = {
     rule: Rule
   }
   // valueType: string // TODO:
-  render?: (
-    text: any,
-    rowData: T,
-    rowIndex: number,
-    actions?: any
-  ) => VNodeChild //TODO: actions
-  filters?: true | Array<{ label: string; value: string | number }>
+  render?: RenderCell<T>
+  filters?: boolean | Array<{ label: string; value: string | number }>
+  sorter?: TableBaseColumn<T>['sorter']
+  sortOrder?: boolean
+  filter?: TableBaseColumn<T>['filter']
 }
 
-export type ProColumn<T = InternalRowData> = Partial<DataTableColumn<T>> &
+export type ProColumn<T = InternalRowData> = Omit<
+  Partial<DataTableColumn<T>>,
+  keyof ProTableBasicColumn
+> &
   ProTableBasicColumn<T>
 
 export type ApiRequestArgs = [
