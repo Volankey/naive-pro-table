@@ -1,20 +1,24 @@
 <template>
   <EditabledText :value="textValue" :disabled="disabled">
     <template #default="{ setEditStatus }">
-      <div ref="textRef" @click="handleEnterEditing(setEditStatus)">
+      <div
+        ref="textRef"
+        class="td-content"
+        @click="handleEnterEditing(setEditStatus)"
+      >
         {{ textValue }}
       </div>
     </template>
     <template #input="inputProps">
-      <input
+      <Input
         v-if="inputProps.editing"
         ref="inputRef"
-        v-clickoutside="() => handleClickoutside(inputProps)"
-        class="cell-input-wrapper"
+        v-clickoutside="(e) => handleClickoutside(inputProps, e)"
         :value="inputProps.value"
-        type="text"
-        autofocus
-        @change="(e) => handleInputChange(e, inputProps)"
+        :rule="rule"
+        class="cell-input-wrapper"
+        @update:value="(v) => (inputProps.value = v)"
+        @error="handleInputInValid"
       />
     </template>
   </EditabledText>
@@ -23,26 +27,22 @@
 <script lang="ts" setup>
 import { defineProps, nextTick, ref } from 'vue'
 import { clickoutside as VClickoutside } from 'vdirs'
-
+import type { FieldRule, InputProps } from './types'
 import EditabledText from './EditabledText.vue'
-
-interface InputProps {
-  setEditStatus: (editable: boolean) => void
-  value: string
-  updateValue: (v: any) => void
-  editing: boolean
-}
+import Input from './Input.vue'
+import { useMessage } from 'naive-ui'
 
 const props = defineProps<{
   textValue: string
   disabled?: boolean
   beforeUpdateValue?: (value: string) => any
   updateValue: (value: any) => void
+  rule?: FieldRule
 }>()
 const textRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
-function handleInputChange(e: InputEvent, inputProps: InputProps) {
+function handleInputChange(e: Event, inputProps: InputProps) {
   const value = (e.target as HTMLInputElement).value
   inputProps.updateValue(value)
   if (props.beforeUpdateValue && value) {
@@ -51,9 +51,13 @@ function handleInputChange(e: InputEvent, inputProps: InputProps) {
     props.updateValue(value)
   }
 }
-function handleClickoutside(inputProps: InputProps) {
-  console.log('clickoutside')
-  inputProps.setEditStatus(false)
+function handleClickoutside(inputProps: InputProps, e: MouseEvent) {
+  console.log('clickoutside', e.target)
+  if ((e.target as HTMLDivElement).className.includes('td-content'))
+    inputProps.setEditStatus(false)
+}
+function handleInputInValid(message: string) {
+  alert(message)
 }
 function handleEnterEditing(setEditStatus: InputProps['setEditStatus']) {
   props.disabled ? false : setEditStatus(true)

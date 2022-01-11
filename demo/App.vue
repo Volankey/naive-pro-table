@@ -78,6 +78,17 @@ export default defineComponent({
         render(age, raw) {
           return h(EditableTableCell, {
             textValue: '' + age,
+            rule: {
+              message: 'age 不合法',
+              type: Number,
+              validator(value) {
+                if (value > 30) {
+                  return false
+                } else {
+                  return true
+                }
+              }
+            },
             updateValue(v) {
               raw.age = +v
             }
