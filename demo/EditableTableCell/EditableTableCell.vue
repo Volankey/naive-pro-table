@@ -17,7 +17,7 @@
         :value="inputProps.value"
         :rule="rule"
         class="cell-input-wrapper"
-        @update:value="(v) => (inputProps.value = v)"
+        @update:value="handleUpdateValue($event, inputProps)"
         @error="handleInputInValid"
       />
     </template>
@@ -35,22 +35,13 @@ import { useMessage } from 'naive-ui'
 const props = defineProps<{
   textValue: string
   disabled?: boolean
-  beforeUpdateValue?: (value: string) => any
+  beforeUpdateValue?: (value: string | number) => any
   updateValue: (value: any) => void
   rule?: FieldRule
 }>()
 const textRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
 
-function handleInputChange(e: Event, inputProps: InputProps) {
-  const value = (e.target as HTMLInputElement).value
-  inputProps.updateValue(value)
-  if (props.beforeUpdateValue && value) {
-    props.updateValue(props.beforeUpdateValue(value))
-  } else {
-    props.updateValue(value)
-  }
-}
 function handleClickoutside(inputProps: InputProps, e: MouseEvent) {
   console.log('clickoutside', e.target)
   if ((e.target as HTMLDivElement).className.includes('td-content'))
@@ -58,6 +49,14 @@ function handleClickoutside(inputProps: InputProps, e: MouseEvent) {
 }
 function handleInputInValid(message: string) {
   alert(message)
+}
+function handleUpdateValue(value: string | number, inputProps: InputProps) {
+  inputProps.value = '' + value
+  if (props.beforeUpdateValue && value) {
+    props.updateValue(props.beforeUpdateValue(value))
+  } else {
+    props.updateValue(value)
+  }
 }
 function handleEnterEditing(setEditStatus: InputProps['setEditStatus']) {
   props.disabled ? false : setEditStatus(true)
