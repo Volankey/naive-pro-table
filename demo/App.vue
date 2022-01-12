@@ -27,6 +27,7 @@ import { defineComponent, h, ref } from 'vue'
 import ProTable, { ApiRequest } from '../src/index'
 import type { ProColumn } from '../src/interface'
 import EditableTableCell from './EditableTableCell/EditableTableCell.vue'
+import { provideSingleInputValidStatus } from './EditableTableCell/useSingleEdit'
 
 const createSourceData = (
   params: unknown,
@@ -68,6 +69,7 @@ export default defineComponent({
   },
   setup() {
     const isEditingModeRef = ref(false)
+    provideSingleInputValidStatus()
     const columnsRef = ref<ProColumn<Column>[]>([
       {
         title: 'name',

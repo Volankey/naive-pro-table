@@ -30,7 +30,7 @@ import { clickoutside as VClickoutside } from 'vdirs'
 import type { FieldRule, InputProps } from './types'
 import EditabledText from './EditabledText.vue'
 import Input from './Input.vue'
-import { useMessage } from 'naive-ui'
+import { injectSingleInputValidStatus } from './useSingleEdit'
 
 const props = defineProps<{
   textValue: string
@@ -41,9 +41,18 @@ const props = defineProps<{
 }>()
 const textRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLInputElement | null>(null)
-
+const isValidRef = ref(true)
+const validStatusData = injectSingleInputValidStatus()
 function handleClickoutside(inputProps: InputProps, e: MouseEvent) {
-  console.log('clickoutside', e.target)
+  if (!isValidRef.value) {
+    if (props.rule) {
+      handleInputInValid(props.rule.message)
+    }
+    nextTick(() => {
+      inputRef.value?.focus()
+    })
+    return
+  }
   if ((e.target as HTMLDivElement).className.includes('td-content'))
     inputProps.setEditStatus(false)
 }
@@ -51,14 +60,34 @@ function handleInputInValid(message: string) {
   alert(message)
 }
 function handleUpdateValue(value: string | number, inputProps: InputProps) {
+  let updateValue = value
   inputProps.value = '' + value
+  if (props.rule) {
+    const isValid = props.rule.validator(value)
+    isValidRef.value = isValid
+    validStatusData.isValid = isValid
+    if (isValid === false) {
+      focus()
+      handleInputInValid(props.rule.message)
+      return
+    }
+    updateValue = props.rule.type(updateValue)
+  } else {
+    validStatusData.isValid = true
+    isValidRef.value = true
+  }
   if (props.beforeUpdateValue && value) {
     props.updateValue(props.beforeUpdateValue(value))
   } else {
     props.updateValue(value)
   }
 }
+
 function handleEnterEditing(setEditStatus: InputProps['setEditStatus']) {
+  if (validStatusData.isValid === false) {
+    return
+  }
+  console.log('enter editing')
   props.disabled ? false : setEditStatus(true)
   nextTick(() => {
     // inputRef.value?.click()
