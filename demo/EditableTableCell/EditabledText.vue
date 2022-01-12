@@ -44,7 +44,7 @@ export default {
     }
   },
   render() {
-    if (this.editing) {
+    if (this.editing && !this.disabled) {
       return renderSlot(this.$slots, 'input', {
         setEditStatus: this.setEditStatus,
         value: this.shadowValue,

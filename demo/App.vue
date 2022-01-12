@@ -1,4 +1,15 @@
 <template>
+  <n-button
+    v-if="!isEditingMode"
+    style="margin-top: 20px"
+    type="info"
+    @click="isEditingMode = true"
+  >
+    age列进入编辑状态
+  </n-button>
+  <n-button v-else style="margin-top: 20px" @click="isEditingMode = false">
+    age列退出编辑状态
+  </n-button>
   <ProTable
     :columns="columns"
     :header-title="'高级表格'"
@@ -52,9 +63,11 @@ type Column = {
 
 export default defineComponent({
   components: {
-    ProTable
+    ProTable,
+    NButton
   },
   setup() {
+    const isEditingModeRef = ref(false)
     const columnsRef = ref<ProColumn<Column>[]>([
       {
         title: 'name',
@@ -78,6 +91,7 @@ export default defineComponent({
         render(age, raw) {
           return h(EditableTableCell, {
             textValue: '' + age,
+            disabled: !isEditingModeRef.value,
             rule: {
               message: 'age 不合法',
               type: Number,
@@ -170,6 +184,7 @@ export default defineComponent({
       renderToolBars,
       columns: columnsRef,
       apiRequest,
+      isEditingMode: isEditingModeRef,
       rowClassName() {
         return 'td-relative'
       }
