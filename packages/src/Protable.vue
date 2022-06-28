@@ -8,9 +8,9 @@ import type {
 import { NDataTable } from 'naive-ui'
 import type { ApiRequest, ProColumn } from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
-import { TableParamsStore } from './TableParamsStore'
-import { syncFromRouter, syncRouterQuery } from './TableParamsStore/routerSync'
-import type { QueryOptions } from './TableParamsStore/types'
+import { TableParamsStore } from './table-params-store'
+import { syncFromRouter, syncRouterQuery } from './router-sync'
+import type { QueryOptions } from './table-params-store/types'
 import { debounce } from 'lodash-es'
 
 const props = withDefaults(
@@ -110,17 +110,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <NDataTable
-      v-bind="dataTableProps"
-      :remote="remote"
-      :pagination="mergedPaginationRef"
-      :data="tableDataRef"
-      :loading="loadingRef"
-      :columns="mergedColumnsRef"
-      :onUpdateFilters="handleFilterChange"
-      :onUpdateSorter="handleSortChange"
-      :onUpdatePageSize="handlePageSizeChange"
-      :onUpdatePage="handlePageChange"
-    />
+    <NDataTable v-bind="dataTableProps" :remote="remote" :pagination="mergedPaginationRef" :data="tableDataRef"
+      :loading="loadingRef" :columns="mergedColumnsRef" :onUpdateFilters="handleFilterChange"
+      :onUpdateSorter="handleSortChange" :onUpdatePageSize="handlePageSizeChange" :onUpdatePage="handlePageChange" />
   </div>
 </template>

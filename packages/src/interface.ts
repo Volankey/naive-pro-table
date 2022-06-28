@@ -6,7 +6,7 @@ import type {
   DataTableFilterState,
 } from 'naive-ui'
 
-import type { Rule } from './TableParamsStore/types'
+import type { Rule } from './table-params-store/types'
 
 interface InternalRowData {
   [key: string]: unknown

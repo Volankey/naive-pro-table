@@ -14,8 +14,8 @@ import type {
   SortState,
 } from 'naive-ui/lib/data-table/src/interface'
 import CommonCopy from './components/CommonCopy'
-import type { Rule, Rules } from './TableParamsStore/types'
-import type { TableParamsStore } from './TableParamsStore/index'
+import type { Rule, Rules } from './table-params-store/types'
+import type { TableParamsStore } from './table-params-store/index'
 
 interface RenderOptions {
   result: VNodeChild

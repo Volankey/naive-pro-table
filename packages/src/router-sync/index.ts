@@ -1,5 +1,5 @@
 import { type LocationQuery, useRoute, useRouter } from 'vue-router'
-import type { QueryOptions, RoueQueryParsed } from './types'
+import type { QueryOptions, RoueQueryParsed } from '../table-params-store/types'
 
 function _getQueryKey(key: string, type: string): string {
   return key + '.' + type
