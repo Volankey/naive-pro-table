@@ -1,4 +1,7 @@
+import { PaginationProps } from 'naive-ui'
+import { ruleHandlers } from '../rule/rule-handler'
 import { ref, type Ref } from 'vue'
+import { LocationQueryValue } from 'vue-router'
 import type {
   KeyMapColumnAndRule,
   QueryOptions,
@@ -26,9 +29,18 @@ export class TableParamsStore {
     this.keyMapColumnAndRule = keyMapColumnAndRule
     this.onUpdateQuery = onUpdateQuery
   }
-  initQuery(routeQueryParsed: RoueQueryParsed) {
+  initQuery(
+    routeQueryParsed: RoueQueryParsed,
+    paginationRef: Ref<PaginationProps>,
+  ) {
     const keyMapColumnAndRule = this.keyMapColumnAndRule
     const params: any = {}
+    if (paginationRef.value.defaultPage !== undefined) {
+      this._updatePageValue(paginationRef.value.defaultPage)
+    }
+    if (paginationRef.value.defaultPageSize !== undefined) {
+      this._updatePageSizeValue(paginationRef.value.defaultPageSize)
+    }
     Object.values(routeQueryParsed).forEach((queryItems) => {
       queryItems.forEach((queryItem) => {
         const { key, value, type } = queryItem
@@ -54,14 +66,21 @@ export class TableParamsStore {
   }
   _updateFilterValue(columnKey: string, value: any) {
     const columnAndRule = this.keyMapColumnAndRule[columnKey]
-    const { column, rule } = columnAndRule
+    const { column } = columnAndRule
+
     const storeQuery = this.queryRef.value
 
     const filterKey = column.key
-    if (rule.type === 'array') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      column.filterOptionValues = value
+    if (column.syncRouteFilter?.rule.type === 'array') {
+      if (value === undefined || Array.isArray(value)) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        column.filterOptionValues = value
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        column.filterOptionValues = [value]
+      }
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

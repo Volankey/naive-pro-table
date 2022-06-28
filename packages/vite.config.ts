@@ -7,16 +7,18 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   build: {
+    outDir: './dist/src',
     lib: {
-      entry: path.resolve(__dirname, './index.ts'),
+      entry: path.resolve(__dirname, './src/index.ts'),
       name: 'naive-ui-protable',
     },
     rollupOptions: {
-      external: ['vue','naive-ui'],
+      external: ['vue','naive-ui','vue-router'],
       output: {
         globals: {
           vue: 'Vue',
-          'naive-ui':'naive'
+          'naive-ui':'naive',
+          'vue-router':'VueRouter'
         }
       }
     }

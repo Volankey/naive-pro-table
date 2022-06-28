@@ -10,3 +10,9 @@ export const headerPropsDefine = {
     default: () => [],
   },
 }
+
+export interface PropsDefine {
+  headerTitle: string | (() => VNode) | undefined
+  headerTitleToolTip: string
+  toolBars: (() => VNode)[]
+}

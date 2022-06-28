@@ -15,7 +15,7 @@ import type {
 } from 'naive-ui/lib/data-table/src/interface'
 import CommonCopy from './components/CommonCopy'
 import type { Rule, Rules } from './TableParamsStore/types'
-import type { TableParamsStore } from './TableParamsStore'
+import type { TableParamsStore } from './TableParamsStore/index'
 
 interface RenderOptions {
   result: VNodeChild
@@ -193,7 +193,9 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
   }
 }
 
-type ColumnRule = { [name: string]: { rule: Rule; column: ProColumn<any> } }
+export type ColumnRule = {
+  [name: string]: { rule: Rule; column: ProColumn<any> }
+}
 
 export const getRouteRuleFilter = (
   column: ProColumn<any>,
@@ -226,11 +228,25 @@ export const getRouteRuleSorter = (
   }
   return {}
 }
-export const getColumnsRouteRules = (columns: ProColumn<any>[]): ColumnRule => {
-  return columns.reduce((result, column) => {
-    const filter = getRouteRuleFilter(column, result)
-    const sorter = getRouteRuleSorter(column, result)
-    Object.assign(result, filter, sorter)
-    return result
+export type ColumnKeyMapColAndRules = Record<
+  string,
+  { rules: ColumnRule; column: ProColumn<any> }
+>
+export const getColumnsRouteRules = (
+  columns: ProColumn<any>[],
+): ColumnKeyMapColAndRules => {
+  const columnKeyMapRules: ColumnKeyMapColAndRules = {}
+  columns.forEach((column) => {
+    const filter = getRouteRuleFilter(column, {})
+    const sorter = getRouteRuleSorter(column, {})
+    if (!columnKeyMapRules[column.key!]) {
+      columnKeyMapRules[column.key!] = {
+        rules: {},
+        column,
+      }
+    }
+    // TODO: 重复的 rule name
+    Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
   }, {})
+  return columnKeyMapRules
 }

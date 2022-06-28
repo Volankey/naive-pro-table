@@ -1,4 +1,4 @@
-import { NProTable } from './Protable'
+import NProTable from './Protable.vue'
 
 export * from './interface'
 

@@ -1,0 +1,40 @@
+{
+  "name": "naive-ui-protable",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npm run build:dev",
+    "prepublishOnly": "npm run build",
+    "build:dev": " vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --jsx preserve"
+  },
+  "main": "./dist/src/naive-ui-protable.umd.js",
+  "module": "./dist/src/naive-ui-protable.es.js",
+  "types": "./dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/src/naive-ui-protable.es.js",
+      "require": "./dist/src/naive-ui-protable.umd.js"
+    }
+  },
+  "keywords": [],
+  "author": "Volankey",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/types": "^7.18.4",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "naive-ui": "^2.30.6",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.9",
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16",
+    "vue-tsc": "^0.38.2"
+  },
+  "dependencies": {
+    "@vicons/ionicons5": "^0.12.0",
+    "lodash-es": "^4.17.21"
+  }
+}

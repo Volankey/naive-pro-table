@@ -1,0 +1,29 @@
+{
+  "name": "naive-ui-protable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "typescript": "^4.7.4"
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  },
+  "scripts": {
+    "format": "prettier --single-quote --trailing-comma all --write **/src/**/*.{ts,js,md,vue} "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Volankey/naive-pro-table.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Volankey/naive-pro-table/issues"
+  },
+  "homepage": "https://github.com/Volankey/naive-pro-table#readme"
+}

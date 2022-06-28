@@ -1,6 +1,6 @@
 import { CopyOutline, Checkmark } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref,h } from 'vue'
 
 const copyToClipBoard = (clipBoardContent: string | undefined | number) => {
   if (clipBoardContent === undefined) {
@@ -57,13 +57,17 @@ export default defineComponent({
             color="#1890ff"
             onClick={handleClick}
           >
-            <CopyOutline />
+            {{
+              default:()=><CopyOutline />
+            }}
           </NIcon>
         )
       }
       return (
         <NIcon {...commonIconProps} size={16} color="#18A058">
-          <Checkmark />
+          {{
+              default:()=><Checkmark />
+            }}
         </NIcon>
       )
     }

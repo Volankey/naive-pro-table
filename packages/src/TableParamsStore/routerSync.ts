@@ -75,21 +75,27 @@ export function syncRouterQuery() {
   const router = useRouter()
   const route = useRoute()
   return function updateRouter(tableQuery: QueryOptions) {
-    const routeQuery = route.query
+    const routeQuery = { ...route.query }
     const query = {
-      ...routeQuery,
       ...getSortQuery(tableQuery.sort, routeQuery),
       ...getFilterQuery(tableQuery.filter, routeQuery),
       ...getPageQuery(tableQuery.page),
       ...getPageSizeQuery(tableQuery.pageSize),
       ...getParamsQuery(tableQuery.params, routeQuery),
     }
-
-    const path = router.resolve({
-      ...router.currentRoute.value,
-      query,
+    Object.entries(query).forEach(([key, value]) => {
+      if (value === undefined && (routeQuery as any)[key]) {
+        ;(routeQuery as any)[key] = undefined
+      }
     })
-    router.replace(path)
+    const next = router.resolve({
+      ...router.currentRoute.value,
+      query: {
+        ...routeQuery,
+        ...query,
+      },
+    })
+    router.replace(next)
   }
 }
 

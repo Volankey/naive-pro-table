@@ -1,5 +1,6 @@
 import type { ProColumn } from '../interface'
 import type { LocationQueryValue, Router } from 'vue-router'
+import { ColumnKeyMapColAndRules, ColumnRule } from '../utils'
 
 export interface Options {
   defaultQuery: string
@@ -19,9 +20,7 @@ export interface Rule {
   validator?: (value: string | number | any) => boolean
 }
 
-export interface KeyMapColumnAndRule {
-  [columnKey: string]: { rule: Rule; column: ProColumn }
-}
+export type KeyMapColumnAndRule = ColumnKeyMapColAndRules
 
 export type ParamsType = 'filter'
 export interface QueryOptions<T = false> {
