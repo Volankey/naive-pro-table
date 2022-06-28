@@ -53,7 +53,7 @@ export default defineComponent({
         return (
           <NIcon
             {...commonIconProps}
-            style="cursor:pointer"
+            style="cursor:pointer;vertical-align:middle;margin-left:3px;"
             color="#1890ff"
             onClick={handleClick}
           >
