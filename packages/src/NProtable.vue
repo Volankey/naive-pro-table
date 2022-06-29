@@ -27,6 +27,7 @@ const props = withDefaults(
     columns: ProColumn<any>[]
     pagination?: Partial<PaginationProps>
     remote: boolean
+    queryPrefix?: string
   }>(),
   {
     remote: true
@@ -43,7 +44,7 @@ watch(
 
 const handleSyncRouterQuery = syncRouterQuery()
 const handleUpdateQuery = debounce((query: QueryOptions<false>) => {
-  handleSyncRouterQuery(query)
+  handleSyncRouterQuery(query, props.queryPrefix)
   handleFetchTableData()
 })
 const paramsStoreRef = computed(
