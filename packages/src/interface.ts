@@ -33,6 +33,7 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   key?: string
   title?: TableColumnTitle
   editable?: boolean | RenderCell<T>
+  children?: Array<ProTableBasicColumn<T>>
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
