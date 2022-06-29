@@ -5,6 +5,7 @@ import type {
   QueryOptions,
   RoueQueryParsed
 } from './types'
+import type { SortState } from 'naive-ui/lib/data-table/src/interface'
 
 export class TableParamsStore {
   keyMapColumnAndRule: KeyMapColumnAndRule
@@ -91,14 +92,7 @@ export class TableParamsStore {
   }
   _updateSorterValue(columnKey: string, value: any) {
     const storeQuery = this.queryRef.value
-    storeQuery['sort'] &&
-      Object.keys(storeQuery['sort']).forEach((columnKey) => {
-        const { column } = this.keyMapColumnAndRule[columnKey]
-        column.sortOrder = undefined
-        storeQuery['sort'][columnKey] = false
-      })
     const columnAndRule = this.keyMapColumnAndRule[columnKey]
-    // const { column, rule } = columnAndRule
     const { column } = columnAndRule
     const sorterKey = column.key
     column.sortOrder = value
@@ -111,8 +105,22 @@ export class TableParamsStore {
   handleQueryUpdate() {
     this.onUpdateQuery(this.queryRef.value as any)
   }
-  updateSort(columnKey: string, value: any) {
-    this._updateSorterValue(columnKey, value)
+  updateSort(sort: SortState | SortState[]) {
+    const storeQuery = this.queryRef.value
+    storeQuery['sort'] &&
+      Object.keys(storeQuery['sort']).forEach((columnKey) => {
+        const { column } = this.keyMapColumnAndRule[columnKey]
+        column.sortOrder = undefined
+        storeQuery['sort'][columnKey] = false
+      })
+
+    if (Array.isArray(sort)) {
+      sort.forEach((item) => {
+        this._updateSorterValue(item.columnKey as string, item.order)
+      })
+    } else {
+      this._updateSorterValue(sort.columnKey as string, sort.order)
+    }
     this.handleQueryUpdate()
   }
   updateFilter(columnKey: string, value: any) {

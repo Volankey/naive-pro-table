@@ -138,11 +138,10 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     } as PaginationProps
   })
 
-  const handleSortChange = (sort: SortState | null) => {
+  const handleSortChange = (sort: SortState | SortState[] | null) => {
     const paramsStore = paramsStoreRef.value
     if (sort) {
-      // TODO: 使用type ColumnKey
-      paramsStore.updateSort(sort.columnKey as string, sort?.order)
+      paramsStore.updateSort(sort)
     } else {
       paramsStore.clearQuery('sort')
     }
