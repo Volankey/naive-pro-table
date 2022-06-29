@@ -8,6 +8,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     outDir: './dist/src',
+    emptyOutDir: false,
     lib: {
       entry: path.resolve(__dirname, './src/index.ts'),
       name: 'naive-ui-protable'

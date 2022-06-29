@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "npm run build:dev",
     "prepublishOnly": "npm run build",
-    "build:dev": " vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
-    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --jsx preserve",
+    "build:dev": "vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
+    "build": "rm -rf dist && vue-tsc --declaration --emitDeclarationOnly --jsx preserve && vite build",
     "typecheck":"vue-tsc --noEmit"
   },
   "main": "./dist/src/naive-ui-protable.umd.js",

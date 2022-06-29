@@ -120,7 +120,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="n-data-protable">
     <NDataTable
       v-bind="dataTableProps"
       :remote="remote"
