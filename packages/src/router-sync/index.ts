@@ -8,12 +8,12 @@ function parseRouteQueryKey(queryKey: string) {
   const [key, type] = queryKey.split('.')
   return {
     type,
-    key,
+    key
   }
 }
 function getSortQuery(
   sort: Record<string, string | false>,
-  routeQuery: LocationQuery,
+  routeQuery: LocationQuery
 ) {
   const res: Record<string, string | undefined> = {}
   sort &&
@@ -30,7 +30,7 @@ function getSortQuery(
 }
 function getFilterQuery(
   filter: Record<string, string | false>,
-  routeQuery: LocationQuery,
+  routeQuery: LocationQuery
 ) {
   const res: Record<string, string | undefined> = {}
   filter &&
@@ -48,19 +48,19 @@ function getFilterQuery(
 function getPageQuery(pageNumber: number | undefined) {
   const k = _getQueryKey('page', 'page')
   return {
-    [k]: pageNumber || undefined,
+    [k]: pageNumber || undefined
   }
 }
 function getPageSizeQuery(pageSize: number | undefined) {
   const k = _getQueryKey('pageSize', 'pageSize')
   return {
-    [k]: pageSize || undefined,
+    [k]: pageSize || undefined
   }
 }
 
 function getParamsQuery(
   params: Record<string, any> | undefined,
-  routeQuery: LocationQuery,
+  routeQuery: LocationQuery
 ) {
   const res: Record<string, string | undefined> = {}
   params &&
@@ -81,19 +81,20 @@ export function syncRouterQuery() {
       ...getFilterQuery(tableQuery.filter, routeQuery),
       ...getPageQuery(tableQuery.page),
       ...getPageSizeQuery(tableQuery.pageSize),
-      ...getParamsQuery(tableQuery.params, routeQuery),
+      ...getParamsQuery(tableQuery.params, routeQuery)
     }
     Object.entries(query).forEach(([key, value]) => {
       if (value === undefined && (routeQuery as any)[key]) {
-        ;(routeQuery as any)[key] = undefined
+        // eslint-disable-next-line prettier/prettier
+        (routeQuery as any)[key] = undefined
       }
     })
     const next = router.resolve({
       ...router.currentRoute.value,
       query: {
         ...routeQuery,
-        ...query,
-      },
+        ...query
+      }
     })
     router.replace(next)
   }

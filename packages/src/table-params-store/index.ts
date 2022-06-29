@@ -1,11 +1,9 @@
 import { PaginationProps } from 'naive-ui'
-import { ruleHandlers } from '../rule/rule-handler'
 import { ref, type Ref } from 'vue'
-import { LocationQueryValue } from 'vue-router'
 import type {
   KeyMapColumnAndRule,
   QueryOptions,
-  RoueQueryParsed,
+  RoueQueryParsed
 } from './types'
 
 export class TableParamsStore {
@@ -21,7 +19,7 @@ export class TableParamsStore {
 
   constructor({
     keyMapColumnAndRule,
-    onUpdateQuery,
+    onUpdateQuery
   }: {
     keyMapColumnAndRule: KeyMapColumnAndRule
     onUpdateQuery: (query: QueryOptions) => void
@@ -31,7 +29,7 @@ export class TableParamsStore {
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
-    paginationRef: Ref<PaginationProps>,
+    paginationRef: Ref<PaginationProps>
   ) {
     const keyMapColumnAndRule = this.keyMapColumnAndRule
     const params: any = {}

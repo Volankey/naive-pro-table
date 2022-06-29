@@ -1,6 +1,6 @@
 import { CopyOutline, Checkmark } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
-import { defineComponent, ref,h } from 'vue'
+import { defineComponent, ref, h } from 'vue'
 
 const copyToClipBoard = (clipBoardContent: string | undefined | number) => {
   if (clipBoardContent === undefined) {
@@ -28,7 +28,7 @@ const copyToClipBoard = (clipBoardContent: string | undefined | number) => {
 export default defineComponent({
   name: 'CommonCopy',
   props: {
-    text: [String, Number],
+    text: [String, Number]
   },
   setup(props) {
     const copied = ref(false)
@@ -45,31 +45,34 @@ export default defineComponent({
       style: {
         verticalAlign: 'middle',
         marginLeft: '4px',
-      },
+        cursor: 'pointer'
+      }
     }
 
     return () => {
       if (!copied.value) {
-        return (
-          <NIcon
-            {...commonIconProps}
-            style="cursor:pointer;vertical-align:middle;margin-left:3px;"
-            color="#1890ff"
-            onClick={handleClick}
-          >
-            {{
-              default:()=><CopyOutline />
-            }}
-          </NIcon>
+        return h(
+          NIcon,
+          {
+            ...commonIconProps,
+            color: '#1890ff',
+            onClick: { handleClick }
+          },
+          {
+            default: () => h(CopyOutline)
+          }
         )
       }
-      return (
-        <NIcon {...commonIconProps} size={16} color="#18A058">
-          {{
-              default:()=><Checkmark />
-            }}
-        </NIcon>
+      return h(
+        NIcon,
+        {
+          ...commonIconProps,
+          color: '#18A058'
+        },
+        {
+          default: () => h(Checkmark)
+        }
       )
     }
-  },
+  }
 })

@@ -9,18 +9,18 @@
         showQuickJumper: true,
         defaultPageSize: 10,
         defaultPage: 1,
-        pageSizes: [10, 20, 50],
+        pageSizes: [10, 20, 50]
       }"
       :data-table-props="{
-        rowClassName: rowClassName,
+        rowClassName: rowClassName
       }"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { NButton, NTag } from 'naive-ui'
-import { defineComponent, h, ref } from 'vue'
+import { NTag } from 'naive-ui'
+import { h, ref } from 'vue'
 import ProTable from 'naive-ui-protable'
 import type { ApiRequest, ProColumn, ProTableIns } from 'naive-ui-protable'
 
@@ -28,8 +28,7 @@ const createSourceData = (
   params: unknown,
   sort: any,
   filter: any,
-  page: number,
-  pageSize: number,
+  page: number
 ): { pageSize: number; itemCount: number; data: Column[] } => {
   const data: Column[] = new Array(10).fill(1).map((_, idx) => ({
     name: 'Jonny' + ((page - 1) * 10 + idx),
@@ -37,13 +36,13 @@ const createSourceData = (
     sex: 'man',
     favorates: ['pinao', 'gita'],
     otherInfo: {
-      parents: ['Jan', 'Pony'],
-    },
+      parents: ['Jan', 'Pony']
+    }
   }))
   return {
     pageSize: 10,
     itemCount: 50,
-    data,
+    data
   }
 }
 
@@ -56,7 +55,6 @@ type Column = {
     parents: string[]
   }
 }
-const isEditingMode = ref(false)
 const proTableRef = ref<ProTableIns | null>(null)
 const columns = ref<ProColumn<Column>[]>([
   {
@@ -64,7 +62,7 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'name',
     key: 'name',
     ellipsis: true,
-    copyable: true,
+    copyable: true
   },
   {
     title: 'age',
@@ -75,9 +73,9 @@ const columns = ref<ProColumn<Column>[]>([
     syncRouteSorter: {
       name: 'age',
       rule: {
-        type: 'string',
-      },
-    },
+        type: 'string'
+      }
+    }
   },
   {
     title: 'sex',
@@ -89,25 +87,25 @@ const columns = ref<ProColumn<Column>[]>([
     syncRouteSorter: {
       name: 'sexsort',
       rule: {
-        type: 'string',
-      },
+        type: 'string'
+      }
     },
     syncRouteFilter: {
       name: 'sexfilter',
       rule: {
-        type: 'array',
-      },
+        type: 'array'
+      }
     },
     valueEnum: {
       all: { label: '全部' },
       man: {
-        label: '男',
+        label: '男'
       },
       woman: {
         label: '女',
-        disabled: true,
-      },
-    },
+        disabled: true
+      }
+    }
   },
   {
     title: 'favoraties',
@@ -115,34 +113,15 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'favorates',
     render(favorates) {
       return favorates.map((favorate: string) =>
-        h(
-          NTag,
-          { style: { marginRight: '10px' } },
-          { default: () => favorate },
-        ),
+        h(NTag, { style: { marginRight: '10px' } }, { default: () => favorate })
       )
-    },
+    }
   },
   {
     title: 'parents',
     key: 'parents',
-    dataIndex: 'otherInfo.parents',
-  },
-])
-const renderToolBars = ref([
-  () =>
-    h(
-      NButton,
-      {
-        type: 'primary',
-        onClick: () => {
-          proTableRef.value?.refresh()
-        },
-      },
-      {
-        default: () => '刷新',
-      },
-    ),
+    dataIndex: 'otherInfo.parents'
+  }
 ])
 function rowClassName() {
   return 'td-relative'
@@ -153,7 +132,7 @@ const apiRequest: ApiRequest = (params, sort, filter, page, pageSize) => {
     sort,
     filter,
     page,
-    pageSize,
+    pageSize
   })
   return Promise.resolve(createSourceData(params, sort, filter, page, pageSize))
 }

@@ -6,7 +6,8 @@
     "dev": "npm run build:dev",
     "prepublishOnly": "npm run build",
     "build:dev": " vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
-    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --jsx preserve"
+    "build": "vite build && vue-tsc --declaration --emitDeclarationOnly --jsx preserve",
+    "typecheck":"vue-tsc --noEmit"
   },
   "main": "./dist/src/naive-ui-protable.umd.js",
   "module": "./dist/src/naive-ui-protable.es.js",
@@ -36,5 +37,10 @@
   "dependencies": {
     "@vicons/ionicons5": "^0.12.0",
     "lodash-es": "^4.17.21"
+  },
+  "peerDependencies": {
+    "vue-router": ">=4.0.0",
+    "naive-ui": ">=2.25.0",
+    "vue":">=3.2.0"
   }
 }

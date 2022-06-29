@@ -10,15 +10,15 @@ export default defineConfig({
     outDir: './dist/src',
     lib: {
       entry: path.resolve(__dirname, './src/index.ts'),
-      name: 'naive-ui-protable',
+      name: 'naive-ui-protable'
     },
     rollupOptions: {
-      external: ['vue','naive-ui','vue-router'],
+      external: ['vue', 'naive-ui', 'vue-router'],
       output: {
         globals: {
           vue: 'Vue',
-          'naive-ui':'naive',
-          'vue-router':'VueRouter'
+          'naive-ui': 'naive',
+          'vue-router': 'VueRouter'
         }
       }
     }

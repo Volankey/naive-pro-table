@@ -1,9 +1,16 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted, withDefaults } from 'vue'
+import {
+  computed,
+  ref,
+  watch,
+  onMounted,
+  withDefaults,
+  defineExpose
+} from 'vue'
 import type {
   PaginationProps,
   DataTableProps,
-  DataTableColumns,
+  DataTableColumns
 } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
 import type { ApiRequest, ProColumn } from './interface'
@@ -22,15 +29,16 @@ const props = withDefaults(
     remote: boolean
   }>(),
   {
-    remote: true,
-  },
+    remote: true
+  }
 )
+
 const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
 watch(
   () => props.columns,
   () => {
     syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
-  },
+  }
 )
 
 const handleSyncRouterQuery = syncRouterQuery()
@@ -42,8 +50,8 @@ const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       keyMapColumnAndRule: syncRouteRuleColumnRef.value,
-      onUpdateQuery: handleUpdateQuery,
-    }),
+      onUpdateQuery: handleUpdateQuery
+    })
 )
 
 const loadingRef = ref(false)
@@ -55,7 +63,7 @@ const mergedPaginationRef = computed(() => {
     ...(props.pagination && typeof props.pagination === 'object'
       ? props.pagination
       : {}),
-    ...paginationRef.value,
+    ...paginationRef.value
   }
   if (itemCountRef.value) {
     res.itemCount = itemCountRef.value
@@ -79,9 +87,12 @@ const {
   handlePageChange,
   handlePageSizeChange,
   tableApiRequestArgsRef,
-  paginationRef,
+  paginationRef
 } = useTableRequest(paramsStoreRef)
 
+defineExpose({
+  changeParams: handleParamsChange
+})
 paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
 
 async function handleFetchTableData() {
@@ -110,8 +121,17 @@ onMounted(() => {
 
 <template>
   <div>
-    <NDataTable v-bind="dataTableProps" :remote="remote" :pagination="mergedPaginationRef" :data="tableDataRef"
-      :loading="loadingRef" :columns="mergedColumnsRef" :onUpdateFilters="handleFilterChange"
-      :onUpdateSorter="handleSortChange" :onUpdatePageSize="handlePageSizeChange" :onUpdatePage="handlePageChange" />
+    <NDataTable
+      v-bind="dataTableProps"
+      :remote="remote"
+      :pagination="mergedPaginationRef"
+      :data="tableDataRef"
+      :loading="loadingRef"
+      :columns="mergedColumnsRef"
+      :onUpdateFilters="handleFilterChange"
+      :onUpdateSorter="handleSortChange"
+      :onUpdatePageSize="handlePageSizeChange"
+      :onUpdatePage="handlePageChange"
+    />
   </div>
 </template>

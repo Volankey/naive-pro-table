@@ -1,6 +1,5 @@
-import type { ProColumn } from '../interface'
 import type { LocationQueryValue, Router } from 'vue-router'
-import { ColumnKeyMapColAndRules, ColumnRule } from '../utils'
+import { ColumnKeyMapColAndRules } from '../utils'
 
 export interface Options {
   defaultQuery: string
