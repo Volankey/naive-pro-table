@@ -235,9 +235,14 @@ export const getColumnsRouteRules = (
   columns: ProColumn<any>[]
 ): ColumnKeyMapColAndRules => {
   const columnKeyMapRules: ColumnKeyMapColAndRules = {}
-  columns.forEach((column) => {
+
+  function _handleColumn(column: ProColumn<any>) {
+    if ('children' in column) {
+      column.children?.forEach((item) => _handleColumn(item))
+    }
     const filter = getRouteRuleFilter(column, {})
     const sorter = getRouteRuleSorter(column, {})
+
     if (!columnKeyMapRules[column.key!]) {
       columnKeyMapRules[column.key!] = {
         rules: {},
@@ -246,6 +251,10 @@ export const getColumnsRouteRules = (
     }
     // TODO: 重复的 rule name
     Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
-  }, {})
+  }
+
+  columns.forEach((column) => {
+    _handleColumn(column)
+  })
   return columnKeyMapRules
 }
