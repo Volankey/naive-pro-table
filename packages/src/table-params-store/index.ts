@@ -113,7 +113,8 @@ export class TableParamsStore {
         column.sortOrder = undefined
         storeQuery['sort'][columnKey] = false
       })
-
+    
+    // handle multiple column sort
     if (Array.isArray(sort)) {
       sort.forEach((item) => {
         this._updateSorterValue(item.columnKey as string, item.order)
