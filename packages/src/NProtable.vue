@@ -28,10 +28,12 @@ const props = withDefaults(
     pagination?: Partial<PaginationProps>
     remote: boolean
     queryPrefix?: string
+    syncRoute: boolean
   }>(),
   {
-    remote: true
-  }
+    remote: true,
+    syncRoute: true,
+  },
 )
 
 const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
@@ -51,8 +53,8 @@ const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       keyMapColumnAndRule: syncRouteRuleColumnRef.value,
-      onUpdateQuery: handleUpdateQuery
-    })
+      onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => {},
+    }),
 )
 
 const loadingRef = ref(false)
