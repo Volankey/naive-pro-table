@@ -7,8 +7,8 @@ export const headerPropsDefine = {
   headerTitleToolTip: String,
   toolBars: {
     type: Array as PropType<(() => VNode)[]>,
-    default: () => [],
-  },
+    default: () => []
+  }
 }
 
 export interface PropsDefine {

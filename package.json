@@ -42,7 +42,7 @@
     ]
   },
   "scripts": {
-    "format": "prettier --single-quote --trailing-comma all --write **/src/**/*.{ts,js,md,vue} ",
+    "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
     "typecheck":"pnpm run typecheck -C packages",
     "dev:example": "pnpm run dev -C example",
     "dev:pkg": "pnpm run dev -C packages",

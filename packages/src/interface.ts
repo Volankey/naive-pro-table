@@ -3,7 +3,7 @@ import type { VNodeChild } from 'vue'
 import type {
   DataTableColumn,
   DataTableBaseColumn,
-  DataTableFilterState,
+  DataTableFilterState
 } from 'naive-ui'
 
 import type { Rule } from './table-params-store/types'
@@ -26,7 +26,7 @@ type RenderCell<T> = (
   text: any,
   rowData: T,
   rowIndex: number,
-  actions: any,
+  actions: any
 ) => VNodeChild
 
 export type ProTableBasicColumn<T = InternalRowData> = {
@@ -63,7 +63,7 @@ export type ApiRequestArgs = [
   sort: Record<string, string> | null,
   filter: DataTableFilterState | null,
   page: number,
-  pageSize: number,
+  pageSize: number
 ]
 
 export type ApiRequest<T = any> = (...args: ApiRequestArgs) => Promise<{

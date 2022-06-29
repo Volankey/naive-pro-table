@@ -4,14 +4,14 @@ import {
   type VNode,
   type VNodeChild,
   h,
-  type Ref,
+  type Ref
 } from 'vue'
 import type { ApiRequestArgs, ProColumn } from './interface'
 import type { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import type {
   FilterState,
-  SortState,
+  SortState
 } from 'naive-ui/lib/data-table/src/interface'
 import CommonCopy from './components/CommonCopy'
 import type { Rule, Rules } from './table-params-store/types'
@@ -40,11 +40,11 @@ const columnRenderHandler = {
       renderOptions.result = [
         result,
         h(CommonCopy, {
-          text: text,
-        }),
+          text: text
+        })
       ]
     }
-  },
+  }
 }
 const columnConfigHandlers = {
   valueEnum(column: ProColumn<any>) {
@@ -52,11 +52,11 @@ const columnConfigHandlers = {
       const valueEnum = column.valueEnum
       const filterOptions = Object.entries(valueEnum).map(([key, data]) => ({
         value: key,
-        ...data,
+        ...data
       }))
       column.filterOptions = filterOptions
     }
-  },
+  }
 }
 
 const setColumnRenderConfig = (renderOptions: RenderOptions) => {
@@ -81,7 +81,7 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
           text: any,
           rowData: any,
           rowIndex: number,
-          actions?: any,
+          actions?: any
         ) => VNodeChild) = null
     const dataIndex = column.dataIndex
     let text = get(rowData, dataIndex)
@@ -97,7 +97,7 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
       text,
       index: rowIndex,
       rowData,
-      column,
+      column
     }
 
     // add some vnode change render result
@@ -115,7 +115,7 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
     // @ts-ignore
     key: column.key || column.dataIndex,
     ellipsis: column.ellipsis,
-    render: getMergedColumnRender(column),
+    render: getMergedColumnRender(column)
   } as ProColumn<any>
 
   setColumnConfig(tmpColumn)
@@ -134,7 +134,7 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     const query = paramsStoreRef.value.queryRef.value
     return {
       pageSize: query.pageSize,
-      page: query.page,
+      page: query.page
     } as PaginationProps
   })
 
@@ -189,7 +189,7 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     handleParamsChange,
     handlePageChange,
     handlePageSizeChange,
-    paginationRef,
+    paginationRef
   }
 }
 
@@ -199,7 +199,7 @@ export type ColumnRule = {
 
 export const getRouteRuleFilter = (
   column: ProColumn<any>,
-  rules: Rules,
+  rules: Rules
 ): ColumnRule => {
   if ('filter' in column && column.syncRouteFilter) {
     const { name, rule } = column.syncRouteFilter
@@ -207,7 +207,7 @@ export const getRouteRuleFilter = (
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column },
+      [name]: { rule, column }
     }
   }
   return {}
@@ -215,7 +215,7 @@ export const getRouteRuleFilter = (
 
 export const getRouteRuleSorter = (
   column: ProColumn,
-  rules: Rules,
+  rules: Rules
 ): ColumnRule => {
   if ('sorter' in column && column.syncRouteSorter) {
     const { name, rule } = column.syncRouteSorter
@@ -223,7 +223,7 @@ export const getRouteRuleSorter = (
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column },
+      [name]: { rule, column }
     }
   }
   return {}
@@ -233,7 +233,7 @@ export type ColumnKeyMapColAndRules = Record<
   { rules: ColumnRule; column: ProColumn<any> }
 >
 export const getColumnsRouteRules = (
-  columns: ProColumn<any>[],
+  columns: ProColumn<any>[]
 ): ColumnKeyMapColAndRules => {
   const columnKeyMapRules: ColumnKeyMapColAndRules = {}
   columns.forEach((column) => {
@@ -242,7 +242,7 @@ export const getColumnsRouteRules = (
     if (!columnKeyMapRules[column.key!]) {
       columnKeyMapRules[column.key!] = {
         rules: {},
-        column,
+        column
       }
     }
     // TODO: 重复的 rule name

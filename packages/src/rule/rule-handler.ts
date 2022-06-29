@@ -17,5 +17,5 @@ export const ruleHandlers = {
   },
   object: (value: LocationQueryValue) => {
     return value
-  },
+  }
 } as const
