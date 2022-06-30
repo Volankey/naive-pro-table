@@ -138,11 +138,10 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     } as PaginationProps
   })
 
-  const handleSortChange = (sort: SortState | null) => {
+  const handleSortChange = (sort: SortState | SortState[] | null) => {
     const paramsStore = paramsStoreRef.value
     if (sort) {
-      // TODO: 使用type ColumnKey
-      paramsStore.updateSort(sort.columnKey as string, sort?.order)
+      paramsStore.updateSort(sort)
     } else {
       paramsStore.clearQuery('sort')
     }
@@ -236,17 +235,27 @@ export const getColumnsRouteRules = (
   columns: ProColumn<any>[]
 ): ColumnKeyMapColAndRules => {
   const columnKeyMapRules: ColumnKeyMapColAndRules = {}
-  columns.forEach((column) => {
-    const filter = getRouteRuleFilter(column, {})
-    const sorter = getRouteRuleSorter(column, {})
-    if (!columnKeyMapRules[column.key!]) {
-      columnKeyMapRules[column.key!] = {
-        rules: {},
-        column
+
+  function _handleColumn(column: ProColumn<any>) {
+    if ('children' in column) {
+      column.children?.forEach((item) => _handleColumn(item))
+    } else {
+      const filter = getRouteRuleFilter(column, {})
+      const sorter = getRouteRuleSorter(column, {})
+
+      if (!columnKeyMapRules[column.key!]) {
+        columnKeyMapRules[column.key!] = {
+          rules: {},
+          column
+        }
       }
+      // TODO: 重复的 rule name
+      Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
     }
-    // TODO: 重复的 rule name
-    Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
-  }, {})
+  }
+
+  columns.forEach((column) => {
+    _handleColumn(column)
+  })
   return columnKeyMapRules
 }
