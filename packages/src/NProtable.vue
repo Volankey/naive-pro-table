@@ -26,9 +26,9 @@ const props = withDefaults(
     apiRequest: ApiRequest
     columns: ProColumn<any>[]
     pagination?: Partial<PaginationProps>
-    remote: boolean
+    remote?: boolean
     queryPrefix?: string
-    syncRoute: boolean
+    syncRoute?: boolean
   }>(),
   {
     remote: true,
@@ -94,7 +94,8 @@ const {
 } = useTableRequest(paramsStoreRef)
 
 defineExpose({
-  changeParams: handleParamsChange
+  changeParams: handleParamsChange,
+  refresh: handleFetchTableData
 })
 paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
 

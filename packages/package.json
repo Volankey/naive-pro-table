@@ -1,13 +1,15 @@
 {
   "name": "naive-ui-protable-alpha",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "scripts": {
     "dev": "npm run build:dev",
     "prepublishOnly": "npm run build",
     "build:dev": "vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
     "build": "rm -rf dist && vue-tsc --declaration --emitDeclarationOnly --jsx preserve && vite build",
-    "typecheck":"vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage"
   },
   "main": "./dist/src/naive-ui-protable-alpha.umd.js",
   "module": "./dist/src/naive-ui-protable-alpha.es.js",
@@ -21,9 +23,12 @@
   "devDependencies": {
     "@babel/types": "^7.18.4",
     "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/test-utils": "^2.0.0",
+    "jsdom": "^20.0.0",
     "naive-ui": "^2.30.6",
     "typescript": "^4.5.4",
     "vite": "^2.9.9",
+    "vitest": "^0.16.0",
     "vue": "^3.2.37",
     "vue-router": "^4.0.16",
     "vue-tsc": "^0.38.2"
@@ -33,8 +38,8 @@
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
-    "vue-router": ">=4.0.0",
     "naive-ui": ">=2.25.0",
-    "vue":">=3.2.0"
+    "vue": ">=3.2.0",
+    "vue-router": ">=4.0.0"
   }
 }
