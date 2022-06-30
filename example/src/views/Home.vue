@@ -7,9 +7,9 @@
       :pagination="{
         showSizePicker: true,
         showQuickJumper: true,
-        defaultPageSize: 10,
+        defaultPageSize: 14,
         defaultPage: 1,
-        pageSizes: [10, 20, 50]
+        pageSizes: [14, 20, 50]
       }"
       :data-table-props="{
         rowClassName: rowClassName
@@ -28,10 +28,11 @@ const createSourceData = (
   params: unknown,
   sort: any,
   filter: any,
-  page: number
+  page: number,
+  pageSize: number
 ): { pageSize: number; itemCount: number; data: Column[] } => {
-  const data: Column[] = new Array(10).fill(1).map((_, idx) => ({
-    name: 'Jonny' + ((page - 1) * 10 + idx),
+  const data: Column[] = new Array(pageSize).fill(1).map((_, idx) => ({
+    name: 'Jonny' + ((page - 1) * pageSize + idx),
     age: 10 + idx,
     sex: 'man',
     favorates: ['pinao', 'gita'],
@@ -40,7 +41,7 @@ const createSourceData = (
     }
   }))
   return {
-    pageSize: 10,
+    pageSize: 14,
     itemCount: 50,
     data
   }
