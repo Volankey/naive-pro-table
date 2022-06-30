@@ -1,6 +1,6 @@
 {
-  "name": "naive-ui-protable",
-  "version": "1.0.0",
+  "name": "naive-ui-protable-alpha",
+  "version": "0.0.2",
   "description": "",
   "scripts": {
     "dev": "npm run build:dev",
@@ -9,18 +9,12 @@
     "build": "rm -rf dist && vue-tsc --declaration --emitDeclarationOnly --jsx preserve && vite build",
     "typecheck":"vue-tsc --noEmit"
   },
-  "main": "./dist/src/naive-ui-protable.umd.js",
-  "module": "./dist/src/naive-ui-protable.es.js",
+  "main": "./dist/src/naive-ui-protable-alpha.umd.js",
+  "module": "./dist/src/naive-ui-protable-alpha.es.js",
   "types": "./dist/types/index.d.ts",
   "files": [
     "dist"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/src/naive-ui-protable.es.js",
-      "require": "./dist/src/naive-ui-protable.umd.js"
-    }
-  },
   "keywords": [],
   "author": "Volankey",
   "license": "MIT",

@@ -11,7 +11,7 @@ function parseRouteQueryKey(queryKey: string) {
 function getQuery(
   tableQuery: QueryOptions,
   routeQuery: LocationQuery,
-  tablePrefix?: string, 
+  tablePrefix?: string
 ) {
   function _getQueryKey(key: string, type: string): string {
     if (tablePrefix) return `${tablePrefix}.${key}.${type}`
@@ -20,7 +20,7 @@ function getQuery(
 
   function getSortQuery(
     sort: Record<string, string | false>,
-    routeQuery: LocationQuery,
+    routeQuery: LocationQuery
   ) {
     const res: Record<string, string | undefined> = {}
     sort &&
@@ -38,7 +38,7 @@ function getQuery(
 
   function getFilterQuery(
     filter: Record<string, string | false>,
-    routeQuery: LocationQuery,
+    routeQuery: LocationQuery
   ) {
     const res: Record<string, string | undefined> = {}
     filter &&
@@ -57,20 +57,20 @@ function getQuery(
   function getPageQuery(pageNumber: number | undefined) {
     const k = _getQueryKey('page', 'page')
     return {
-      [k]: pageNumber || undefined,
+      [k]: pageNumber || undefined
     }
   }
 
   function getPageSizeQuery(pageSize: number | undefined) {
     const k = _getQueryKey('pageSize', 'pageSize')
     return {
-      [k]: pageSize || undefined,
+      [k]: pageSize || undefined
     }
   }
-  
+
   function getParamsQuery(
     params: Record<string, any> | undefined,
-    routeQuery: LocationQuery,
+    routeQuery: LocationQuery
   ) {
     const res: Record<string, string | undefined> = {}
     params &&
@@ -87,11 +87,9 @@ function getQuery(
     ...getFilterQuery(tableQuery.filter, routeQuery),
     ...getPageQuery(tableQuery.page),
     ...getPageSizeQuery(tableQuery.pageSize),
-    ...getParamsQuery(tableQuery.params, routeQuery),
+    ...getParamsQuery(tableQuery.params, routeQuery)
   }
 }
-
-
 
 export function syncRouterQuery() {
   const router = useRouter()

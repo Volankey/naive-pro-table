@@ -46,6 +46,7 @@
     "typecheck":"pnpm run typecheck -C packages",
     "dev:example": "pnpm run dev -C example",
     "dev:pkg": "pnpm run dev -C packages",
+    "build:pkg": "pnpm run build -C packages",
     "prepare": "husky install"
   },
   "repository": {

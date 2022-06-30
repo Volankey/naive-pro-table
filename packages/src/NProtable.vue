@@ -32,8 +32,8 @@ const props = withDefaults(
   }>(),
   {
     remote: true,
-    syncRoute: true,
-  },
+    syncRoute: true
+  }
 )
 
 const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
@@ -53,8 +53,8 @@ const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       keyMapColumnAndRule: syncRouteRuleColumnRef.value,
-      onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => {},
-    }),
+      onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
+    })
 )
 
 const loadingRef = ref(false)

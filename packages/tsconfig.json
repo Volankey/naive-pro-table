@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist/types",
     "baseUrl": ".",
     "target": "esnext",
     "useDefineForClassFields": true,
