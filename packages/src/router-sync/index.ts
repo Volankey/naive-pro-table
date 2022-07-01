@@ -1,13 +1,15 @@
 import { type LocationQuery, useRoute, useRouter } from 'vue-router'
-import type { QueryOptions, RoueQueryParsed } from '../table-params-store/types'
+import type { QueryOptions, RouteQueryParsed } from '../table-params-store/types'
 
 function parseRouteQueryKey(queryKey: string) {
-  const [key, type] = queryKey.split('.')
+  const queryInfo = queryKey.split('.')
+  const len = queryInfo.length
   return {
-    type,
-    key
+    type: queryInfo[len - 1],
+    key: queryInfo[len - 2],
   }
 }
+
 function getQuery(
   tableQuery: QueryOptions,
   routeQuery: LocationQuery,
@@ -127,5 +129,5 @@ export function syncFromRouter() {
     }
     result[key].push({ key, type, value })
     return result
-  }, {} as RoueQueryParsed)
+  }, {} as RouteQueryParsed)
 }

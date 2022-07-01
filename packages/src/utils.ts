@@ -14,7 +14,7 @@ import type {
   SortState
 } from 'naive-ui/lib/data-table/src/interface'
 import CommonCopy from './components/CommonCopy'
-import type { Rule, Rules } from './table-params-store/types'
+import type {  Rules } from './table-params-store/types'
 import type { TableParamsStore } from './table-params-store/index'
 
 interface RenderOptions {
@@ -24,6 +24,8 @@ interface RenderOptions {
   rowData: any
   column: ProColumn<any>
 }
+
+type RuleType = 'filter' | 'sorter'
 
 export const RenderHelper = (context: { render: string | (() => VNode) }) => {
   const { render } = context
@@ -130,6 +132,7 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     const { sort, filter, params, page, pageSize } = query
     return [params, sort, filter, page, pageSize] as ApiRequestArgs
   })
+
   const paginationRef = computed(() => {
     const query = paramsStoreRef.value.queryRef.value
     return {
@@ -192,21 +195,17 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
   }
 }
 
-export type ColumnRule = {
-  [name: string]: { rule: Rule; column: ProColumn<any> }
-}
-
 export const getRouteRuleFilter = (
   column: ProColumn<any>,
   rules: Rules
-): ColumnRule => {
+): Rules => {
   if ('filter' in column && column.syncRouteFilter) {
     const { name, rule } = column.syncRouteFilter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column }
+      [name]: rule
     }
   }
   return {}
@@ -215,21 +214,22 @@ export const getRouteRuleFilter = (
 export const getRouteRuleSorter = (
   column: ProColumn,
   rules: Rules
-): ColumnRule => {
+): Rules => {
   if ('sorter' in column && column.syncRouteSorter) {
     const { name, rule } = column.syncRouteSorter
     if (rules[name]) {
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column }
+      [name]: rule
     }
   }
   return {}
 }
+export type RuleTypeKeyMapRules = Record<RuleType, Rules>
 export type ColumnKeyMapColAndRules = Record<
   string,
-  { rules: ColumnRule; column: ProColumn<any> }
+  { rules: RuleTypeKeyMapRules; column: ProColumn<any> }
 >
 export const getColumnsRouteRules = (
   columns: ProColumn<any>[]
@@ -245,17 +245,22 @@ export const getColumnsRouteRules = (
 
       if (!columnKeyMapRules[column.key!]) {
         columnKeyMapRules[column.key!] = {
-          rules: {},
+          rules: {
+            'filter': {},
+            'sorter': {},
+          },
           column
         }
       }
       // TODO: 重复的 rule name
-      Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
+      Object.assign(columnKeyMapRules[column.key!].rules['filter'], filter)
+      Object.assign(columnKeyMapRules[column.key!].rules['sorter'], sorter)
     }
   }
 
   columns.forEach((column) => {
     _handleColumn(column)
   })
+
   return columnKeyMapRules
 }

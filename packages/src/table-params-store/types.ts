@@ -8,13 +8,16 @@ export interface Options {
   adapter?: any
   router: Router
 }
+
 export interface Rules {
   [name: string]: Rule
 }
 
+export type ValueType = 'string' | 'number' | 'array' | 'object'
+
 // export interface Adapter {}
 export interface Rule {
-  type: 'string' | 'number' | 'array' | 'object'
+  type: ValueType
   // 从router传入过来的
   validator?: (value: string | number | any) => boolean
 }
@@ -30,7 +33,7 @@ export interface QueryOptions<T = false> {
   pageSize?: number
 }
 
-export type RoueQueryParsed = Record<
+export type RouteQueryParsed = Record<
   string,
   {
     key: string

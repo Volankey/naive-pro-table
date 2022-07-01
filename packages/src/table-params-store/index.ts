@@ -3,9 +3,10 @@ import { ref, type Ref } from 'vue'
 import type {
   KeyMapColumnAndRule,
   QueryOptions,
-  RoueQueryParsed
+  RouteQueryParsed,
 } from './types'
 import type { SortState } from 'naive-ui/lib/data-table/src/interface'
+import { useValidateQuery } from '../validate/index';
 
 export class TableParamsStore {
   keyMapColumnAndRule: KeyMapColumnAndRule
@@ -29,11 +30,17 @@ export class TableParamsStore {
     this.onUpdateQuery = onUpdateQuery
   }
   initQuery(
-    routeQueryParsed: RoueQueryParsed,
+    routeQueryParsed: RouteQueryParsed,
     paginationRef: Ref<PaginationProps>
   ) {
     const keyMapColumnAndRule = this.keyMapColumnAndRule
     const params: any = {}
+    const {
+      validateSorter,
+      validateFilter,
+      validatePageOrPageSize,
+    } = useValidateQuery()
+
     if (paginationRef.value.defaultPage !== undefined) {
       this._updatePageValue(paginationRef.value.defaultPage)
     }
@@ -45,17 +52,30 @@ export class TableParamsStore {
         const { key, value, type } = queryItem
         if (keyMapColumnAndRule[key]) {
           const columnAndRule = keyMapColumnAndRule[key]
-          const { column } = columnAndRule
+          const { rules, column } = columnAndRule
+
           if (column.syncRouteFilter && type === 'filter') {
-            value && this._updateFilterValue(column.key!, value)
-          }
+            if (validateFilter(value, rules['filter'])) {
+              value && this._updateFilterValue(column.key!, value) 
+              this.handleQueryUpdate()
+            } else {
+              this.clearQuery('filter')
+            } 
+          } 
           if (column.syncRouteSorter && type === 'sort') {
-            value && this._updateSorterValue(column.key!, value)
+            if (validateSorter(value, rules['sorter'])) {
+              value && this._updateSorterValue(column.key!, value)
+              this.handleQueryUpdate()
+            } else {
+              this.clearQuery('sort')
+            }
           }
         } else if (type === 'page' && value) {
-          this._updatePageValue(+value)
+          validatePageOrPageSize(value) ?
+            this._updatePageValue(+value) : this.clearQuery('page')
         } else if (type === 'pageSize' && value) {
-          this._updatePageSizeValue(+value)
+          validatePageOrPageSize(value) ?
+            this._updatePageValue(+value) : this.clearQuery('pageSize')
         } else if (type === 'params') {
           params[key] = value
         }
@@ -99,7 +119,6 @@ export class TableParamsStore {
     if (!storeQuery['sort']) {
       storeQuery['sort'] = {}
     }
-
     Object.assign(storeQuery['sort'], { [sorterKey!]: value })
   }
   handleQueryUpdate() {
@@ -157,12 +176,16 @@ export class TableParamsStore {
     this._updatePageSizeValue(pageSize)
     this.handleQueryUpdate()
   }
-  clearQuery(type: 'filter' | 'sort') {
+  clearQuery(type: 'filter' | 'sort' | 'page' | 'pageSize') {
     const query = this.queryRef.value
     if (type === 'filter') {
       query.filter = undefined
     } else if (type === 'sort') {
       query.sort = undefined
+    } else if (type === 'page') {
+      query.page = undefined
+    } else if (type === 'pageSize') {
+      query.pageSize = undefined
     } else {
       query.params = undefined
     }
