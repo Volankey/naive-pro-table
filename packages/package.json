@@ -22,6 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/types": "^7.18.4",
+    "@types/lodash-es": "^4.17.6",
     "@vitejs/plugin-vue": "^2.3.3",
     "@vue/test-utils": "^2.0.0",
     "jsdom": "^20.0.0",

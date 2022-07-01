@@ -21,8 +21,12 @@
 <script lang="ts" setup>
 import { NTag } from 'naive-ui'
 import { h, ref } from 'vue'
-import ProTable from 'naive-ui-protable'
-import type { ApiRequest, ProColumn, ProTableIns } from 'naive-ui-protable'
+import ProTable from 'naive-ui-protable-alpha'
+import type {
+  ApiRequest,
+  ProColumn,
+  ProTableIns
+} from 'naive-ui-protable-alpha'
 
 const createSourceData = (
   params: unknown,

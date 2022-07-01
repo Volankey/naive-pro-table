@@ -40,10 +40,10 @@
   },
   "scripts": {
     "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
-    "typecheck": "pnpm run typecheck -C packages",
-    "dev:example": "pnpm run dev -C example",
-    "dev:pkg": "pnpm run dev -C packages",
-    "build:pkg": "pnpm run build -C packages",
+    "typecheck": "pnpm run typecheck",
+    "dev:example": "pnpm run -C example dev",
+    "dev:pkg": "pnpm run  -C packages dev",
+    "build:pkg": "pnpm run -C packages build ",
     "prepare": "husky install"
   },
   "repository": {

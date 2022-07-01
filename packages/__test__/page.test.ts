@@ -4,19 +4,30 @@ import NProTable from '../src/index'
 import { flushPromises, mount } from '@vue/test-utils'
 import { createCommonColsRef, createMyRouter, createSourceData } from './common'
 import { RouterView } from 'vue-router'
+import { NPagination } from 'naive-ui'
 
-test('default page size = 15', async () => {
-  let _pageSize = 0
+async function createPageTest() {
+  const result: {
+    params: any
+    sort: any
+    filter: any
+    page: number
+    pageSize: number
+  } = {
+    params: undefined,
+    sort: undefined,
+    filter: undefined,
+    page: 0,
+    pageSize: 0
+  }
   const getData = vi.fn((params, sort, filter, page, pageSize) => {
-    console.log(
-      '🚀 ~ file: page.test.ts ~ line 11 ~ getData ~ params, sort, filter, page, pageSize',
+    Object.assign(result, {
       params,
       sort,
       filter,
       page,
       pageSize
-    )
-    _pageSize = pageSize
+    })
     return Promise.resolve(
       createSourceData(params, sort, filter, page, pageSize)
     )
@@ -48,14 +59,38 @@ test('default page size = 15', async () => {
     }
   )
   await flushPromises() // 等待promise handler all done https://test-utils.vuejs.org/api/#flushpromises
-  const pageSelect = wrapper.find('.n-base-selection-input[title="15 / page"]')
-  expect(pageSelect)
-  expect(_pageSize).equal(15)
+  return {
+    wrapper,
+    router,
+    result
+  }
+}
 
-  await pageSelect.trigger('click')
-  await flushPromises()
-  console.log(document.body.innerHTML)
-  const option = document.querySelectorAll('.n-base-select-option')
-  console.log('🚀 ~ file: page.test.ts ~ line 57 ~ test ~ option', option)
-  // await document.querySelector('.n-base-select-option')
+test('default pageSize = 15', async () => {
+  const { result } = await createPageTest()
+  expect(result.pageSize).equal(15)
+})
+
+test('change page = 2 then the pageSize = 20', async () => {
+  const { wrapper, result, router } = await createPageTest()
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
+    pagination.vm?.['onUpdate:page'](2)
+  }
+  await flushPromises() // 等待promise handler all done https://test-utils.vuejs.org/api/#flushpromises
+  let route = router.currentRoute.value
+  // 需要检验 路由是否正确
+  expect(route.query['page.page']).equal('2')
+  // apiRequest是否被调用 且参数是否正确
+  expect(result.page).equal(2)
+
+  // change page to 20
+  if (!Array.isArray(pagination.vm?.['onUpdate:pageSize'])) {
+    pagination.vm?.['onUpdate:pageSize'](20)
+  }
+  await flushPromises() // 等待promise handler all done https://test-utils.vuejs.org/api/#flushpromises
+  route = router.currentRoute.value
+  expect(result.pageSize).equal(20)
+  expect(route.query['pageSize.pageSize']).equal('20')
+  expect(route.query['page.page']).equal('1')
 })
