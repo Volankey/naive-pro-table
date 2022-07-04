@@ -13,12 +13,13 @@ import type {
   DataTableColumns
 } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
-import type { ApiRequest, ProColumn } from './interface'
+import type { ApiRequest, ProColumn, ProTableIns } from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
 import { syncFromRouter, syncRouterQuery } from './router-sync'
 import type { QueryOptions } from './table-params-store/types'
 import { debounce } from 'lodash-es'
+import { CustomParams } from './hooks'
 
 const props = withDefaults(
   defineProps<{
@@ -29,6 +30,7 @@ const props = withDefaults(
     remote?: boolean
     queryPrefix?: string
     syncRoute?: boolean
+    customParamsStore?: CustomParams
   }>(),
   {
     remote: true,
@@ -45,17 +47,25 @@ watch(
 )
 
 const handleSyncRouterQuery = syncRouterQuery()
-const handleUpdateQuery = debounce((query: QueryOptions<false>) => {
-  handleSyncRouterQuery(query, props.queryPrefix)
+const handleUpdateQuery = (query: QueryOptions<false>) => {
+  handleSyncRouterQuery(
+    query,
+    props.customParamsStore?.customParamsValue.value,
+    props.queryPrefix
+  )
   handleFetchTableData()
-})
+}
 const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       keyMapColumnAndRule: syncRouteRuleColumnRef.value,
+      customParams: props.customParamsStore,
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
 )
+if (props.customParamsStore) {
+  props.customParamsStore.setCallback(handleUpdateQuery)
+}
 
 const loadingRef = ref(false)
 const pageCountRef = ref(0)
@@ -86,20 +96,12 @@ watch(props.columns, () => {
 const {
   handleSortChange,
   handleFilterChange,
-  handleParamsChange,
   handlePageChange,
   handlePageSizeChange,
   tableApiRequestArgsRef,
   paginationRef
-} = useTableRequest(paramsStoreRef)
-
-defineExpose({
-  changeParams: handleParamsChange,
-  refresh: handleFetchTableData
-})
-paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
-
-async function handleFetchTableData() {
+} = useTableRequest(paramsStoreRef, props?.customParamsStore)
+const handleFetchTableData = debounce(async () => {
   if (!props.apiRequest) {
     return
   }
@@ -117,7 +119,12 @@ async function handleFetchTableData() {
     console.error(error)
   }
   loadingRef.value = false
-}
+})
+defineExpose<ProTableIns>({
+  refresh: handleFetchTableData
+})
+paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
+
 onMounted(() => {
   handleFetchTableData()
 })

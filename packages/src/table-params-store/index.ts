@@ -1,3 +1,4 @@
+import { CustomParams } from './../hooks/use-params'
 import { PaginationProps } from 'naive-ui'
 import { ref, type Ref } from 'vue'
 import type {
@@ -6,26 +7,32 @@ import type {
   RoueQueryParsed
 } from './types'
 import type { SortState } from 'naive-ui/lib/data-table/src/interface'
+import { isFinite } from 'lodash-es'
 
 export class TableParamsStore {
   keyMapColumnAndRule: KeyMapColumnAndRule
   queryRef: Ref<{
     params?: unknown | null
-    sort?: any
-    filter?: any
-    page?: number
-    pageSize?: number
+    sort?: any | null
+    filter?: any | null
+    page?: number | null
+    pageSize?: number | null
   }> = ref({})
   onUpdateQuery: (query: QueryOptions) => void
+  paginationRef: Ref<PaginationProps> | undefined
+  customParams: CustomParams | undefined
 
   constructor({
     keyMapColumnAndRule,
+    customParams,
     onUpdateQuery
   }: {
     keyMapColumnAndRule: KeyMapColumnAndRule
+    customParams?: CustomParams
     onUpdateQuery: (query: QueryOptions) => void
   }) {
     this.keyMapColumnAndRule = keyMapColumnAndRule
+    this.customParams = customParams
     this.onUpdateQuery = onUpdateQuery
   }
   initQuery(
@@ -33,7 +40,9 @@ export class TableParamsStore {
     paginationRef: Ref<PaginationProps>
   ) {
     const keyMapColumnAndRule = this.keyMapColumnAndRule
-    const params: any = {}
+    const params: any = this.customParams?.customParamsValue.value
+
+    this.paginationRef = paginationRef
     if (paginationRef.value.defaultPage !== undefined) {
       this._updatePageValue(paginationRef.value.defaultPage)
     }
@@ -50,7 +59,7 @@ export class TableParamsStore {
             value && this._updateFilterValue(column.key!, value)
           }
           if (column.syncRouteSorter && type === 'sort') {
-            value && this._updateSorterValue(column.key!, value)
+            this._updateSorterValue(column.key!, value)
           }
         } else if (type === 'page' && value) {
           this._updatePageValue(+value)
@@ -95,13 +104,24 @@ export class TableParamsStore {
     const columnAndRule = this.keyMapColumnAndRule[columnKey]
     const { column } = columnAndRule
     const sorterKey = column.key
+    // validate sort order is ascend or descend
+    const isValid = ['ascend', 'descend'].includes(value)
+    if (!isValid) {
+      console.warn(`[naive-protable] invalid sort order: ${value}`)
+      value = false
+    }
     column.sortOrder = value
     if (!storeQuery['sort']) {
       storeQuery['sort'] = {}
     }
 
     Object.assign(storeQuery['sort'], { [sorterKey!]: value })
+    if (!isValid) {
+      // clear invalid sort order
+      this.handleQueryUpdate()
+    }
   }
+  // silent will not trigger api request
   handleQueryUpdate() {
     this.onUpdateQuery(this.queryRef.value as any)
   }
@@ -129,21 +149,22 @@ export class TableParamsStore {
     this.handleQueryUpdate()
   }
   _updateParamsValue(params: any) {
-    const storeQuery = this.queryRef.value
-    if (!storeQuery['params']) {
-      storeQuery['params'] = params
+    if (this.customParams) {
+      this.customParams.setCustomParams(params)
     }
   }
-  updateParams(params: any) {
-    const storeQuery = this.queryRef.value
-    if (!storeQuery['params']) {
-      storeQuery['params'] = params
-    }
+  updateParams() {
     this.handleQueryUpdate()
   }
   _updatePageValue(page: number) {
     const query = this.queryRef.value
-    query.page = page
+    if (isFinite(page)) {
+      query.page = page
+    } else {
+      console.warn(`[naive-protable] invalid page value: ${page}`)
+      query.pageSize = this.paginationRef?.value.defaultPage
+      this.handleQueryUpdate()
+    }
   }
   updatePage(page: number) {
     this._updatePageValue(page)
@@ -151,7 +172,13 @@ export class TableParamsStore {
   }
   _updatePageSizeValue(pageSize: number) {
     const query = this.queryRef.value
-    query.pageSize = pageSize
+    if (isFinite(pageSize)) {
+      query.pageSize = pageSize
+    } else {
+      console.warn(`[naive-protable] invalid pageSize value: ${pageSize}`)
+      query.pageSize = this.paginationRef?.value.defaultPageSize
+      this.handleQueryUpdate()
+    }
   }
   updatePageSize(pageSize: number) {
     this._updatePageSizeValue(pageSize)
@@ -160,11 +187,11 @@ export class TableParamsStore {
   clearQuery(type: 'filter' | 'sort') {
     const query = this.queryRef.value
     if (type === 'filter') {
-      query.filter = undefined
+      query.filter = null
     } else if (type === 'sort') {
-      query.sort = undefined
+      query.sort = null
     } else {
-      query.params = undefined
+      query.params = null
     }
     this.handleQueryUpdate()
   }
