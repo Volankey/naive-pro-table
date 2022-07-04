@@ -105,7 +105,7 @@ export class TableParamsStore {
     const { column } = columnAndRule
     const sorterKey = column.key
     // validate sort order is ascend or descend
-    const isValid = ['ascend', 'descend'].includes(value)
+    const isValid = ['ascend', 'descend', false].includes(value)
     if (!isValid) {
       console.warn(`[naive-protable] invalid sort order: ${value}`)
       value = false
