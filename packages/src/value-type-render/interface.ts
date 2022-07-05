@@ -5,4 +5,7 @@ export type ValueType = keyof typeof valueType
 
 export type DateFormatter =
   | string
-  | ((value: any, valueType: ValueType) => VNodeChild | string | number)
+  | ((
+      value: any,
+      valueType: 'date' | 'datetime'
+    ) => VNodeChild | string | number)

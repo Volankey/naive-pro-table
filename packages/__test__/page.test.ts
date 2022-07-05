@@ -6,7 +6,7 @@ import { createCommonColsRef, createMyRouter, createSourceData } from './common'
 import { RouterView } from 'vue-router'
 import { NPagination } from 'naive-ui'
 
-async function createPageTest() {
+async function createPageTest(columnsRef?: any) {
   const result: {
     params: any
     sort: any
@@ -41,7 +41,7 @@ async function createPageTest() {
         showSizePicker: true,
         pageSizes: [15, 20, 50]
       },
-      columns: createCommonColsRef().value,
+      columns: columnsRef ? columnsRef.value : createCommonColsRef().value,
       apiRequest: getData
     })
   )
