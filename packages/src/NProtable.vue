@@ -101,25 +101,27 @@ const {
   tableApiRequestArgsRef,
   paginationRef
 } = useTableRequest(paramsStoreRef, props?.customParamsStore)
-const handleFetchTableData = debounce(async () => {
-  if (!props.apiRequest) {
-    return
-  }
-  loadingRef.value = true
-
-  try {
-    const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
-    tableDataRef.value = resp.data
-    if (resp.pageCount) {
-      pageCountRef.value = resp.pageCount
-    } else if (resp.itemCount) {
-      itemCountRef.value = resp.itemCount
+const handleFetchTableData = debounce(
+  async ({ showLoading = true }: { showLoading?: boolean } = {}) => {
+    if (!props.apiRequest) {
+      return
     }
-  } catch (error) {
-    console.error(error)
+    if (showLoading) loadingRef.value = true
+
+    try {
+      const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
+      tableDataRef.value = resp.data
+      if (resp.pageCount) {
+        pageCountRef.value = resp.pageCount
+      } else if (resp.itemCount) {
+        itemCountRef.value = resp.itemCount
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    loadingRef.value = false
   }
-  loadingRef.value = false
-})
+)
 defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
