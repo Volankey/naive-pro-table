@@ -20,6 +20,7 @@ import { syncFromRouter, syncRouterQuery } from './router-sync'
 import type { QueryOptions } from './table-params-store/types'
 import { debounce } from 'lodash-es'
 import { CustomParams } from './hooks'
+import type { DateFormatter } from './value-type-render/interface'
 
 const props = withDefaults(
   defineProps<{
@@ -31,6 +32,7 @@ const props = withDefaults(
     queryPrefix?: string
     syncRoute?: boolean
     customParamsStore?: CustomParams
+    dateFormatter?: DateFormatter
   }>(),
   {
     remote: true,
@@ -86,11 +88,18 @@ const mergedPaginationRef = computed(() => {
   return res
 })
 const tableDataRef = ref<any[]>([])
-const mergedColumnsRef = ref<DataTableColumns>(props.columns.map(handleColumn))
+function mergedHandleColumn(col: ProColumn<any>) {
+  return handleColumn(col, {
+    dateFormatter: props.dateFormatter
+  })
+}
+const mergedColumnsRef = ref<DataTableColumns>(
+  props.columns.map(mergedHandleColumn)
+)
 watch(props.columns, () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  mergedColumnsRef.value = props.columns.map(handleColumn)
+  mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
 })
 
 const {
@@ -133,18 +142,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="n-data-protable">
-    <NDataTable
-      v-bind="dataTableProps"
-      :remote="remote"
-      :pagination="mergedPaginationRef"
-      :data="tableDataRef"
-      :loading="loadingRef"
-      :columns="mergedColumnsRef"
-      :onUpdateFilters="handleFilterChange"
-      :onUpdateSorter="handleSortChange"
-      :onUpdatePageSize="handlePageSizeChange"
-      :onUpdatePage="handlePageChange"
-    />
-  </div>
+  <NDataTable
+    v-bind="dataTableProps"
+    :remote="remote"
+    class="n-data-protable"
+    :pagination="mergedPaginationRef"
+    :data="tableDataRef"
+    :loading="loadingRef"
+    :columns="mergedColumnsRef"
+    :onUpdateFilters="handleFilterChange"
+    :onUpdateSorter="handleSortChange"
+    :onUpdatePageSize="handlePageSizeChange"
+    :onUpdatePage="handlePageChange"
+  />
 </template>

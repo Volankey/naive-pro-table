@@ -1,26 +1,34 @@
 import { NImage, NTime } from 'naive-ui'
 import { h } from 'vue'
-import type { RenderCell } from '../index'
+import { DateFormatter } from './interface'
 
-const date: RenderCell = (text: any) => {
+const date = (text: any, format?: DateFormatter) => {
+  if (typeof format === 'function') {
+    return format(text, 'date')
+  }
   return h(NTime, {
     time: text,
-    type: 'date'
+    type: 'date',
+    format
   })
 }
-const datetime: RenderCell = (text: any) => {
+const datetime = (text: any, format?: DateFormatter) => {
+  if (typeof format === 'function') {
+    return format(text, 'datetime')
+  }
   return h(NTime, {
     time: text,
-    type: 'datetime'
+    type: 'datetime',
+    format
   })
 }
-const fromNow: RenderCell = (text: any) => {
+const fromNow = (text: any) => {
   return h(NTime, {
     time: text,
     type: 'relative'
   })
 }
-const img: RenderCell = (src: any) => {
+const img = (src: any) => {
   return h(NImage, {
     src,
     height: 32
@@ -31,4 +39,4 @@ export default {
   datetime,
   fromNow,
   img
-}
+} as const

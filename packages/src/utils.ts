@@ -1,3 +1,4 @@
+import { DateFormatter } from './value-type-render/interface'
 import { CustomParams } from './hooks/use-params'
 import {
   computed,
@@ -75,7 +76,10 @@ const setColumnConfig = (column: ProColumn<any>) => {
   })
 }
 
-const getMergedColumnRender = (column: ProColumn<any>) => {
+const getMergedColumnRender = (
+  column: ProColumn<any>,
+  handleColumnOps: HandleColumnOps
+) => {
   return (rowData: unknown, rowIndex: any) => {
     let render:
       | null
@@ -91,7 +95,8 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
     if (!column.render) {
       text = get(rowData, column.dataIndex)
       if (valueType) {
-        render = valueTypeMapRender[valueType]
+        render = (value) =>
+          valueTypeMapRender[valueType](value, handleColumnOps?.dateFormatter)
       } else {
         render = () => text
       }
@@ -113,8 +118,14 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
     return renderOptions.result
   }
 }
+export type HandleColumnOps = {
+  dateFormatter?: DateFormatter
+}
 
-export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
+export const handleColumn = (
+  column: ProColumn<any>,
+  handleColumnOps: HandleColumnOps
+): DataTableColumn<any> => {
   const tmpColumn = {
     ...column,
     title: column.title ?? '',
@@ -122,7 +133,7 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
     // @ts-ignore
     key: column.key || column.dataIndex,
     ellipsis: column.ellipsis,
-    render: getMergedColumnRender(column)
+    render: getMergedColumnRender(column, handleColumnOps)
   } as ProColumn<any>
 
   setColumnConfig(tmpColumn)

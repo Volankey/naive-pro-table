@@ -23,6 +23,7 @@
         defaultPage: 1,
         pageSizes: [14, 20, 50]
       }"
+      :date-formatter="'dd/mm/yyyy'"
       :customParamsStore="customParamsStore"
       :data-table-props="{
         rowClassName: rowClassName
