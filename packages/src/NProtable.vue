@@ -1,12 +1,5 @@
 <script lang="ts" setup>
-import {
-  computed,
-  ref,
-  watch,
-  onMounted,
-  withDefaults,
-  defineExpose
-} from 'vue'
+import { computed, ref, watch, onMounted, withDefaults } from 'vue'
 import type {
   PaginationProps,
   DataTableProps,
