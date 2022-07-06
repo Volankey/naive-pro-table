@@ -3,6 +3,12 @@ import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
 import { NPopover, NCheckboxGroup, NCheckbox, NButton } from 'naive-ui'
 
+// use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
+vi.mock('lodash-es/debounce', () => ({
+  default: vi.fn((fn) => fn),
+  __esModule: true
+}))
+
 const renderProps = {
   syncRoute: true
 }
@@ -50,5 +56,5 @@ test('clear filter', async () => {
   await flushPromises()
   const route = router.currentRoute.value
   expect(route.query).toEqual({ sex: undefined })
-  expect(result.filter).toEqual({ sex: undefined })
+  expect(result.filter).toEqual({ sex: null })
 })

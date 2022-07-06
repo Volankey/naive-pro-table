@@ -2,6 +2,12 @@ import { expect, test } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
 
+// use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
+vi.mock('lodash-es/debounce', () => ({
+  default: vi.fn((fn) => fn),
+  __esModule: true
+}))
+
 const renderProps = {
   syncRoute: true
 }
