@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "naive-ui-protable-alpha": "workspace:*",
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
+    "vue": "3.2.37",
+    "vue-router": "4.0.16"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",

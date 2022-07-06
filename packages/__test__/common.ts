@@ -41,8 +41,8 @@ export const createSourceData = (
     age: 10 + idx,
     sex: 'man',
     favorates: ['pinao', 'gita'],
-    birthday: 861292800000,
-    latestLogin: 861292800000,
+    birthday: +new Date(1997, 3, 18),
+    latestLogin: +new Date(1997, 3, 18),
     avatarSrc,
     otherInfo: {
       parents: ['Jan', 'Pony']
