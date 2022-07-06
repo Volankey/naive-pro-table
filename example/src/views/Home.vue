@@ -1,12 +1,12 @@
 <template>
   <div>
-    name
+    name:
     <n-input
       :value="customParamsStore.customParamsValue.value.search"
       style="width: 300px"
       @update:value="customParamsStore.updateCustomParams('search', $event)"
     ></n-input>
-    age
+    age:
     <n-input
       :value="customParamsStore.customParamsValue.value.age"
       style="width: 300px"
