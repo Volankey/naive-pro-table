@@ -23,6 +23,7 @@ module.exports = {
   env: {
     'vue/setup-compiler-macros': true
   },
+  ignorePatterns: ['dist'],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -41,7 +42,8 @@ module.exports = {
     'func-call-spacing': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error']
+    '@typescript-eslint/no-unused-vars': ['error'],
+    '@typescript-eslint/no-extra-semi': 'off'
   },
   plugins: ['@typescript-eslint', 'import'],
   overrides: [

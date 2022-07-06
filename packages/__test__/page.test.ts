@@ -6,7 +6,13 @@ import { createCommonColsRef, createMyRouter, createSourceData } from './common'
 import { RouterView } from 'vue-router'
 import { NPagination } from 'naive-ui'
 
-async function createPageTest() {
+// use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
+vi.mock('lodash-es/debounce', () => ({
+  default: vi.fn((fn) => fn),
+  __esModule: true
+}))
+
+async function createPageTest(columnsRef?: any) {
   const result: {
     params: any
     sort: any
@@ -41,7 +47,7 @@ async function createPageTest() {
         showSizePicker: true,
         pageSizes: [15, 20, 50]
       },
-      columns: createCommonColsRef().value,
+      columns: columnsRef ? columnsRef.value : createCommonColsRef().value,
       apiRequest: getData
     })
   )
@@ -65,11 +71,6 @@ async function createPageTest() {
     result
   }
 }
-
-test('default pageSize = 15', async () => {
-  const { result } = await createPageTest()
-  expect(result.pageSize).equal(15)
-})
 
 test('change page = 2 then the pageSize = 20', async () => {
   const { wrapper, result, router } = await createPageTest()

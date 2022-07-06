@@ -13,12 +13,14 @@ import type {
   DataTableColumns
 } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
-import type { ApiRequest, ProColumn } from './interface'
+import type { ApiRequest, ProColumn, ProTableIns } from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
 import { syncFromRouter, syncRouterQuery } from './router-sync'
 import type { QueryOptions } from './table-params-store/types'
-import { debounce } from 'lodash-es'
+import debounce from 'lodash-es/debounce'
+import { CustomParams } from './hooks'
+import type { DateFormatter } from './value-type-render/interface'
 
 const props = withDefaults(
   defineProps<{
@@ -29,6 +31,8 @@ const props = withDefaults(
     remote?: boolean
     queryPrefix?: string
     syncRoute?: boolean
+    customParamsStore?: CustomParams
+    dateFormatter?: DateFormatter
   }>(),
   {
     remote: true,
@@ -45,17 +49,25 @@ watch(
 )
 
 const handleSyncRouterQuery = syncRouterQuery()
-const handleUpdateQuery = debounce((query: QueryOptions<false>) => {
-  handleSyncRouterQuery(query, props.queryPrefix)
+const handleUpdateQuery = (query: QueryOptions<false>) => {
+  handleSyncRouterQuery(
+    query,
+    props.customParamsStore?.customParamsValue.value,
+    props.queryPrefix
+  )
   handleFetchTableData()
-})
+}
 const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       keyMapColumnAndRule: syncRouteRuleColumnRef.value,
+      customParams: props.customParamsStore,
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
 )
+if (props.customParamsStore) {
+  props.customParamsStore.setCallback(handleUpdateQuery)
+}
 
 const loadingRef = ref(false)
 const pageCountRef = ref(0)
@@ -76,66 +88,71 @@ const mergedPaginationRef = computed(() => {
   return res
 })
 const tableDataRef = ref<any[]>([])
-const mergedColumnsRef = ref<DataTableColumns>(props.columns.map(handleColumn))
+function mergedHandleColumn(col: ProColumn<any>) {
+  return handleColumn(col, {
+    dateFormatter: props.dateFormatter
+  })
+}
+const mergedColumnsRef = ref<DataTableColumns>(
+  props.columns.map(mergedHandleColumn)
+)
 watch(props.columns, () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  mergedColumnsRef.value = props.columns.map(handleColumn)
+  mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
 })
 
 const {
   handleSortChange,
   handleFilterChange,
-  handleParamsChange,
   handlePageChange,
   handlePageSizeChange,
   tableApiRequestArgsRef,
   paginationRef
-} = useTableRequest(paramsStoreRef)
+} = useTableRequest(paramsStoreRef, props?.customParamsStore)
+const handleFetchTableData = debounce(
+  async ({ showLoading = true }: { showLoading?: boolean } = {}) => {
+    if (!props.apiRequest) {
+      return
+    }
+    if (showLoading) loadingRef.value = true
 
-defineExpose({
-  changeParams: handleParamsChange,
+    try {
+      const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
+      tableDataRef.value = resp.data
+      if (resp.pageCount) {
+        pageCountRef.value = resp.pageCount
+      } else if (resp.itemCount) {
+        itemCountRef.value = resp.itemCount
+      }
+    } catch (error) {
+      console.error(error)
+    }
+    loadingRef.value = false
+  }
+)
+defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
 paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
 
-async function handleFetchTableData() {
-  if (!props.apiRequest) {
-    return
-  }
-  loadingRef.value = true
-
-  try {
-    const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
-    tableDataRef.value = resp.data
-    if (resp.pageCount) {
-      pageCountRef.value = resp.pageCount
-    } else if (resp.itemCount) {
-      itemCountRef.value = resp.itemCount
-    }
-  } catch (error) {
-    console.error(error)
-  }
-  loadingRef.value = false
-}
 onMounted(() => {
   handleFetchTableData()
 })
 </script>
 
 <template>
-  <div class="n-data-protable">
-    <NDataTable
-      v-bind="dataTableProps"
-      :remote="remote"
-      :pagination="mergedPaginationRef"
-      :data="tableDataRef"
-      :loading="loadingRef"
-      :columns="mergedColumnsRef"
-      :onUpdateFilters="handleFilterChange"
-      :onUpdateSorter="handleSortChange"
-      :onUpdatePageSize="handlePageSizeChange"
-      :onUpdatePage="handlePageChange"
-    />
-  </div>
+  <NDataTable
+    v-bind="dataTableProps"
+    :remote="remote"
+    class="n-data-protable"
+    :pagination="mergedPaginationRef"
+    :data="tableDataRef"
+    :loading="loadingRef"
+    :columns="mergedColumnsRef"
+    :onUpdateFilters="handleFilterChange"
+    :onUpdateSorter="handleSortChange"
+    :onUpdatePageSize="handlePageSizeChange"
+    :onUpdatePage="handlePageChange"
+  />
 </template>

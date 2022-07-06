@@ -1,3 +1,5 @@
+import { DateFormatter } from './value-type-render/interface'
+import { CustomParams } from './hooks/use-params'
 import {
   computed,
   createTextVNode,
@@ -16,6 +18,7 @@ import type {
 import CommonCopy from './components/CommonCopy'
 import type { Rule, Rules } from './table-params-store/types'
 import type { TableParamsStore } from './table-params-store/index'
+import valueTypeMapRender from './value-type-render'
 
 interface RenderOptions {
   result: VNodeChild
@@ -73,7 +76,10 @@ const setColumnConfig = (column: ProColumn<any>) => {
   })
 }
 
-const getMergedColumnRender = (column: ProColumn<any>) => {
+const getMergedColumnRender = (
+  column: ProColumn<any>,
+  handleColumnOps: HandleColumnOps
+) => {
   return (rowData: unknown, rowIndex: any) => {
     let render:
       | null
@@ -84,10 +90,16 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
           actions?: any
         ) => VNodeChild) = null
     const dataIndex = column.dataIndex
+    const valueType = column.valueType
     let text = get(rowData, dataIndex)
     if (!column.render) {
       text = get(rowData, column.dataIndex)
-      render = () => text
+      if (valueType) {
+        render = (value) =>
+          valueTypeMapRender[valueType](value, handleColumnOps?.dateFormatter)
+      } else {
+        render = () => text
+      }
     } else {
       render = column.render
     }
@@ -106,8 +118,14 @@ const getMergedColumnRender = (column: ProColumn<any>) => {
     return renderOptions.result
   }
 }
+export type HandleColumnOps = {
+  dateFormatter?: DateFormatter
+}
 
-export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
+export const handleColumn = (
+  column: ProColumn<any>,
+  handleColumnOps: HandleColumnOps
+): DataTableColumn<any> => {
   const tmpColumn = {
     ...column,
     title: column.title ?? '',
@@ -115,7 +133,7 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
     // @ts-ignore
     key: column.key || column.dataIndex,
     ellipsis: column.ellipsis,
-    render: getMergedColumnRender(column)
+    render: getMergedColumnRender(column, handleColumnOps)
   } as ProColumn<any>
 
   setColumnConfig(tmpColumn)
@@ -123,12 +141,21 @@ export const handleColumn = (column: ProColumn<any>): DataTableColumn<any> => {
   return tmpColumn as DataTableColumn<any>
 }
 
-export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
+export const useTableRequest = (
+  paramsStoreRef: Ref<TableParamsStore>,
+  customParams?: CustomParams
+) => {
   const tableApiRequestArgsRef = computed(() => {
     const paramsStore = paramsStoreRef.value
     const query = paramsStore.queryRef.value
-    const { sort, filter, params, page, pageSize } = query
-    return [params, sort, filter, page, pageSize] as ApiRequestArgs
+    const { sort, filter, page, pageSize } = query
+    return [
+      customParams?.customParamsValue.value,
+      sort,
+      filter,
+      page,
+      pageSize
+    ] as ApiRequestArgs
   })
   const paginationRef = computed(() => {
     const query = paramsStoreRef.value.queryRef.value
@@ -162,15 +189,12 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
           result[key] = filterValues
           paramsStore.updateFilter(key, filterValues)
         } else {
-          paramsStore.updateFilter(key, undefined)
+          paramsStore.updateFilter(key, null)
         }
         return result
       }, {} as any)
   }
-  const handleParamsChange = (params: any) => {
-    const paramsStore = paramsStoreRef.value
-    paramsStore.updateParams(params)
-  }
+
   const handlePageChange = (page: number) => {
     const paramsStore = paramsStoreRef.value
     paramsStore.updatePage(page)
@@ -185,7 +209,6 @@ export const useTableRequest = (paramsStoreRef: Ref<TableParamsStore>) => {
     tableApiRequestArgsRef,
     handleSortChange,
     handleFilterChange,
-    handleParamsChange,
     handlePageChange,
     handlePageSizeChange,
     paginationRef

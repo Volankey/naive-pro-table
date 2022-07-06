@@ -1,5 +1,5 @@
 import type { VNodeChild } from 'vue'
-
+import type { ValueType } from './value-type-render/interface'
 import type {
   DataTableColumn,
   DataTableBaseColumn,
@@ -20,9 +20,9 @@ type ValueEnumItem = {
 interface ValueEnum {
   [key: string]: ValueEnumItem
 }
-type RenderColumnCell = (column: ProTableBasicColumn) => VNodeChild
+export type RenderColumnCell = (column: ProTableBasicColumn) => VNodeChild
 type TableColumnTitle = string | RenderColumnCell
-type RenderCell<T> = (
+export type RenderCell<T = any> = (
   text: any,
   rowData: T,
   rowIndex: number,
@@ -45,7 +45,7 @@ export type ProTableBasicColumn<T = InternalRowData> = {
     name: string
     rule: Rule
   }
-  // valueType: string // TODO:
+  valueType?: ValueType
   render?: RenderCell<T>
   filters?: boolean | Array<{ label: string; value: string | number }>
   sorter?: DataTableBaseColumn<T>['sorter']
@@ -75,7 +75,6 @@ export type ApiRequest<T = any> = (...args: ApiRequestArgs) => Promise<{
 
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 export interface ProTableIns {
-  changeParams: (params: any) => void
   refresh: () => void
 }
 

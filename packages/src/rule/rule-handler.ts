@@ -8,7 +8,6 @@ export const ruleHandlers = {
     return value ? +value : 0
   },
   array: (value: LocationQueryValue[] | LocationQueryValue) => {
-    debugger
     if (Array.isArray(value)) {
       return value
     } else {
