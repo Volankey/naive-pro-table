@@ -9,7 +9,7 @@
     "build": "rm -rf dist && vue-tsc --declaration --emitDeclarationOnly --jsx preserve && vite build",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",
-    "coverage": "vitest run --coverage"
+    "test:cov": "vitest run --coverage"
   },
   "main": "./dist/src/naive-ui-protable-alpha.umd.js",
   "module": "./dist/src/naive-ui-protable-alpha.es.js",

@@ -40,11 +40,14 @@
   },
   "scripts": {
     "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
-    "typecheck": "pnpm run typecheck",
+    "typecheck:pkg": "pnpm run -C packages typecheck",
     "dev:example": "pnpm run -C example dev",
     "dev:pkg": "pnpm run  -C packages dev",
     "build:pkg": "pnpm run -C packages build ",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "pnpm run lint:code && pnpm run lint:type",
+    "lint:type": "pnpm run typecheck:pkg",
+    "lint:code": "eslint \"{packages,example}/**/*.{ts,tsx,js,vue}\""
   },
   "repository": {
     "type": "git",
@@ -56,8 +59,5 @@
   "bugs": {
     "url": "https://github.com/Volankey/naive-pro-table/issues"
   },
-  "homepage": "https://github.com/Volankey/naive-pro-table#readme",
-  "dependencies": {
-    "@vue/test-utils": "^2.0.0"
-  }
+  "homepage": "https://github.com/Volankey/naive-pro-table#readme"
 }

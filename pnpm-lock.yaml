@@ -9,7 +9,6 @@ importers:
       '@typescript-eslint/parser': ^5.26.0
       '@vue/eslint-config-prettier': ^7.0.0
       '@vue/eslint-config-typescript': ^10.0.0
-      '@vue/test-utils': ^2.0.0
       eslint: ^8.5.0
       eslint-plugin-import: ^2.26.0
       eslint-plugin-vue: ^8.2.0
@@ -17,8 +16,6 @@ importers:
       lint-staged: ^12.4.2
       prettier: ^2.7.1
       typescript: ^4.7.4
-    dependencies:
-      '@vue/test-utils': 2.0.0
     devDependencies:
       '@rushstack/eslint-patch': 1.1.4
       '@typescript-eslint/eslint-plugin': 5.30.0_5mtqsiui4sk53pmkx7i7ue45wm
@@ -282,7 +279,7 @@ packages:
     dev: true
 
   /@types/web-bluetooth/0.0.14:
-    resolution: {integrity: sha1-lOF1tTYjOEv/HzVM2zGXqNY82+U=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/@types/web-bluetooth/-/web-bluetooth-0.0.14.tgz}
+    resolution: {integrity: sha1-lOF1tTYjOEv/HzVM2zGXqNY82+U=}
     dev: false
 
   /@typescript-eslint/eslint-plugin/5.30.0_5mtqsiui4sk53pmkx7i7ue45wm:
@@ -565,12 +562,6 @@ packages:
   /@vue/shared/3.2.37:
     resolution: {integrity: sha1-jmrcPydZr1Lw6Fhj37C3EezFxwI=}
 
-  /@vue/test-utils/2.0.0:
-    resolution: {integrity: sha1-BkVZNAkdI31x2BusZhdIXeOLHFg=}
-    peerDependencies:
-      vue: ^3.0.1
-    dev: false
-
   /@vue/test-utils/2.0.0_vue@3.2.37:
     resolution: {integrity: sha1-BkVZNAkdI31x2BusZhdIXeOLHFg=}
     peerDependencies:
@@ -580,7 +571,7 @@ packages:
     dev: true
 
   /@vueuse/core/8.7.5_vue@3.2.37:
-    resolution: {integrity: sha1-50qIglHqEanUMgaM4Yy9/E+BAlE=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/@vueuse/core/-/core-8.7.5.tgz}
+    resolution: {integrity: sha1-50qIglHqEanUMgaM4Yy9/E+BAlE=}
     peerDependencies:
       '@vue/composition-api': ^1.1.0
       vue: ^2.6.0 || ^3.2.0
@@ -598,11 +589,11 @@ packages:
     dev: false
 
   /@vueuse/metadata/8.7.5:
-    resolution: {integrity: sha1-x/KyHYc9FgSohg7ZxXKNjzKV8Ao=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/@vueuse/metadata/-/metadata-8.7.5.tgz}
+    resolution: {integrity: sha1-x/KyHYc9FgSohg7ZxXKNjzKV8Ao=}
     dev: false
 
   /@vueuse/shared/8.7.5_vue@3.2.37:
-    resolution: {integrity: sha1-BvsI9vj8npC+nR4DP6RD3pJxcrA=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/@vueuse/shared/-/shared-8.7.5.tgz}
+    resolution: {integrity: sha1-BvsI9vj8npC+nR4DP6RD3pJxcrA=}
     peerDependencies:
       '@vue/composition-api': ^1.1.0
       vue: ^2.6.0 || ^3.2.0
@@ -2838,7 +2829,7 @@ packages:
     engines: {node: '>=0.10.0'}
 
   /source-map/0.6.1:
-    resolution: {integrity: sha1-dHIq8y6WFOnCh6jQu95IteLxomM=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/source-map/-/source-map-0.6.1.tgz}
+    resolution: {integrity: sha1-dHIq8y6WFOnCh6jQu95IteLxomM=}
     engines: {node: '>=0.10.0'}
 
   /sourcemap-codec/1.4.8:
@@ -3170,7 +3161,7 @@ packages:
     dev: true
 
   /vue-demi/0.13.1_vue@3.2.37:
-    resolution: {integrity: sha1-dgSQTIi+M4QYoQq7yU1bjKoUy4w=, tarball: https://artifactory.tusimple.ai:443/artifactory/api/npm/npm-infra-common/vue-demi/-/vue-demi-0.13.1.tgz}
+    resolution: {integrity: sha1-dgSQTIi+M4QYoQq7yU1bjKoUy4w=}
     engines: {node: '>=12'}
     hasBin: true
     requiresBuild: true
