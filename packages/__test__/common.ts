@@ -14,6 +14,41 @@ export const createCommonColsRef = () =>
       title: 'birthday',
       dataIndex: 'birthday',
       valueType: 'date'
+    },
+    {
+      title: 'age',
+      dataIndex: 'age',
+      key: 'age',
+      sorter: true,
+      sortOrder: false,
+      syncRouteSorter: {
+        name: 'age',
+        rule: {
+          type: 'string'
+        }
+      }
+    },
+    {
+      title: 'sex',
+      dataIndex: 'sex',
+      key: 'sex',
+      filter: true,
+      syncRouteFilter: {
+        name: 'sexfilter',
+        rule: {
+          type: 'array'
+        }
+      },
+      valueEnum: {
+        all: { label: '全部' },
+        man: {
+          label: '男'
+        },
+        woman: {
+          label: '女',
+          disabled: true
+        }
+      }
     }
   ])
 export type ColumnData = {
@@ -54,7 +89,6 @@ export const createSourceData = (
     data
   }
 }
-
 export function createMyRouter(render) {
   return createRouter({
     history: createWebHistory(),
