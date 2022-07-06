@@ -36,6 +36,7 @@ test('test value type date and change value type to datetime', async () => {
   const { wrapper } = await createTable(colsRef)
   await flushPromises()
   expect(wrapper.html()).toContain('1997-04-18')
+
   colsRef.value[1].valueType = 'datetime'
   await flushPromises()
   expect(wrapper.html()).toContain('1997-04-18 00:00:00')
