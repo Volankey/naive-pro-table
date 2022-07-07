@@ -56,7 +56,7 @@ export default defineComponent({
           {
             ...commonIconProps,
             color: '#1890ff',
-            onClick: { handleClick }
+            onClick: handleClick
           },
           {
             default: () => h(CopyOutline)
