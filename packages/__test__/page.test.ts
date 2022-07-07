@@ -1,4 +1,4 @@
-import { expect } from 'vitest'
+import { expect, vi } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
 import { NPagination } from 'naive-ui'
