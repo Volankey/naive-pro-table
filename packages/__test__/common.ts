@@ -106,7 +106,7 @@ export function createMyRouter(render) {
   })
 }
 
-export async function createTable(columnsRef?: any, tableProps?: any = {}) {
+export async function createTable(columnsRef?: any, tableProps: any = {}) {
   const result: {
     params: any
     sort: any
