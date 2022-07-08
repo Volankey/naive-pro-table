@@ -64,7 +64,7 @@ const createSourceData = (
   }))
   return {
     pageSize: 14,
-    itemCount: Math.ceil(Math.random() * 50),
+    itemCount: 50,
     data
   }
 }

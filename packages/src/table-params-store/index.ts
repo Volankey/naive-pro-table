@@ -121,7 +121,6 @@ export class TableParamsStore {
       this.handleQueryUpdate()
     }
   }
-  // silent will not trigger api request
   handleQueryUpdate() {
     this.onUpdateQuery(this.queryRef.value as any)
   }

@@ -58,8 +58,16 @@ const paramsStoreRef = computed(
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
 )
+const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
+  handleSyncRouterQuery(
+    paramsStoreRef.value.queryRef.value as any,
+    customParams,
+    props.queryPrefix
+  )
+  handleFetchTableData()
+}
 if (props.customParamsStore) {
-  props.customParamsStore.setCallback(handleUpdateQuery)
+  props.customParamsStore.setCallback(handleCustomParamsUpdate)
 }
 
 const loadingRef = ref(false)
