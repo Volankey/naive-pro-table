@@ -2,27 +2,14 @@ import { CopyOutline, Checkmark } from '@vicons/ionicons5'
 import { NIcon } from 'naive-ui'
 import { defineComponent, ref, h } from 'vue'
 
-const copyToClipBoard = (clipBoardContent: string | undefined | number) => {
+const copyToClipBoard = async (
+  clipBoardContent: string | undefined | number
+) => {
   if (clipBoardContent === undefined) {
     return
   }
   clipBoardContent = '' + clipBoardContent
-  const tmpDiv = document.createElement('div')
-  tmpDiv.innerText = clipBoardContent // 修改文本框的内容
-  document.body.appendChild(tmpDiv)
-  tmpDiv.style.opacity = '0'
-  tmpDiv.style.height = '0'
-  tmpDiv.style.width = '0'
-
-  const selection = window.getSelection()
-  const range = document.createRange()
-  range.selectNodeContents(tmpDiv)
-  if (selection) {
-    selection.removeAllRanges()
-    selection.addRange(range)
-  }
-  document.execCommand('Copy')
-  tmpDiv.remove()
+  await navigator.clipboard.writeText(clipBoardContent)
 }
 
 export default defineComponent({
@@ -56,7 +43,7 @@ export default defineComponent({
           {
             ...commonIconProps,
             color: '#1890ff',
-            onClick: { handleClick }
+            onClick: handleClick
           },
           {
             default: () => h(CopyOutline)
