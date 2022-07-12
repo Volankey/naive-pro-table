@@ -8,7 +8,8 @@ export const createCommonColsRef = () =>
   ref<ProColumn<{ name: string }>[]>([
     {
       title: 'name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      copyable: true
     },
     {
       title: 'birthday',
