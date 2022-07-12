@@ -8,12 +8,15 @@ vi.mock('lodash-es/debounce', () => ({
 
 test('test copy icon change', async () => {
   const { wrapper } = await createTest()
+  document.execCommand = vi.fn()
+
   let copyIcon = wrapper.getComponent('.n-icon')
   let svg = copyIcon.find('svg')
 
   expect(svg.find('rect').exists()).toBe(true)
   await copyIcon.trigger('click')
 
+  expect(document.execCommand).toHaveBeenCalledWith('Copy')
   copyIcon = wrapper.getComponent('.n-icon')
   svg = copyIcon.find('svg')
   expect(svg.find('rect').exists()).toBe(false)

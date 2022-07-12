@@ -9,7 +9,25 @@ const copyToClipBoard = async (
     return
   }
   clipBoardContent = '' + clipBoardContent
-  await navigator.clipboard.writeText(clipBoardContent)
+  if (navigator.clipboard) {
+    await navigator.clipboard.writeText(clipBoardContent)
+  } else {
+    const tmpDiv = document.createElement('div')
+    tmpDiv.innerText = clipBoardContent // 修改文本框的内容
+    document.body.appendChild(tmpDiv)
+    tmpDiv.style.opacity = '0'
+    tmpDiv.style.height = '0'
+    tmpDiv.style.width = '0'
+    const selection = window.getSelection()
+    const range = document.createRange()
+    range.selectNodeContents(tmpDiv)
+    if (selection) {
+      selection.removeAllRanges()
+      selection.addRange(range)
+    }
+    document.execCommand('Copy')
+    tmpDiv.remove()
+  }
 }
 
 export default defineComponent({
