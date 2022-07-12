@@ -8,7 +8,8 @@ export const createCommonColsRef = () =>
   ref<ProColumn<{ name: string }>[]>([
     {
       title: 'name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      copyable: true
     },
     {
       title: 'birthday',
@@ -72,7 +73,7 @@ export const createSourceData = (
   pageSize: number
 ): { pageSize: number; itemCount: number; data: ColumnData[] } => {
   const data: ColumnData[] = new Array(pageSize).fill(1).map((_, idx) => ({
-    name: 'Jonny' + ((page - 1) * pageSize + idx),
+    name: 'Jonny' + idx,
     age: 10 + idx,
     sex: 'man',
     favorates: ['pinao', 'gita'],
