@@ -2,3 +2,5 @@ node_modules
 dist
 coverage
 pnpm-lock.yaml
+docs/.vuepress/.cache
+docs/.vuepress/.temp

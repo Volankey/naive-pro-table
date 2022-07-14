@@ -11,6 +11,13 @@ import type {
   ProTableIns
 } from 'naive-ui-protable-alpha'
 
+const proTableRef = ref<ProTableIns | null>(null)
+type Column = {
+  name: string
+  age: number
+  address: string
+}
+
 const createSourceData = (
   params: unknown,
   sort: any,
@@ -28,56 +35,38 @@ const createSourceData = (
   const data: Column[] = [
     {
       name: 'John Brown',
-      age: 38,
-      gender: 'man'
+      age: 32,
+      address: 'New York No. 1 Lake Park'
     },
     {
       name: 'Jim Green',
       age: 42,
-      gender: 'none'
+      address: 'London No. 1 Lake Park'
     },
     {
-      name: 'Megumi Noda',
-      age: 20,
-      gender: 'woman'
+      name: 'Joe Black',
+      age: 32,
+      address: 'Sidney No. 1 Lake Park'
     },
     {
-      name: 'Shinichi Chiaki',
-      age: 21,
-      gender: 'man'
-    },
-    {
-      name: 'Jolyne Cujoh',
-      age: 16,
-      gender: 'woman'
+      name: 'Jim Red',
+      age: 32,
+      address: 'London No. 2 Lake Park'
     }
   ]
   return {
     pageSize: 15,
-    itemCount: 5,
+    itemCount: 4,
     data
   }
 }
 
-type Column = {
-  name: string
-  age: number
-  gender: 'man' | 'woman' | 'none'
-}
-
-const proTableRef = ref<ProTableIns | null>(null)
 const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Name',
     dataIndex: 'name',
-    key: 'name'
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    key: 'name',
     sorter: true,
-    sortOrder: false,
     syncRouteSorter: {
       name: 'age',
       rule: {
@@ -86,25 +75,26 @@ const columns = ref<ProColumn<Column>[]>([
     }
   },
   {
-    title: 'Gender',
-    dataIndex: 'gender',
-    key: 'gender',
-    filter: true,
-    syncRouteFilter: {
-      name: 'gender',
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+    sorter: (row1, row2) => row1.age - row2.age,
+    syncRouteSorter: {
+      name: 'age',
       rule: {
-        type: 'array'
+        type: 'string'
       }
-    },
-    valueEnum: {
-      man: {
-        label: '男'
-      },
-      woman: {
-        label: '女'
-      },
-      none: {
-        label: '无'
+    }
+  },
+  {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+    sorter: 'default',
+    syncRouteSorter: {
+      name: 'address',
+      rule: {
+        type: 'string'
       }
     }
   }
