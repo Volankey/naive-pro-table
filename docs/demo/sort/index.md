@@ -6,7 +6,9 @@
 
 ::: tip
 
-- 在 Protable 中，若`sync-route`不为`false`，则在表格内进行的排序操作将同步路由。在进行排序的路由同步时，可配置`syncRouteSorter`进行校验。详见[同步路由](../sync-route）。 :::
+- 在 Protable 中，若`sync-route`不为`false`，则在表格内进行的排序操作将同步路由。在进行排序的路由同步时，可配置`syncRouteSorter`进行校验。详见[同步路由](../sync-route）。
+
+:::
 
 <SingleSortDemo />
 

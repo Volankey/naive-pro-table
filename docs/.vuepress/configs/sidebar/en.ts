@@ -15,31 +15,31 @@ export const sidebarEn: SidebarConfig = {
         },
         {
           text: '可复制列',
-          link: '/demo/copyable'
+          link: '/demo/copyable/'
         },
         {
           text: '表头分组',
-          link: '/demo/header-grouped'
+          link: '/demo/header-grouped/'
         },
         {
           text: '排序',
-          link: '/demo/sort'
+          link: '/demo/sort/'
         },
         {
           text: '过滤',
-          link: '/demo/filter'
+          link: '/demo/filter/'
         },
         {
           text: '自定义参数',
-          link: '/demo/custom-params'
+          link: '/demo/custom-params/'
         },
         {
           text: '分页',
-          link: '/demo/pagination'
+          link: '/demo/pagination/'
         },
         {
           text: '同步路由',
-          link: '/demo/sync-route'
+          link: '/demo/sync-route/'
         }
       ]
     }
