@@ -4,14 +4,14 @@ import type { QueryOptions, RoueQueryParsed } from '../table-params-store/types'
 function parseRouteQueryKey(queryKey: string) {
   const keyItems = queryKey.split('.')
   // 保证在设置了query-prefix的情况下能够正确获取key & type
-  const length = keyItems.length
-  const type = keyItems[length - 1]
-  keyItems.pop()
-  // 若设置了prefix，key的形式为prefix.key
-  const _key = keyItems.join('.')
+  const type = keyItems.pop()
+  const key = keyItems.pop()
+  // 处理带有'.'符号的prefix
+  const prefix = keyItems.join('.')
   return {
     type,
-    _key
+    key,
+    prefix
   }
 }
 function getQuery(
@@ -136,27 +136,17 @@ export function syncFromRouter() {
 
   return Object.entries(query).reduce((result, curr) => {
     const [queryKey, value] = curr
-    const { _key, type } = parseRouteQueryKey(queryKey)
-    const mixKeyItem = _key.split('.')
-    let key = ''
-    let tablePrefix = ''
-    if (mixKeyItem.length === 1) {
-      key = _key
-    } else {
-      key = mixKeyItem[mixKeyItem.length - 1]
-      mixKeyItem.pop()
-      // 处理带有'.'符号的prefix
-      tablePrefix = mixKeyItem.join('.')
-    }
-    if (!result[key]) {
-      result[key] = {}
+    const { type, key, prefix } = parseRouteQueryKey(queryKey)
+
+    if (!result[key!]) {
+      result[key!] = {}
     }
 
-    if (tablePrefix.length === 0) {
-      Object.assign(result[key], { default: { key, type, value } })
+    if (prefix.length === 0) {
+      Object.assign(result[key!], { default: { key, type, value } })
     } else {
-      Object.assign(result[key], {
-        [tablePrefix]: { key, type, value }
+      Object.assign(result[key!], {
+        [prefix]: { key, type, value }
       })
     }
     return result
