@@ -189,7 +189,7 @@ export const useTableRequest = (
           result[key] = filterValues
           paramsStore.updateFilter(key, filterValues)
         } else {
-          paramsStore.updateFilter(key, null)
+          paramsStore.updateFilter(key, undefined)
         }
         return result
       }, {} as any)
