@@ -4,8 +4,10 @@
 
 ::: tip
 
-- 在 Protable 中，若`sync-route`不为 false，自定义参数的变化将与路由同步。  
-  :::
+- 在 Protable 中，若`sync-route`不为 false，自定义参数的变化将与路由同步。
+- 自定义参数的更新使用`useCustomParamsStore`中提供的更新方法`updateCustomParams`。
+
+:::
 
 <CustomParamsDemo />
 
