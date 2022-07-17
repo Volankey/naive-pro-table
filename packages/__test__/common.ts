@@ -171,3 +171,71 @@ export async function createTable(columnsRef?: any, tableProps: any = {}) {
     result
   }
 }
+
+export async function createMultipleTable() {
+  const result: {
+    params: any
+    sort: any
+    filter: any
+    page: number
+    pageSize: number
+  } = {
+    params: undefined,
+    sort: undefined,
+    filter: undefined,
+    page: 0,
+    pageSize: 0
+  }
+
+  const getData = vi.fn((params, sort, filter, page, pageSize) => {
+    Object.assign(result, {
+      params,
+      sort,
+      filter,
+      page,
+      pageSize
+    })
+    return Promise.resolve(
+      createSourceData(params, sort, filter, page, pageSize)
+    )
+  })
+
+  const router = createMyRouter(() =>
+    h('div', {}, [
+      h(NProTable, {
+        queryPrefix: 'table',
+        columns: createCommonColsRef().value,
+        apiRequest: getData
+      }),
+      h(NProTable, {
+        queryPrefix: 'tableCopy',
+        columns: createCommonColsRef().value,
+        apiRequest: getData
+      })
+    ])
+  )
+
+  const wrapper = mount(
+    {
+      template: `<router-view></router-view>`,
+      components: {
+        RouterView
+      }
+    },
+    {
+      attachTo: document.body,
+      global: {
+        plugins: [router],
+        stubs: {
+          teleport: true
+        }
+      }
+    }
+  )
+  await flushPromises() // 等待promise handler all done https://test-utils.vuejs.org/api/#flushpromises
+  return {
+    wrapper,
+    router,
+    result
+  }
+}
