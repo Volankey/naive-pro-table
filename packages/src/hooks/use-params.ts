@@ -45,17 +45,17 @@ export function useCustomParamsStore<T extends Record<string, any> = any>(
     return filteredParams
   }
 
-  function setCustomParams(params: Record<string, any>) {
+  function setCustomParams(params: T) {
     transform(params)
     const filteredParams = validate(params)
-    customParamsRef.value = filteredParams
+    customParamsRef.value = filteredParams as T
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }
   function updateCustomParams(key: string, v: any) {
     const nextParams = { ...customParamsRef.value, [key]: v }
     transform(nextParams)
     const filteredParams = validate(nextParams)
-    customParamsRef.value = filteredParams
+    customParamsRef.value = filteredParams as T
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }
   const customParamsStore = {
@@ -71,4 +71,4 @@ export function useCustomParamsStore<T extends Record<string, any> = any>(
   return customParamsStore
 }
 
-export type CustomParams = ReturnType<typeof useCustomParamsStore>
+export type CustomParams = ReturnType<typeof useCustomParamsStore<any>>

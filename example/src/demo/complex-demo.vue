@@ -68,7 +68,10 @@ const createSourceData = (
     data
   }
 }
-const customParamsStore = useCustomParamsStore(
+const customParamsStore = useCustomParamsStore<{
+  search: string | null
+  age: number | null
+}>(
   {
     search: null,
     age: 1
