@@ -8,7 +8,7 @@ import { createCommonColsRef, createMyRouter, createSourceData } from './common'
 export async function createTest(
   tableProps?,
   otherRender?: () => VNodeChild,
-  initUrl = '/'
+  initUrl?
 ) {
   const result: {
     params: any
@@ -43,8 +43,10 @@ export async function createTest(
       apiRequest: getData
     })
   ])
-  router.push(initUrl)
-  await flushPromises()
+  if (initUrl) {
+    router.push(initUrl)
+    await flushPromises()
+  }
   const wrapper = mount(
     {
       setup() {
