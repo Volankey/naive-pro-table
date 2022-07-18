@@ -1,11 +1,13 @@
-import { computed, ref } from 'vue'
+import { computed, Ref, ref } from 'vue'
 import { Rule } from './../table-params-store/types'
 
-export function useCustomParamsStore(
-  initValue?: Record<string, any>,
-  syncCustomParams?: Record<string, Rule>
+export function useCustomParamsStore<T extends Record<string, any> = any>(
+  initValue?: T,
+  syncCustomParams?: Partial<
+    Record<keyof T, Rule & { transform?: (v: any) => any }>
+  >
 ) {
-  const customParamsRef = ref<Record<string, any>>(initValue || {})
+  const customParamsRef = ref(initValue || {}) as Ref<T>
   const customParamsReadonly = computed(() => customParamsRef.value)
 
   function validateField(key: string, value: any) {
@@ -14,6 +16,22 @@ export function useCustomParamsStore(
       return rule.validator(value)
     }
     return true
+  }
+  function transformField(key: string, v: any) {
+    const rule = syncCustomParams?.[key]
+    if (rule && rule.transform) {
+      return rule.transform(v)
+    }
+    return v
+  }
+  function transform(params: Record<string, any>) {
+    const keys = Object.keys(params)
+    const filteredParams: Record<string, any> = {}
+    keys.forEach((key) => {
+      const transformedValue = transformField(key, params[key])
+      params[key] = transformedValue
+    })
+    return filteredParams
   }
   function validate(params: Record<string, any>) {
     const keys = Object.keys(params)
@@ -28,12 +46,15 @@ export function useCustomParamsStore(
   }
 
   function setCustomParams(params: Record<string, any>) {
+    transform(params)
     const filteredParams = validate(params)
     customParamsRef.value = filteredParams
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }
   function updateCustomParams(key: string, v: any) {
-    const filteredParams = validate({ [key]: v })
+    const nextParams = { ...customParamsRef.value, [key]: v }
+    transform(nextParams)
+    const filteredParams = validate(nextParams)
     customParamsRef.value = filteredParams
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }

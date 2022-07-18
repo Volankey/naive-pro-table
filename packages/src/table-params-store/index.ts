@@ -52,7 +52,10 @@ export class TableParamsStore {
     Object.values(routeQueryParsed).forEach((queryItems) => {
       queryItems.forEach((queryItem) => {
         const { key, value, type } = queryItem
-        if (keyMapColumnAndRule[key]) {
+        if (
+          (type === 'sort' || type === 'filter') &&
+          keyMapColumnAndRule[key]
+        ) {
           const columnAndRule = keyMapColumnAndRule[key]
           const { column } = columnAndRule
           if (column.syncRouteFilter && type === 'filter') {

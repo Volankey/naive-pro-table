@@ -1,11 +1,15 @@
 import { RouterView } from 'vue-router'
 import { vi } from 'vitest'
-import { h } from 'vue'
+import { h, VNodeChild } from 'vue'
 import NProTable from '../src'
 import { flushPromises, mount } from '@vue/test-utils'
 import { createCommonColsRef, createMyRouter, createSourceData } from './common'
 
-export async function createTest(renderProps?) {
+export async function createTest(
+  tableProps?,
+  otherRender?: () => VNodeChild,
+  initUrl = '/'
+) {
   const result: {
     params: any
     sort: any
@@ -31,13 +35,16 @@ export async function createTest(renderProps?) {
       createSourceData(params, sort, filter, page, pageSize)
     )
   })
-  const router = createMyRouter(() =>
+  const router = createMyRouter(() => [
+    otherRender?.(),
     h(NProTable, {
-      ...renderProps,
+      ...tableProps,
       columns: createCommonColsRef().value,
       apiRequest: getData
     })
-  )
+  ])
+  router.push(initUrl)
+  await flushPromises()
   const wrapper = mount(
     {
       setup() {
@@ -62,7 +69,7 @@ export async function createTest(renderProps?) {
 export function delay(time = 1000) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve()
+      resolve(true)
     }, time)
   })
 }
