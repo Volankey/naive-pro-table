@@ -28,7 +28,7 @@ function getCheckboxAndButton(wrapper: VueWrapper) {
 
 test('test set single filter', async () => {
   const { wrapper, router, result } = await createFilterTest(renderProps)
-  const filterIcon = wrapper.find('.n-data-table-filter')
+  const filterIcon = wrapper.getComponent('.n-data-table-filter')
   await filterIcon.trigger('click')
 
   const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
@@ -40,6 +40,7 @@ test('test set single filter', async () => {
   expect(route.query['sex.filter']).toEqual(['all'])
   expect(result.filter['sex']).toEqual(['all'])
   expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
+  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
 })
 
 test('test set multiple filters', async () => {
@@ -57,6 +58,7 @@ test('test set multiple filters', async () => {
   expect(result.filter['sex']).toEqual(['all', 'man'])
   expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
   expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
+  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
 })
 
 test('test filter after refresh', async () => {
@@ -67,11 +69,13 @@ test('test filter after refresh', async () => {
 
   const filterIcon = wrapper.find('.n-data-table-filter')
   await filterIcon.trigger('click')
+
   const { checkbox } = getCheckboxAndButton(wrapper)
   expect(route.query['sex.filter']).toEqual(['all', 'man'])
   expect(result.filter['sex']).toEqual(['all', 'man'])
   expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
   expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
+  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
 })
 
 test('clear filter', async () => {
@@ -86,10 +90,11 @@ test('clear filter', async () => {
   await flushPromises()
   const route = router.currentRoute.value
   expect(route.query).toEqual({ sex: undefined })
-  expect(result.filter).toEqual({ sex: null })
+  expect(result.filter).toEqual({ sex: undefined })
 
   await filterIcon.trigger('click')
   const { checkbox } = getCheckboxAndButton(wrapper)
   expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(false)
   expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(false)
+  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(false)
 })

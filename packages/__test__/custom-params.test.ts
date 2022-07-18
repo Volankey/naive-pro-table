@@ -68,7 +68,7 @@ test('test custom params with initUrl', async () => {
 })
 
 test('test custom params with initValue', async () => {
-  const { wrapper, result } = await createCustomParamsTest('/', {
+  const { wrapper, result, router } = await createCustomParamsTest('/', {
     age: 10,
     search: 'hello'
   })
@@ -81,6 +81,8 @@ test('test custom params with initValue', async () => {
     search: 'hello',
     age: 10
   })
+  expect(router.currentRoute.value.query['search.params']).equal('hello')
+  expect(router.currentRoute.value.query['age.params']).equal('10')
 })
 
 test('test custom params with operate', async () => {
