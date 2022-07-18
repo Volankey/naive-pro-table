@@ -1,5 +1,17 @@
 <template>
-  <ProTable ref="proTableRef" :columns="columns" :api-request="apiRequest" />
+  <ProTable
+    ref="proTableRef"
+    style="margin-top: 20px"
+    :columns="columns"
+    :api-request="apiRequest"
+    :pagination="{
+      showSizePicker: true,
+      showQuickJumper: true,
+      defaultPageSize: 14,
+      defaultPage: 1,
+      pageSizes: [14, 20, 50]
+    }"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -10,6 +22,13 @@ import type {
   ProColumn,
   ProTableIns
 } from 'naive-ui-protable-alpha'
+
+type Column = {
+  name: string
+  age: number
+  gender: string
+  address: string
+}
 
 const createSourceData = (
   params: unknown,
@@ -25,59 +44,29 @@ const createSourceData = (
     page,
     pageSize
   })
-  const data: Column[] = [
-    {
-      name: 'John Brown',
-      age: 38,
-      gender: 'man',
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      name: 'Jim Green',
-      age: 42,
-      gender: 'none',
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      name: 'Megumi Noda',
-      age: 20,
-      gender: 'woman',
-      address: 'Paris No.7 Mozart'
-    },
-    {
-      name: 'Shinichi Chiaki',
-      age: 21,
-      gender: 'man',
-      address: 'Paris No.7 Mozart'
-    },
-    {
-      name: 'Jolyne Cujoh',
-      age: 16,
-      gender: 'woman',
-      address: 'New York No.1 Lake Park'
-    }
-  ]
+  const gender = ['男', '女', '无']
+  const data: Column[] = new Array(pageSize).fill(1).map((_, idx) => ({
+    name: 'John Brown' + ((page - 1) * pageSize + idx),
+    age: 20 + idx,
+    gender: gender[Math.round(Math.random() * 2)],
+    address: `New York No. ${(page - 1) * pageSize + idx} Lake Park`
+  }))
   return {
-    pageSize: 15,
-    itemCount: 5,
+    pageSize,
+    itemCount: 100,
     data
   }
 }
 
-type Column = {
-  name: string
-  age: number
-  gender: 'man' | 'woman' | 'none'
-  address: string
-}
-
 const proTableRef = ref<ProTableIns | null>(null)
+
 const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    sorter: true
+    sorter: true,
+    copyable: true
   },
   {
     title: 'Age',
@@ -120,6 +109,7 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'address',
     filter: true,
     sorter: true,
+    copyable: true,
     syncRouteFilter: {
       name: 'addrFilter',
       rule: {
