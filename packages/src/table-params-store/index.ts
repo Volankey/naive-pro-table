@@ -55,7 +55,10 @@ export class TableParamsStore {
       const queryItems = tablePrefix ? items[tablePrefix] : items['default']
       if (queryItems) {
         const { key, value, type } = queryItems as RouteQuery
-        if (keyMapColumnAndRule[key]) {
+        if (
+          (type === 'sort' || type === 'filter') &&
+          keyMapColumnAndRule[key]
+        ) {
           const columnAndRule = keyMapColumnAndRule[key]
           const { column } = columnAndRule
           if (column.syncRouteFilter && type === 'filter') {
