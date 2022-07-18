@@ -22,14 +22,14 @@ const demoRoutes = [
     component: () => import('./demo/copyable.demo.vue')
   },
   {
-    path: '/demo/controlled-sorter',
-    name: 'controlled-sorter',
-    component: () => import('./demo/controlled-sorter.demo.vue')
-  },
-  {
     path: '/demo/sync-route',
     name: 'sync-route',
     component: () => import('./demo/sync-route.demo.vue')
+  },
+  {
+    path: '/demo/custom-params',
+    name: 'custom-params',
+    component: () => import('./demo/custom-params.demo.vue')
   },
   {
     path: '/demo',
