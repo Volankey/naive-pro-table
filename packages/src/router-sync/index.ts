@@ -4,8 +4,8 @@ import type { QueryOptions, RoueQueryParsed } from '../table-params-store/types'
 function parseRouteQueryKey(queryKey: string) {
   const keyItems = queryKey.split('.')
   // 保证在设置了query-prefix的情况下能够正确获取key & type
-  const type = keyItems.pop()
-  const key = keyItems.pop()
+  const type = keyItems.pop() as string
+  const key = keyItems.pop() as string
   // 处理带有'.'符号的prefix
   const prefix = keyItems.join('.')
   return {
@@ -130,24 +130,21 @@ export function syncRouterQuery() {
   }
 }
 
-export function syncFromRouter() {
+export function syncFromRouter(queryPrefix?: string) {
   const route = useRoute()
   const query = route.query
 
   return Object.entries(query).reduce((result, curr) => {
     const [queryKey, value] = curr
     const { type, key, prefix } = parseRouteQueryKey(queryKey)
-
-    if (!result[key!]) {
-      result[key!] = {}
+    if (!result[key]) {
+      result[key] = []
     }
 
-    if (prefix.length === 0) {
-      Object.assign(result[key!], { default: { key, type, value } })
-    } else {
-      Object.assign(result[key!], {
-        [prefix]: { key, type, value }
-      })
+    if (!queryPrefix && prefix === '') {
+      result[key].push({ key, type, value })
+    } else if (queryPrefix === prefix) {
+      result[key].push({ key, type, value })
     }
     return result
   }, {} as RoueQueryParsed)
