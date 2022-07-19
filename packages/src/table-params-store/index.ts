@@ -4,7 +4,8 @@ import { ref, type Ref } from 'vue'
 import type {
   KeyMapColumnAndRule,
   QueryOptions,
-  RoueQueryParsed
+  RoueQueryParsed,
+  RouteQuery
 } from './types'
 import type { SortState } from 'naive-ui/lib/data-table/src/interface'
 import { isFinite } from 'lodash-es'
@@ -37,7 +38,8 @@ export class TableParamsStore {
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
-    paginationRef: Ref<PaginationProps>
+    paginationRef: Ref<PaginationProps>,
+    tablePrefix?: string
   ) {
     const keyMapColumnAndRule = this.keyMapColumnAndRule
     const params: any = this.customParams?.customParamsValue.value
@@ -49,10 +51,14 @@ export class TableParamsStore {
     if (paginationRef.value.defaultPageSize !== undefined) {
       this._updatePageSizeValue(paginationRef.value.defaultPageSize)
     }
-    Object.values(routeQueryParsed).forEach((queryItems) => {
-      queryItems.forEach((queryItem) => {
-        const { key, value, type } = queryItem
-        if (keyMapColumnAndRule[key]) {
+    Object.values(routeQueryParsed).forEach((items) => {
+      const queryItems = tablePrefix ? items[tablePrefix] : items['default']
+      if (queryItems) {
+        const { key, value, type } = queryItems as RouteQuery
+        if (
+          (type === 'sort' || type === 'filter') &&
+          keyMapColumnAndRule[key]
+        ) {
           const columnAndRule = keyMapColumnAndRule[key]
           const { column } = columnAndRule
           if (column.syncRouteFilter && type === 'filter') {
@@ -68,7 +74,7 @@ export class TableParamsStore {
         } else if (type === 'params') {
           params[key] = value
         }
-      })
+      }
     })
     this._updateParamsValue(params)
   }

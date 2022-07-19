@@ -7,14 +7,15 @@ export default defineClientConfig({
     router.beforeEach((to, from) => {
       if (to.path === from.path && to.fullPath !== from.fullPath) {
         if (!isEqual(from.query, to.query) && preFullPath !== to.fullPath) {
-          preFullPath = router.resolve({
+          const nextRouter = router.resolve({
             ...to,
             query: {
               ...from.query,
               ...to.query
             }
-          }).fullPath
-          return preFullPath
+          })
+          preFullPath = nextRouter.fullPath
+          return nextRouter
         }
       }
     })

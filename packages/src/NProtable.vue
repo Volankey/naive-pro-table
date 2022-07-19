@@ -135,7 +135,11 @@ const handleFetchTableData = debounce(
 defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
-paramsStoreRef.value.initQuery(syncFromRouter(), mergedPaginationRef)
+paramsStoreRef.value.initQuery(
+  syncFromRouter(),
+  mergedPaginationRef,
+  props.queryPrefix
+)
 
 onMounted(() => {
   handleFetchTableData()

@@ -7,11 +7,11 @@
       @update:value="customParamsStore.updateCustomParams('search', $event)"
     ></n-input>
     age:
-    <n-input
+    <n-input-number
       :value="customParamsStore.customParamsValue.value.age"
-      style="width: 300px"
+      style="width: 300px; display: inline-block"
       @update:value="customParamsStore.updateCustomParams('age', $event)"
-    ></n-input>
+    ></n-input-number>
     <ProTable
       ref="proTableRef"
       style="margin-top: 20px"
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NTag, NInput } from 'naive-ui'
+import { NTag, NInput, NInputNumber } from 'naive-ui'
 import { h, ref } from 'vue'
 import ProTable, { useCustomParamsStore } from 'naive-ui-protable-alpha'
 import type {
@@ -70,10 +70,23 @@ const createSourceData = (
     data
   }
 }
-const customParamsStore = useCustomParamsStore({
-  search: null,
-  age: null
-})
+const customParamsStore = useCustomParamsStore<{
+  search: string | null
+  age: number | null
+}>(
+  {
+    search: null,
+    age: 1
+  },
+  {
+    age: {
+      type: 'number',
+      transform: (value: string) => {
+        return parseInt(value)
+      }
+    }
+  }
+)
 
 type Column = {
   name: string

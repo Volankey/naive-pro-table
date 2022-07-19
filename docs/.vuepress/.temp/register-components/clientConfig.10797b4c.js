@@ -10,6 +10,7 @@ export default {
       app.component("MultipleSortDemo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/MultipleSortDemo.vue"))),
       app.component("PaginationDemo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/PaginationDemo.vue"))),
       app.component("SingleSortDemo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/SingleSortDemo.vue"))),
-      app.component("SyncRoutePrefixDemo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/SyncRoutePrefixDemo.vue")))
+      app.component("SyncRoutePrefixDemo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/SyncRoutePrefixDemo.vue"))),
+      app.component("custom-params.demo", defineAsyncComponent(() => import("/home/tusimple/Documents/naive-ui-protable/docs/demo/demo-components/custom-params.demo.vue")))
   },
 }

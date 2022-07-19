@@ -18,11 +18,11 @@
       <span class="token attr-name"><span class="token namespace">@update:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.updateCustomParams(<span class="token punctuation">'</span>search<span class="token punctuation">'</span>, $event)<span class="token punctuation">"</span></span>
     <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>n-input</span><span class="token punctuation">></span></span>
     age:
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>n-input</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>n-input-number</span>
       <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.customParamsValue.value.age<span class="token punctuation">"</span></span>
-      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 300px</span><span class="token punctuation">"</span></span></span>
+      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 300px<span class="token punctuation">;</span> <span class="token property">display</span><span class="token punctuation">:</span> inline-block</span><span class="token punctuation">"</span></span></span>
       <span class="token attr-name"><span class="token namespace">@update:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.updateCustomParams(<span class="token punctuation">'</span>age<span class="token punctuation">'</span>, $event)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>n-input</span><span class="token punctuation">></span></span>
+    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>n-input-number</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ProTable</span>
       <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>proTableRef<span class="token punctuation">"</span></span>
       <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">margin-top</span><span class="token punctuation">:</span> 20px</span><span class="token punctuation">"</span></span></span>
@@ -46,7 +46,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
 
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ts<span class="token punctuation">"</span></span> <span class="token attr-name">setup</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">import</span> <span class="token punctuation">{</span> NTag<span class="token punctuation">,</span> NInput <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> NTag<span class="token punctuation">,</span> NInput<span class="token punctuation">,</span> NInputNumber <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui'</span>
 <span class="token keyword">import</span> <span class="token punctuation">{</span> h<span class="token punctuation">,</span> ref <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue'</span>
 <span class="token keyword">import</span> ProTable<span class="token punctuation">,</span> <span class="token punctuation">{</span> useCustomParamsStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui-protable-alpha'</span>
 <span class="token keyword">import</span> type <span class="token punctuation">{</span>
@@ -81,10 +81,23 @@
     data
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-<span class="token keyword">const</span> customParamsStore <span class="token operator">=</span> <span class="token function">useCustomParamsStore</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
-  <span class="token literal-property property">search</span><span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token keyword">null</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">const</span> customParamsStore <span class="token operator">=</span> useCustomParamsStore<span class="token operator">&lt;</span><span class="token punctuation">{</span>
+  <span class="token literal-property property">search</span><span class="token operator">:</span> string <span class="token operator">|</span> <span class="token keyword">null</span>
+  <span class="token literal-property property">age</span><span class="token operator">:</span> number <span class="token operator">|</span> <span class="token keyword">null</span>
+<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">search</span><span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">1</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>
+    <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'number'</span><span class="token punctuation">,</span>
+      <span class="token function-variable function">transform</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token literal-property property">value</span><span class="token operator">:</span> string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
 
 type Column <span class="token operator">=</span> <span class="token punctuation">{</span>
   <span class="token literal-property property">name</span><span class="token operator">:</span> string
@@ -202,6 +215,19 @@ type Column <span class="token operator">=</span> <span class="token punctuation
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
 </code></pre>
       <div class="line-numbers" aria-hidden="true">
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
         <div class="line-number"></div>
         <div class="line-number"></div>
         <div class="line-number"></div>
