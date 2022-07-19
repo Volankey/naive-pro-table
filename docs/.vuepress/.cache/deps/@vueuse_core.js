@@ -25,31 +25,26 @@ import {
   unref,
   watch,
   watchEffect
-} from "./chunk-KRQX4B73.js";
-import "./chunk-T4WQ2GQA.js";
+} from "./chunk-ZOU6IRRB.js";
+import "./chunk-3S3PNJFB.js";
 import {
-  init_define_DOCSEARCH_OPTIONS,
   init_define_EXTERNAL_LINK_ICON_LOCALES,
   init_define_MZ_ZOOM_OPTIONS
-} from "./chunk-W74T5VLY.js";
+} from "./chunk-UKF2MNSR.js";
 
 // dep:@vueuse_core
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 
 // ../node_modules/.pnpm/@vueuse+core@8.7.5_vue@3.2.37/node_modules/@vueuse/core/index.mjs
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 
 // ../node_modules/.pnpm/@vueuse+shared@8.7.5_vue@3.2.37/node_modules/@vueuse/shared/index.mjs
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 
 // ../node_modules/.pnpm/vue-demi@0.13.2_vue@3.2.37/node_modules/vue-demi/lib/index.mjs
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 var isVue2 = false;

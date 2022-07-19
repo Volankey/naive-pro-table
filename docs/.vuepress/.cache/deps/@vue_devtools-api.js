@@ -2,15 +2,13 @@ import {
   isPerformanceSupported,
   now,
   setupDevtoolsPlugin
-} from "./chunk-U6P2M2TT.js";
+} from "./chunk-XCDT3MBI.js";
 import {
-  init_define_DOCSEARCH_OPTIONS,
   init_define_EXTERNAL_LINK_ICON_LOCALES,
   init_define_MZ_ZOOM_OPTIONS
-} from "./chunk-W74T5VLY.js";
+} from "./chunk-UKF2MNSR.js";
 
 // dep:@vue_devtools-api
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 export {

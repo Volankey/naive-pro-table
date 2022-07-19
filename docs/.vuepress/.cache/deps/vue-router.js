@@ -1,6 +1,6 @@
 import {
   setupDevtoolsPlugin
-} from "./chunk-U6P2M2TT.js";
+} from "./chunk-XCDT3MBI.js";
 import {
   computed,
   defineComponent,
@@ -18,26 +18,22 @@ import {
   unref,
   watch,
   watchEffect
-} from "./chunk-KRQX4B73.js";
-import "./chunk-T4WQ2GQA.js";
+} from "./chunk-ZOU6IRRB.js";
+import "./chunk-3S3PNJFB.js";
 import {
-  init_define_DOCSEARCH_OPTIONS,
   init_define_EXTERNAL_LINK_ICON_LOCALES,
   init_define_MZ_ZOOM_OPTIONS
-} from "./chunk-W74T5VLY.js";
+} from "./chunk-UKF2MNSR.js";
 
 // dep:vue-router
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 
 // ../node_modules/.pnpm/vue-router@4.1.2_vue@3.2.37/node_modules/vue-router/dist/vue-router.esm-bundler.js
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 
 // ../node_modules/.pnpm/vue-router@4.1.2_vue@3.2.37/node_modules/vue-router/dist/vue-router.mjs
-init_define_DOCSEARCH_OPTIONS();
 init_define_EXTERNAL_LINK_ICON_LOCALES();
 init_define_MZ_ZOOM_OPTIONS();
 var isBrowser = typeof window !== "undefined";

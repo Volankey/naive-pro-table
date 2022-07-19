@@ -19,6 +19,7 @@
     "@vuepress/plugin-shiki": "next",
     "@vuepress/theme-default": "next",
     "@vuepress/utils": "next",
+    "lodash-es": "^4.17.21",
     "naive-ui": "^2.30.6",
     "naive-ui-protable-alpha": "workspace:*",
     "sass-loader": "^13.0.2",
