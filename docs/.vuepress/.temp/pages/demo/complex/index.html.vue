@@ -4,217 +4,226 @@
       <a class="header-anchor" href="#复杂示例" aria-hidden="true">#</a>
       复杂示例
     </h1>
-    <ComplexDemo />
+    <ClientOnly>
+      <ComplexDemo />
+    </ClientOnly>
     <div class="language-vue ext-vue line-numbers-mode">
       <pre
         v-pre
-        class="language-vue"
-      ><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
-    name:
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>n-input</span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.customParamsValue.value.search<span class="token punctuation">"</span></span>
-      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 300px</span><span class="token punctuation">"</span></span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.updateCustomParams(<span class="token punctuation">'</span>search<span class="token punctuation">'</span>, $event)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>n-input</span><span class="token punctuation">></span></span>
-    age:
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>n-input-number</span>
-      <span class="token attr-name">:value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.customParamsValue.value.age<span class="token punctuation">"</span></span>
-      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">width</span><span class="token punctuation">:</span> 300px<span class="token punctuation">;</span> <span class="token property">display</span><span class="token punctuation">:</span> inline-block</span><span class="token punctuation">"</span></span></span>
-      <span class="token attr-name"><span class="token namespace">@update:</span>value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore.updateCustomParams(<span class="token punctuation">'</span>age<span class="token punctuation">'</span>, $event)<span class="token punctuation">"</span></span>
-    <span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>n-input-number</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ProTable</span>
-      <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>proTableRef<span class="token punctuation">"</span></span>
-      <span class="token special-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token value css language-css"><span class="token property">margin-top</span><span class="token punctuation">:</span> 20px</span><span class="token punctuation">"</span></span></span>
-      <span class="token attr-name">:columns</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>columns<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:api-request</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>apiRequest<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:pagination</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{
-        showSizePicker: true,
-        showQuickJumper: true,
-        defaultPageSize: 14,
-        defaultPage: 1,
-        pageSizes: [14, 20, 50]
-      }<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:date-formatter</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span>dd/MM/yyyy<span class="token punctuation">'</span><span class="token punctuation">"</span></span>
-      <span class="token attr-name">:customParamsStore</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>customParamsStore<span class="token punctuation">"</span></span>
-      <span class="token attr-name">:data-table-props</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>{
-        rowClassName: rowClassName,
-        maxHeight: <span class="token punctuation">'</span>500px<span class="token punctuation">'</span>
-      }<span class="token punctuation">"</span></span>
-    <span class="token punctuation">/></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>ts<span class="token punctuation">"</span></span> <span class="token attr-name">setup</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">
-<span class="token keyword">import</span> <span class="token punctuation">{</span> NTag<span class="token punctuation">,</span> NInput<span class="token punctuation">,</span> NInputNumber <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui'</span>
-<span class="token keyword">import</span> <span class="token punctuation">{</span> h<span class="token punctuation">,</span> ref <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue'</span>
-<span class="token keyword">import</span> ProTable<span class="token punctuation">,</span> <span class="token punctuation">{</span> useCustomParamsStore <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui-protable-alpha'</span>
-<span class="token keyword">import</span> type <span class="token punctuation">{</span>
-  ApiRequest<span class="token punctuation">,</span>
-  ProColumn<span class="token punctuation">,</span>
-  ProTableIns
-<span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'naive-ui-protable-alpha'</span>
-
-<span class="token keyword">const</span> createSourceData <span class="token operator">=</span> <span class="token punctuation">(</span>
-  <span class="token literal-property property">params</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">age</span><span class="token operator">:</span> number<span class="token punctuation">;</span> search<span class="token operator">:</span> string <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token literal-property property">sort</span><span class="token operator">:</span> any<span class="token punctuation">,</span>
-  <span class="token literal-property property">filter</span><span class="token operator">:</span> any<span class="token punctuation">,</span>
-  <span class="token literal-property property">page</span><span class="token operator">:</span> number<span class="token punctuation">,</span>
-  <span class="token literal-property property">pageSize</span><span class="token operator">:</span> number
-<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">pageSize</span><span class="token operator">:</span> number<span class="token punctuation">;</span> itemCount<span class="token operator">:</span> number<span class="token punctuation">;</span> data<span class="token operator">:</span> Column<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">}</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-  <span class="token keyword">const</span> <span class="token literal-property property">data</span><span class="token operator">:</span> Column<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Array</span><span class="token punctuation">(</span>pageSize<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">fill</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">_<span class="token punctuation">,</span> idx</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">(</span><span class="token punctuation">{</span>
-    <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'Jonny'</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>page <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">*</span> pageSize <span class="token operator">+</span> idx<span class="token punctuation">)</span> <span class="token operator">+</span> params<span class="token punctuation">.</span>search<span class="token punctuation">,</span>
-    <span class="token literal-property property">age</span><span class="token operator">:</span> params<span class="token punctuation">.</span>age <span class="token operator">?</span> params<span class="token punctuation">.</span>age <span class="token operator">:</span> <span class="token number">10</span> <span class="token operator">+</span> idx<span class="token punctuation">,</span>
-    <span class="token literal-property property">sex</span><span class="token operator">:</span> <span class="token string">'man'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">favorates</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'pinao'</span><span class="token punctuation">,</span> <span class="token string">'gita'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">avatar</span><span class="token operator">:</span>
-      <span class="token string">'https://camo.githubusercontent.com/b8ebecade711b9ae1fa306e7a1c9dd680fb56b0e2b9f015fec9cbad343570353/68747470733a2f2f6e6169766575692e6f73732d636e2d686f6e676b6f6e672e616c6979756e63732e636f6d2f6e616976656c6f676f2e737667'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">birthday</span><span class="token operator">:</span> <span class="token operator">+</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">10</span> <span class="token operator">+</span> idx<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">3600</span> <span class="token operator">*</span> <span class="token number">1000</span> <span class="token operator">*</span> <span class="token number">24</span> <span class="token operator">*</span> <span class="token number">365</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">lastLogin</span><span class="token operator">:</span> <span class="token operator">+</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token number">10</span> <span class="token operator">+</span> idx<span class="token punctuation">)</span> <span class="token operator">*</span> Math<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">3600</span> <span class="token operator">*</span> <span class="token number">24</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">otherInfo</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">parents</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'Jan'</span><span class="token punctuation">,</span> <span class="token string">'Pony'</span><span class="token punctuation">]</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-  <span class="token keyword">return</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">pageSize</span><span class="token operator">:</span> <span class="token number">14</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">itemCount</span><span class="token operator">:</span> <span class="token number">50</span><span class="token punctuation">,</span>
-    data
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">const</span> customParamsStore <span class="token operator">=</span> useCustomParamsStore<span class="token operator">&lt;</span><span class="token punctuation">{</span>
-  <span class="token literal-property property">search</span><span class="token operator">:</span> string <span class="token operator">|</span> <span class="token keyword">null</span>
-  <span class="token literal-property property">age</span><span class="token operator">:</span> number <span class="token operator">|</span> <span class="token keyword">null</span>
-<span class="token punctuation">}</span><span class="token operator">></span><span class="token punctuation">(</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">search</span><span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token number">1</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">age</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'number'</span><span class="token punctuation">,</span>
-      <span class="token function-variable function">transform</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token literal-property property">value</span><span class="token operator">:</span> string</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">)</span>
-
-type Column <span class="token operator">=</span> <span class="token punctuation">{</span>
-  <span class="token literal-property property">name</span><span class="token operator">:</span> string
-  <span class="token literal-property property">age</span><span class="token operator">:</span> number
-  <span class="token literal-property property">birthday</span><span class="token operator">:</span> number
-  <span class="token literal-property property">lastLogin</span><span class="token operator">:</span> number
-  <span class="token literal-property property">sex</span><span class="token operator">:</span> <span class="token string">'man'</span> <span class="token operator">|</span> <span class="token string">'woman'</span>
-  <span class="token literal-property property">favorates</span><span class="token operator">:</span> string<span class="token punctuation">[</span><span class="token punctuation">]</span>
-  <span class="token literal-property property">otherInfo</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">parents</span><span class="token operator">:</span> string<span class="token punctuation">[</span><span class="token punctuation">]</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">const</span> proTableRef <span class="token operator">=</span> ref<span class="token operator">&lt;</span>ProTableIns <span class="token operator">|</span> <span class="token keyword">null</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span>
-<span class="token keyword">const</span> columns <span class="token operator">=</span> ref<span class="token operator">&lt;</span>ProColumn<span class="token operator">&lt;</span>Column<span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">[</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'name'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">ellipsis</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">copyable</span><span class="token operator">:</span> <span class="token boolean">true</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">sorter</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">sortOrder</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">syncRouteSorter</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'age'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">rule</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'sex'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'sex'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'sex'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">filter</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">sorter</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">sortOrder</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">syncRouteSorter</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'sexsort'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">rule</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'string'</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">syncRouteFilter</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'sexfilter'</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">rule</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">type</span><span class="token operator">:</span> <span class="token string">'array'</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">valueEnum</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token literal-property property">all</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'全部'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">man</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'男'</span>
-      <span class="token punctuation">}</span><span class="token punctuation">,</span>
-      <span class="token literal-property property">woman</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">label</span><span class="token operator">:</span> <span class="token string">'女'</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">disabled</span><span class="token operator">:</span> <span class="token boolean">true</span>
-      <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'birthday'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'birthday'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">valueType</span><span class="token operator">:</span> <span class="token string">'date'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'last login'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'lastLogin'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">valueType</span><span class="token operator">:</span> <span class="token string">'fromNow'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'favoraties'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'favorates'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'favorates'</span><span class="token punctuation">,</span>
-    <span class="token function">render</span><span class="token punctuation">(</span><span class="token parameter">favorates</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-      <span class="token keyword">return</span> favorates<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter"><span class="token literal-property property">favorate</span><span class="token operator">:</span> string</span><span class="token punctuation">)</span> <span class="token operator">=></span>
-        <span class="token function">h</span><span class="token punctuation">(</span>NTag<span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token literal-property property">style</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token literal-property property">marginRight</span><span class="token operator">:</span> <span class="token string">'10px'</span> <span class="token punctuation">}</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token function-variable function">default</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> favorate <span class="token punctuation">}</span><span class="token punctuation">)</span>
-      <span class="token punctuation">)</span>
-    <span class="token punctuation">}</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'avatar'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'avatar'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">valueType</span><span class="token operator">:</span> <span class="token string">'img'</span>
-  <span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>
-    <span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'parents'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">key</span><span class="token operator">:</span> <span class="token string">'parents'</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">dataIndex</span><span class="token operator">:</span> <span class="token string">'otherInfo.parents'</span>
-  <span class="token punctuation">}</span>
-<span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token keyword">function</span> <span class="token function">rowClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  <span class="token keyword">return</span> <span class="token string">'td-relative'</span>
-<span class="token punctuation">}</span>
-<span class="token keyword">const</span> <span class="token literal-property property">apiRequest</span><span class="token operator">:</span> <span class="token function-variable function">ApiRequest</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">params<span class="token punctuation">,</span> sort<span class="token punctuation">,</span> filter<span class="token punctuation">,</span> page<span class="token punctuation">,</span> pageSize</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
-  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'fetch query: '</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
-    params<span class="token punctuation">,</span>
-    sort<span class="token punctuation">,</span>
-    filter<span class="token punctuation">,</span>
-    page<span class="token punctuation">,</span>
-    pageSize
-  <span class="token punctuation">}</span><span class="token punctuation">)</span>
-  <span class="token keyword">return</span> Promise<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token function">createSourceData</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> sort<span class="token punctuation">,</span> filter<span class="token punctuation">,</span> page<span class="token punctuation">,</span> pageSize<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token punctuation">}</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">></span></span><span class="token style"><span class="token language-css">
-<span class="token selector">.td-relative .n-data-table-td</span> <span class="token punctuation">{</span>
-  <span class="token property">position</span><span class="token punctuation">:</span> relative<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">></span></span>
-</code></pre>
+        class="shiki"
+        style="background-color: #1e1e1e"
+      ><code><span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">template</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;</span><span style="color: #569CD6">div</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">    name:</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&lt;</span><span style="color: #569CD6">n-input</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">customParamsValue</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">search</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">style</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;width: 300px&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      @</span><span style="color: #9CDCFE">update</span><span style="color: #D4D4D4">:</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">updateCustomParams</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;search&#39;</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">$event</span><span style="color: #D4D4D4">)</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&gt;&lt;/</span><span style="color: #569CD6">n-input</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">    age:</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&lt;</span><span style="color: #569CD6">n-input-number</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">customParamsValue</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">style</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;width: 300px; display: inline-block&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      @</span><span style="color: #9CDCFE">update</span><span style="color: #D4D4D4">:</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">updateCustomParams</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;age&#39;</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">$event</span><span style="color: #D4D4D4">)</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&gt;&lt;/</span><span style="color: #569CD6">n-input-number</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #808080">&lt;</span><span style="color: #4EC9B0">ProTable</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">ref</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;proTableRef&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">style</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;margin-top: 20px&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">columns</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">columns</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">api-request</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">apiRequest</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">pagination</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #D4D4D4">{</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">showSizePicker:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">showQuickJumper:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">defaultPageSize:</span><span style="color: #D4D4D4"> </span><span style="color: #B5CEA8">14</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">defaultPage:</span><span style="color: #D4D4D4"> </span><span style="color: #B5CEA8">1</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">pageSizes:</span><span style="color: #D4D4D4"> [</span><span style="color: #B5CEA8">14</span><span style="color: #D4D4D4">, </span><span style="color: #B5CEA8">20</span><span style="color: #D4D4D4">, </span><span style="color: #B5CEA8">50</span><span style="color: #D4D4D4">]</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">date-formatter</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #CE9178">&#39;dd/MM/yyyy&#39;</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #9CDCFE">customParamsStore</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">      :</span><span style="color: #9CDCFE">data-table-props</span><span style="color: #D4D4D4">=</span><span style="color: #D4D4D4">&quot;</span><span style="color: #D4D4D4">{</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">rowClassName:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">rowClassName</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">maxHeight:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;500px&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span><span style="color: #D4D4D4">&quot;</span></span>
+<span class="line"><span style="color: #D4D4D4">    /</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #808080">&lt;/</span><span style="color: #569CD6">div</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">template</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">script</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">lang</span><span style="color: #D4D4D4">=</span><span style="color: #CE9178">&quot;ts&quot;</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">setup</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">NTag</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">NInput</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">NInputNumber</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;naive-ui&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">h</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">ref</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;vue&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">ProTable</span><span style="color: #D4D4D4">, { </span><span style="color: #9CDCFE">useCustomParamsStore</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;naive-ui-protable-alpha&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> </span><span style="color: #C586C0">type</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">ApiRequest</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">ProColumn</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">ProTableIns</span></span>
+<span class="line"><span style="color: #D4D4D4">} </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;naive-ui-protable-alpha&#39;</span></span>
+<span class="line"><span style="color: #C586C0">import</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">useRouter</span><span style="color: #D4D4D4"> } </span><span style="color: #C586C0">from</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;vue-router&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #4FC1FF">router</span><span style="color: #D4D4D4"> = </span><span style="color: #DCDCAA">useRouter</span><span style="color: #D4D4D4">()</span></span>
+<span class="line"><span style="color: #9CDCFE">console</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">log</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">router</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">createSourceData</span><span style="color: #D4D4D4"> = (</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">: { </span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span><span style="color: #D4D4D4">; </span><span style="color: #9CDCFE">search</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4"> },</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">sort</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">any</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">filter</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">any</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">page</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span></span>
+<span class="line"><span style="color: #D4D4D4">): { </span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span><span style="color: #D4D4D4">; </span><span style="color: #9CDCFE">itemCount</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span><span style="color: #D4D4D4">; </span><span style="color: #9CDCFE">data</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">Column</span><span style="color: #D4D4D4">[] } </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #4FC1FF">data</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">Column</span><span style="color: #D4D4D4">[] = </span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #4EC9B0">Array</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4">).</span><span style="color: #DCDCAA">fill</span><span style="color: #D4D4D4">(</span><span style="color: #B5CEA8">1</span><span style="color: #D4D4D4">).</span><span style="color: #DCDCAA">map</span><span style="color: #D4D4D4">((</span><span style="color: #9CDCFE">_</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">idx</span><span style="color: #D4D4D4">) </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> ({</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;Jonny&#39;</span><span style="color: #D4D4D4"> + ((</span><span style="color: #9CDCFE">page</span><span style="color: #D4D4D4"> - </span><span style="color: #B5CEA8">1</span><span style="color: #D4D4D4">) * </span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4"> + </span><span style="color: #9CDCFE">idx</span><span style="color: #D4D4D4">) + </span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">search</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">age:</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4"> ? </span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">.</span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4"> : </span><span style="color: #B5CEA8">10</span><span style="color: #D4D4D4"> + </span><span style="color: #9CDCFE">idx</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;man&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">favorates:</span><span style="color: #D4D4D4"> [</span><span style="color: #CE9178">&#39;pinao&#39;</span><span style="color: #D4D4D4">, </span><span style="color: #CE9178">&#39;gita&#39;</span><span style="color: #D4D4D4">],</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">avatar:</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #CE9178">&#39;https://camo.githubusercontent.com/b8ebecade711b9ae1fa306e7a1c9dd680fb56b0e2b9f015fec9cbad343570353/68747470733a2f2f6e6169766575692e6f73732d636e2d686f6e676b6f6e672e616c6979756e63732e636f6d2f6e616976656c6f676f2e737667&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">birthday:</span><span style="color: #D4D4D4"> +</span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #4EC9B0">Date</span><span style="color: #D4D4D4">() - (</span><span style="color: #B5CEA8">10</span><span style="color: #D4D4D4"> + </span><span style="color: #9CDCFE">idx</span><span style="color: #D4D4D4">) * </span><span style="color: #B5CEA8">3600</span><span style="color: #D4D4D4"> * </span><span style="color: #B5CEA8">1000</span><span style="color: #D4D4D4"> * </span><span style="color: #B5CEA8">24</span><span style="color: #D4D4D4"> * </span><span style="color: #B5CEA8">365</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">lastLogin:</span><span style="color: #D4D4D4"> +</span><span style="color: #569CD6">new</span><span style="color: #D4D4D4"> </span><span style="color: #4EC9B0">Date</span><span style="color: #D4D4D4">() - (</span><span style="color: #B5CEA8">10</span><span style="color: #D4D4D4"> + </span><span style="color: #9CDCFE">idx</span><span style="color: #D4D4D4">) * </span><span style="color: #4EC9B0">Math</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">random</span><span style="color: #D4D4D4">() * </span><span style="color: #B5CEA8">3600</span><span style="color: #D4D4D4"> * </span><span style="color: #B5CEA8">24</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">otherInfo:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">parents:</span><span style="color: #D4D4D4"> [</span><span style="color: #CE9178">&#39;Jan&#39;</span><span style="color: #D4D4D4">, </span><span style="color: #CE9178">&#39;Pony&#39;</span><span style="color: #D4D4D4">]</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  }))</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">pageSize:</span><span style="color: #D4D4D4"> </span><span style="color: #B5CEA8">14</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">itemCount:</span><span style="color: #D4D4D4"> </span><span style="color: #B5CEA8">50</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">data</span></span>
+<span class="line"><span style="color: #D4D4D4">  }</span></span>
+<span class="line"><span style="color: #D4D4D4">}</span></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #4FC1FF">customParamsStore</span><span style="color: #D4D4D4"> = </span><span style="color: #DCDCAA">useCustomParamsStore</span><span style="color: #D4D4D4">&lt;{</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">search</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4"> | </span><span style="color: #4EC9B0">null</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span><span style="color: #D4D4D4"> | </span><span style="color: #4EC9B0">null</span></span>
+<span class="line"><span style="color: #D4D4D4">}&gt;(</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">search:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">null</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">age:</span><span style="color: #D4D4D4"> </span><span style="color: #B5CEA8">1</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">age:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">type:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;number&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #DCDCAA">transform</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> (</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4">) </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">parseInt</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">value</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  }</span></span>
+<span class="line"><span style="color: #D4D4D4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #569CD6">type</span><span style="color: #D4D4D4"> </span><span style="color: #4EC9B0">Column</span><span style="color: #D4D4D4"> = {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">name</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">age</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">birthday</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">lastLogin</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">number</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">sex</span><span style="color: #D4D4D4">: </span><span style="color: #CE9178">&#39;man&#39;</span><span style="color: #D4D4D4"> | </span><span style="color: #CE9178">&#39;woman&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">favorates</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4">[]</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">otherInfo</span><span style="color: #D4D4D4">: {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">parents</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4">[]</span></span>
+<span class="line"><span style="color: #D4D4D4">  }</span></span>
+<span class="line"><span style="color: #D4D4D4">}</span></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #4FC1FF">proTableRef</span><span style="color: #D4D4D4"> = </span><span style="color: #DCDCAA">ref</span><span style="color: #D4D4D4">&lt;</span><span style="color: #4EC9B0">ProTableIns</span><span style="color: #D4D4D4"> | </span><span style="color: #4EC9B0">null</span><span style="color: #D4D4D4">&gt;(</span><span style="color: #569CD6">null</span><span style="color: #D4D4D4">)</span></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #4FC1FF">columns</span><span style="color: #D4D4D4"> = </span><span style="color: #DCDCAA">ref</span><span style="color: #D4D4D4">&lt;</span><span style="color: #4EC9B0">ProColumn</span><span style="color: #D4D4D4">&lt;</span><span style="color: #4EC9B0">Column</span><span style="color: #D4D4D4">&gt;[]&gt;([</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">key:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;name&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">ellipsis:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">copyable:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;age&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;age&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">key:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;age&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sorter:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sortOrder:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">false</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">syncRouteSorter:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;age&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">rule:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">type:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;string&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sex&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sex&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">key:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sex&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">filter:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sorter:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sortOrder:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">false</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">syncRouteSorter:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sexsort&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">rule:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">type:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;string&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    },</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">syncRouteFilter:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">name:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;sexfilter&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">rule:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">type:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;array&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    },</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">valueEnum:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">all:</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">label:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;全部&#39;</span><span style="color: #D4D4D4"> },</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">man:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">label:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;男&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">      },</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #9CDCFE">woman:</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">label:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;女&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #9CDCFE">disabled:</span><span style="color: #D4D4D4"> </span><span style="color: #569CD6">true</span></span>
+<span class="line"><span style="color: #D4D4D4">      }</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;birthday&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;birthday&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">valueType:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;date&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;last login&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;lastLogin&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">valueType:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;fromNow&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;favoraties&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;favorates&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">key:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;favorates&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #DCDCAA">render</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">favorates</span><span style="color: #D4D4D4">) {</span></span>
+<span class="line"><span style="color: #D4D4D4">      </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">favorates</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">map</span><span style="color: #D4D4D4">((</span><span style="color: #9CDCFE">favorate</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">string</span><span style="color: #D4D4D4">) </span><span style="color: #569CD6">=&gt;</span></span>
+<span class="line"><span style="color: #D4D4D4">        </span><span style="color: #DCDCAA">h</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">NTag</span><span style="color: #D4D4D4">, { </span><span style="color: #9CDCFE">style:</span><span style="color: #D4D4D4"> { </span><span style="color: #9CDCFE">marginRight:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;10px&#39;</span><span style="color: #D4D4D4"> } }, { </span><span style="color: #DCDCAA">default</span><span style="color: #9CDCFE">:</span><span style="color: #D4D4D4"> () </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> </span><span style="color: #9CDCFE">favorate</span><span style="color: #D4D4D4"> })</span></span>
+<span class="line"><span style="color: #D4D4D4">      )</span></span>
+<span class="line"><span style="color: #D4D4D4">    }</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;avatar&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;avatar&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">valueType:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;img&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">  },</span></span>
+<span class="line"><span style="color: #D4D4D4">  {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">title:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;parents&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">key:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;parents&#39;</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">dataIndex:</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;otherInfo.parents&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">  }</span></span>
+<span class="line"><span style="color: #D4D4D4">])</span></span>
+<span class="line"><span style="color: #569CD6">function</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">rowClassName</span><span style="color: #D4D4D4">() {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> </span><span style="color: #CE9178">&#39;td-relative&#39;</span></span>
+<span class="line"><span style="color: #D4D4D4">}</span></span>
+<span class="line"><span style="color: #569CD6">const</span><span style="color: #D4D4D4"> </span><span style="color: #DCDCAA">apiRequest</span><span style="color: #D4D4D4">: </span><span style="color: #4EC9B0">ApiRequest</span><span style="color: #D4D4D4"> = (</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">sort</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">filter</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">page</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4">) </span><span style="color: #569CD6">=&gt;</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">console</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">log</span><span style="color: #D4D4D4">(</span><span style="color: #CE9178">&#39;fetch query: &#39;</span><span style="color: #D4D4D4">, {</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">sort</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">filter</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">page</span><span style="color: #D4D4D4">,</span></span>
+<span class="line"><span style="color: #D4D4D4">    </span><span style="color: #9CDCFE">pageSize</span></span>
+<span class="line"><span style="color: #D4D4D4">  })</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #C586C0">return</span><span style="color: #D4D4D4"> </span><span style="color: #4EC9B0">Promise</span><span style="color: #D4D4D4">.</span><span style="color: #DCDCAA">resolve</span><span style="color: #D4D4D4">(</span><span style="color: #DCDCAA">createSourceData</span><span style="color: #D4D4D4">(</span><span style="color: #9CDCFE">params</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">sort</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">filter</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">page</span><span style="color: #D4D4D4">, </span><span style="color: #9CDCFE">pageSize</span><span style="color: #D4D4D4">))</span></span>
+<span class="line"><span style="color: #D4D4D4">}</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">script</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color: #808080">&lt;</span><span style="color: #569CD6">style</span><span style="color: #808080">&gt;</span></span>
+<span class="line"><span style="color: #D7BA7D">.td-relative</span><span style="color: #D4D4D4"> </span><span style="color: #D7BA7D">.n-data-table-td</span><span style="color: #D4D4D4"> {</span></span>
+<span class="line"><span style="color: #D4D4D4">  </span><span style="color: #9CDCFE">position</span><span style="color: #D4D4D4">: </span><span style="color: #CE9178">relative</span><span style="color: #D4D4D4">;</span></span>
+<span class="line"><span style="color: #D4D4D4">}</span></span>
+<span class="line"><span style="color: #808080">&lt;/</span><span style="color: #569CD6">style</span><span style="color: #808080">&gt;</span></span>
+<span class="line"></span></code></pre>
       <div class="line-numbers" aria-hidden="true">
+        <div class="line-number"></div>
+        <div class="line-number"></div>
+        <div class="line-number"></div>
         <div class="line-number"></div>
         <div class="line-number"></div>
         <div class="line-number"></div>

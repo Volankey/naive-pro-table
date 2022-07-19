@@ -43,7 +43,10 @@ import type {
   ProColumn,
   ProTableIns
 } from 'naive-ui-protable-alpha'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+console.log(router)
 const createSourceData = (
   params: { age: number; search: string },
   sort: any,

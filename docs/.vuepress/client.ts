@@ -1,5 +1,5 @@
 import { defineClientConfig } from '@vuepress/client'
-import { isEqual } from 'lodash-es'
+import isEqual from 'lodash-es/isEqual'
 
 export default defineClientConfig({
   enhance({ app, router, siteData }) {

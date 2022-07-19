@@ -137,9 +137,10 @@
     <div class="language-bash ext-sh line-numbers-mode">
       <pre
         v-pre
-        class="language-bash"
-      ><code><span class="token function">pnpm</span> <span class="token function">install</span>
-</code></pre>
+        class="shiki"
+        style="background-color: #1e1e1e"
+      ><code><span class="line"><span style="color: #D4D4D4">pnpm install</span></span>
+<span class="line"></span></code></pre>
       <div class="line-numbers" aria-hidden="true">
         <div class="line-number"></div>
       </div>
@@ -148,9 +149,10 @@
     <div class="language-bash ext-sh line-numbers-mode">
       <pre
         v-pre
-        class="language-bash"
-      ><code><span class="token function">pnpm</span> build
-</code></pre>
+        class="shiki"
+        style="background-color: #1e1e1e"
+      ><code><span class="line"><span style="color: #D4D4D4">pnpm build</span></span>
+<span class="line"></span></code></pre>
       <div class="line-numbers" aria-hidden="true">
         <div class="line-number"></div>
       </div>
@@ -159,9 +161,10 @@
     <div class="language-bash ext-sh line-numbers-mode">
       <pre
         v-pre
-        class="language-bash"
-      ><code><span class="token function">pnpm</span> docs:dev
-</code></pre>
+        class="shiki"
+        style="background-color: #1e1e1e"
+      ><code><span class="line"><span style="color: #D4D4D4">pnpm docs:dev</span></span>
+<span class="line"></span></code></pre>
       <div class="line-numbers" aria-hidden="true">
         <div class="line-number"></div>
       </div>

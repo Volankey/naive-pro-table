@@ -34,8 +34,14 @@ export default defineUserConfig({
   },
 
   // specify bundler via environment variable
-  bundler:
-    process.env.DOCS_BUNDLER === 'webpack' ? webpackBundler() : viteBundler(),
+  bundler: viteBundler({
+    viteOptions: {
+      // @ts-expect-error Invalid types can be ignored
+      ssr: {
+        noExternal: ['naive-ui-protable-alpha', 'naive-ui', 'lodash-es']
+      }
+    }
+  }),
 
   // configure default theme
   theme: defaultTheme({
@@ -140,6 +146,7 @@ export default defineUserConfig({
     registerComponentsPlugin({
       componentsDir: path.resolve(__dirname, '../demo/demo-components')
     }),
+
     // only enable shiki plugin in production mode
     isProd ? shikiPlugin({ theme: 'dark-plus' }) : []
   ]

@@ -24,6 +24,7 @@
     "naive-ui-protable-alpha": "workspace:*",
     "sass-loader": "^13.0.2",
     "serve": "^13.0.2",
-    "vue": "^3.2.37"
+    "vue": "^3.2.37",
+    "vue-router": "4.0.16"
   }
 }

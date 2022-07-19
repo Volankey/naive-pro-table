@@ -7,9 +7,10 @@
     <div class="language-bash ext-sh line-numbers-mode">
       <pre
         v-pre
-        class="language-bash"
-      ><code><span class="token function">pnpm</span> <span class="token function">add</span> naive-ui-protable-alpha
-</code></pre>
+        class="shiki"
+        style="background-color: #1e1e1e"
+      ><code><span class="line"><span style="color: #D4D4D4">pnpm add naive-ui-protable-alpha</span></span>
+<span class="line"></span></code></pre>
       <div class="line-numbers" aria-hidden="true">
         <div class="line-number"></div>
       </div>
