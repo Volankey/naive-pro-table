@@ -141,9 +141,7 @@ export function syncFromRouter(queryPrefix?: string) {
       result[key] = []
     }
 
-    if (!queryPrefix && prefix === '') {
-      result[key].push({ key, type, value })
-    } else if (queryPrefix === prefix) {
+    if ((!queryPrefix && prefix === '') || queryPrefix === prefix) {
       result[key].push({ key, type, value })
     }
     return result

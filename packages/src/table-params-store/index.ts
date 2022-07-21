@@ -58,7 +58,6 @@ export class TableParamsStore {
         ) {
           const columnAndRule = keyMapColumnAndRule[key]
           const { column } = columnAndRule
-          console.log(column)
           if (column.filter && type === 'filter') {
             value && this._updateFilterValue(column.key!, value)
           }
