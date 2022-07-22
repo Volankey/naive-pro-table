@@ -101,6 +101,12 @@ const columns = ref<ProColumn<Column>[]>([
     sorter: {
       compare: (row1, row2) => row1.chinese - row2.chinese,
       multiple: 3
+    },
+    syncRouteSorter: {
+      name: 'chinese',
+      rule: {
+        type: 'string'
+      }
     }
   },
   {
@@ -110,6 +116,12 @@ const columns = ref<ProColumn<Column>[]>([
     sorter: {
       compare: (row1, row2) => row1.math - row2.math,
       multiple: 2
+    },
+    syncRouteSorter: {
+      name: 'math',
+      rule: {
+        type: 'string'
+      }
     }
   },
   {
@@ -119,6 +131,12 @@ const columns = ref<ProColumn<Column>[]>([
     sorter: {
       compare: (row1, row2) => row1.english - row2.english,
       multiple: 1
+    },
+    syncRouteSorter: {
+      name: 'english',
+      rule: {
+        type: 'string'
+      }
     }
   },
   {

@@ -130,7 +130,7 @@ export function syncRouterQuery() {
   }
 }
 
-export function syncFromRouter(queryPrefix?: string) {
+export function syncFromRouter(queryPrefix = '') {
   const route = useRoute()
   const query = route.query
 
@@ -141,7 +141,7 @@ export function syncFromRouter(queryPrefix?: string) {
       result[key] = []
     }
 
-    if ((!queryPrefix && prefix === '') || queryPrefix === prefix) {
+    if (queryPrefix === prefix) {
       result[key].push({ key, type, value })
     }
     return result

@@ -58,10 +58,10 @@ export class TableParamsStore {
         ) {
           const columnAndRule = keyMapColumnAndRule[key]
           const { column } = columnAndRule
-          if (column.filter && type === 'filter') {
+          if (column.syncRouteFilter && type === 'filter') {
             value && this._updateFilterValue(column.key!, value)
           }
-          if (column.sorter && type === 'sort') {
+          if (column.syncRouteSorter && type === 'sort') {
             this._updateSorterValue(column.key!, value)
           }
         } else if (type === 'page' && value) {
