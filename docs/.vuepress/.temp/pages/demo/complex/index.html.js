@@ -1,1 +1,0 @@
-export const data = JSON.parse("{\"key\":\"v-228c245c\",\"path\":\"/demo/complex/\",\"title\":\"复杂示例\",\"lang\":\"en-US\",\"frontmatter\":{},\"excerpt\":\"\",\"headers\":[],\"git\":{\"updatedTime\":1657535589000,\"contributors\":[{\"name\":\"Jiwen Bai\",\"email\":\"56228105@qq.com\",\"commits\":1}]},\"filePathRelative\":\"demo/complex/index.md\"}")

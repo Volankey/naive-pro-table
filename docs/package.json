@@ -1,30 +1,26 @@
 {
   "name": "docs",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "docs:build": "vuepress-cli build --clean-cache",
-    "docs:clean": "rimraf .vuepress/.temp .vuepress/.cache .vuepress/dist",
-    "docs:dev": "vuepress-cli dev --clean-cache",
-    "docs:serve": "serve .vuepress/dist"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@vuepress/bundler-vite": "next",
-    "@vuepress/bundler-webpack": "next",
-    "@vuepress/cli": "next",
-    "@vuepress/client": "next",
-    "@vuepress/core": "next",
-    "@vuepress/plugin-docsearch": "next",
-    "@vuepress/plugin-google-analytics": "next",
-    "@vuepress/plugin-register-components": "next",
-    "@vuepress/plugin-shiki": "next",
-    "@vuepress/theme-default": "next",
-    "@vuepress/utils": "next",
-    "lodash-es": "^4.17.21",
+    "highlight.js": "^11.6.0",
     "naive-ui": "^2.30.6",
-    "naive-ui-protable-alpha": "workspace:*",
-    "sass-loader": "^13.0.2",
-    "serve": "^13.0.2",
     "vue": "^3.2.37",
     "vue-router": "4.0.16"
+  },
+  "devDependencies": {
+    "naive-ui-protable-alpha": "workspace:*",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "typescript": "^4.6.4",
+    "unplugin-vue-components": "^0.21.1",
+    "vite": "^3.0.0",
+    "vite-plugin-naive-ui-md": "^0.1.0",
+    "vue-tsc": "^0.38.4"
   }
 }
