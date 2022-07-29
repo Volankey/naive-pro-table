@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 // vite.config.ts
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
-import naiveUIMD from 'vite-plugin-naive-ui-md'
+import naiveUIMD, { createCodeBlockRule } from 'vite-plugin-naive-ui-md'
 import hljs from 'highlight.js'
 
 // https://vitejs.dev/config/
@@ -23,7 +23,12 @@ export default defineConfig({
     }),
     naiveUIMD({
       hljs: hljs,
-      wrapCodeWithCard: true
+      wrapCodeWithCard: false,
+      markedSetup: (marked, ctx) => {
+        marked.use({
+          extensions: [createCodeBlockRule(ctx.filepath)]
+        })
+      }
     })
   ]
 })

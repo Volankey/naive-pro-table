@@ -1,26 +1,20 @@
 <template>
   <n-layout style="min-height: 100vh">
     <n-layout-header style="height: 64px; padding: 24px" bordered>
-      NaiveUI ProTable
+      <DemoHeader />
     </n-layout-header>
-    <n-layout position="absolute" style="top: 64px; bottom: 64px" has-sider>
+    <n-layout
+      position="absolute"
+      style="top: 64px; bottom: 64px"
+      :has-sider="useHeader"
+    >
       <n-layout-sider
         content-style="padding: 24px;"
         :native-scrollbar="false"
         bordered
+        v-if="useHeader"
       >
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
-        <n-h2>海淀桥</n-h2>
+        <SiderMenus />
       </n-layout-sider>
       <n-layout content-style="padding: 24px;" :native-scrollbar="false">
         <router-view></router-view>
@@ -31,7 +25,19 @@
       style="height: 64px; padding: 24px"
       bordered
     >
-      城府路
+      <DocsFooter />
     </n-layout-footer>
   </n-layout>
 </template>
+<script lang="ts" setup>
+import SiderMenus from './components/SiderMenus.vue'
+import DemoHeader from './components/DocsHeader.vue'
+import DocsFooter from './components/DocsFooter.vue'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const route = useRoute()
+const useHeader = computed(() => {
+  return route.meta.useHeader === false ? false : true
+})
+</script>
