@@ -4,7 +4,6 @@
 
 ### 使用 PNPM 安装
 
-
 <n-card>
 
 ```bash
@@ -14,17 +13,13 @@ pnpm add naive-ui-protable-alpha -D
 
 </n-card>
 
-
 ### 使用 NPM 安装
 
 <n-card>
 
-
 ```bash
 npm install naive-ui-protable-alpha -D
 ```
-
-
 
 </n-card>
 
