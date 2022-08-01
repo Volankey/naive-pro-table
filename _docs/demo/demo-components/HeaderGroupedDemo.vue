@@ -6,9 +6,9 @@
     :pagination="{
       showSizePicker: true,
       showQuickJumper: true,
-      defaultPageSize: 14,
+      defaultPageSize: 10,
       defaultPage: 1,
-      pageSizes: [14, 20, 50]
+      pageSizes: [10, 20, 50]
     }"
   />
 </template>
@@ -22,29 +22,6 @@ import type {
   ProTableIns
 } from 'naive-ui-protable-alpha'
 
-const createSourceData = (
-  params: unknown,
-  sort: any,
-  filter: any,
-  page: number,
-  pageSize: number
-): { pageSize: number; itemCount: number; data: Column[] } => {
-  const data: Column[] = new Array(pageSize).fill(1).map((_, idx) => ({
-    name: 'name_' + ((page - 1) * pageSize + idx),
-    homework1: Math.round(Math.random() * 100),
-    exam1: Math.round(Math.random() * 100),
-    homework2: Math.round(Math.random() * 100),
-    exam2: Math.round(Math.random() * 100),
-    bonus: Math.round(Math.random() * 100),
-    total: Math.round(Math.random() * 100)
-  }))
-  return {
-    pageSize,
-    itemCount: data.length,
-    data
-  }
-}
-
 type Column = {
   name: string
   homework1: number
@@ -55,7 +32,31 @@ type Column = {
   total: number
 }
 
+const createSourceData = (
+  params: unknown,
+  sort: any,
+  filter: any,
+  page: number,
+  pageSize: number
+): { pageSize: number; itemCount: number; data: Column[] } => {
+  const data: Column[] = new Array(pageSize).fill(1).map((_, idx) => ({
+    name: 'name' + ((page - 1) * pageSize + idx),
+    homework1: Math.round(Math.random() * 100),
+    exam1: Math.round(Math.random() * 100),
+    homework2: Math.round(Math.random() * 100),
+    exam2: Math.round(Math.random() * 100),
+    bonus: Math.round(Math.random() * 100),
+    total: Math.round(Math.random() * 100)
+  }))
+  return {
+    pageSize,
+    itemCount: pageSize * 3,
+    data
+  }
+}
+
 const proTableRef = ref<ProTableIns | null>(null)
+
 const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Name',

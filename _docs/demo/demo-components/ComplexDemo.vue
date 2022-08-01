@@ -1,6 +1,6 @@
 <template>
   <div>
-    name:
+    name search:
     <n-input
       :value="customParamsStore.customParamsValue.value.search"
       style="width: 300px"
@@ -14,6 +14,7 @@
     ></n-input-number>
     <ProTable
       ref="proTableRef"
+      style="margin-top: 20px"
       :columns="columns"
       :api-request="apiRequest"
       :pagination="{
@@ -26,7 +27,8 @@
       :date-formatter="'dd/MM/yyyy'"
       :customParamsStore="customParamsStore"
       :data-table-props="{
-        rowClassName: rowClassName
+        rowClassName: rowClassName,
+        maxHeight: '500px'
       }"
     />
   </div>
@@ -41,7 +43,10 @@ import type {
   ProColumn,
   ProTableIns
 } from 'naive-ui-protable-alpha'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+console.log(router)
 const createSourceData = (
   params: { age: number; search: string },
   sort: any,
