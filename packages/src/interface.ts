@@ -75,7 +75,7 @@ export type ApiRequest<T = any> = (...args: ApiRequestArgs) => Promise<{
 
 export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 export interface ProTableIns {
-  refresh: () => void
+  refresh: (opt?: { showLoading?: boolean }) => void
 }
 
 // {
