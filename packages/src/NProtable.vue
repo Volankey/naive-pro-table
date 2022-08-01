@@ -60,6 +60,8 @@ const paramsStoreRef = computed(
     })
 )
 const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
+  // search should reset page
+  paramsStoreRef.value.updatePage(1)
   handleSyncRouterQuery(
     paramsStoreRef.value.queryRef.value as any,
     syncRouteRuleColumnRef.value.columnKeyMapRules,
