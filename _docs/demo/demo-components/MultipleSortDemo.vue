@@ -11,6 +11,16 @@ import type {
   ProTableIns
 } from 'naive-ui-protable-alpha'
 
+const proTableRef = ref<ProTableIns | null>(null)
+type Column = {
+  name: string
+  age: number
+  chinese: number
+  math: number
+  english: number
+  address: string
+}
+
 const createSourceData = (
   params: unknown,
   sort: any,
@@ -66,16 +76,6 @@ const createSourceData = (
   }
 }
 
-type Column = {
-  name: string
-  age: number
-  chinese: number
-  math: number
-  english: number
-  address: string
-}
-
-const proTableRef = ref<ProTableIns | null>(null)
 const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Name',

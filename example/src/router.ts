@@ -40,12 +40,5 @@ const demoRoutes = [
 
 export const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('./views/Home.vue')
-    },
-    ...demoRoutes
-  ]
+  routes: demoRoutes
 })

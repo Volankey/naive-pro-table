@@ -1,17 +1,18 @@
 <template>
   <div>
-    name:
+    name search:
     <n-input
       :value="customParamsStore.customParamsValue.value.search"
       style="width: 300px"
       @update:value="customParamsStore.updateCustomParams('search', $event)"
     ></n-input>
     age:
-    <n-input
+    <n-input-number
+      clearable
       :value="customParamsStore.customParamsValue.value.age"
-      style="width: 300px"
+      style="width: 300px; display: inline-block"
       @update:value="customParamsStore.updateCustomParams('age', $event)"
-    ></n-input>
+    ></n-input-number>
     <ProTable
       ref="proTableRef"
       style="margin-top: 20px"
@@ -35,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { NTag, NInput } from 'naive-ui'
+import { NTag, NInput, NInputNumber } from 'naive-ui'
 import { h, ref } from 'vue'
 import ProTable, { useCustomParamsStore } from 'naive-ui-protable-alpha'
 import type {
@@ -43,7 +44,10 @@ import type {
   ProColumn,
   ProTableIns
 } from 'naive-ui-protable-alpha'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+console.log(router)
 const createSourceData = (
   params: { age: number; search: string },
   sort: any,
@@ -70,10 +74,23 @@ const createSourceData = (
     data
   }
 }
-const customParamsStore = useCustomParamsStore({
-  search: null,
-  age: null
-})
+const customParamsStore = useCustomParamsStore<{
+  search: string | null
+  age: number | null
+}>(
+  {
+    search: null,
+    age: null
+  },
+  {
+    age: {
+      type: 'number',
+      transform: (value: string) => {
+        return value !== null ? parseInt(value) : null
+      }
+    }
+  }
+)
 
 type Column = {
   name: string
