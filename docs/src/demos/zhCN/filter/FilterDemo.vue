@@ -107,7 +107,7 @@ const columns = ref<ProColumn<Column>[]>([
     syncRouteFilter: {
       name: 'addrFilter',
       rule: {
-        type: 'string'
+        type: 'array'
       }
     },
     syncRouteSorter: {
