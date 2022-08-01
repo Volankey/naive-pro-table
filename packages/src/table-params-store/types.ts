@@ -14,7 +14,7 @@ export interface Rules {
 
 // export interface Adapter {}
 export interface Rule {
-  type: 'string' | 'number' | 'array' | 'object'
+  type?: 'string' | 'number' | 'array' | 'object'
   // 从router传入过来的
   validator?: (value: string | number | any) => boolean
 }
