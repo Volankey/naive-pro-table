@@ -133,13 +133,13 @@ const columns = ref<ProColumn<Column>[]>([
     sorter: true,
     sortOrder: false,
     syncRouteSorter: {
-      name: 'sexsort',
+      name: 'sex',
       rule: {
         type: 'string'
       }
     },
     syncRouteFilter: {
-      name: 'sexfilter',
+      name: 'sex',
       rule: {
         type: 'array'
       }

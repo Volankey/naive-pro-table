@@ -105,13 +105,13 @@ const columns = ref<ProColumn<Column>[]>([
     filter: true,
     sorter: true,
     syncRouteFilter: {
-      name: 'addrFilter',
+      name: 'addr',
       rule: {
         type: 'array'
       }
     },
     syncRouteSorter: {
-      name: 'addrSorter',
+      name: 'addr',
       rule: {
         type: 'string'
       }

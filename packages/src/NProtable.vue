@@ -45,6 +45,7 @@ const handleSyncRouterQuery = syncRouterQuery()
 const handleUpdateQuery = (query: QueryOptions<false>) => {
   handleSyncRouterQuery(
     query,
+    syncRouteRuleColumnRef.value.columnKeyMapRules,
     props.customParamsStore?.customParamsValue.value,
     props.queryPrefix
   )
@@ -53,7 +54,7 @@ const handleUpdateQuery = (query: QueryOptions<false>) => {
 const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
-      keyMapColumnAndRule: syncRouteRuleColumnRef.value,
+      syncRouteKeyMapColumnAndRule: syncRouteRuleColumnRef.value,
       customParams: props.customParamsStore,
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
@@ -61,6 +62,7 @@ const paramsStoreRef = computed(
 const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
   handleSyncRouterQuery(
     paramsStoreRef.value.queryRef.value as any,
+    syncRouteRuleColumnRef.value.columnKeyMapRules,
     customParams,
     props.queryPrefix
   )

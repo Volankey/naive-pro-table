@@ -180,8 +180,8 @@ export const useTableRequest = (
     filter &&
       Object.entries(filter).reduce((result, [key, filterValues]) => {
         if (
-          filterValues &&
-          !(Array.isArray(filterValues) && filterValues?.length === 0)
+          (Array.isArray(filterValues) && filterValues?.length !== 0) ||
+          filterValues
         ) {
           result[key] = filterValues
           paramsStore.updateFilter(key, filterValues)
@@ -251,10 +251,10 @@ export type ColumnKeyMapColAndRules = Record<
   string,
   { rules: ColumnRule; column: ProColumn<any> }
 >
-export const getColumnsRouteRules = (
-  columns: ProColumn<any>[]
-): ColumnKeyMapColAndRules => {
+export const getColumnsRouteRules = (columns: ProColumn<any>[]) => {
   const columnKeyMapRules: ColumnKeyMapColAndRules = {}
+  const columnSyncRouteSorterKeyMapRules: ColumnKeyMapColAndRules = {}
+  const columnSyncRouteFilterKeyMapRules: ColumnKeyMapColAndRules = {}
 
   function _handleColumn(column: ProColumn<any>) {
     if ('children' in column) {
@@ -269,6 +269,24 @@ export const getColumnsRouteRules = (
           column
         }
       }
+      if (
+        column.syncRouteFilter &&
+        !columnSyncRouteSorterKeyMapRules[column.syncRouteFilter.name]
+      ) {
+        columnSyncRouteFilterKeyMapRules[column.syncRouteFilter.name] = {
+          rules: {},
+          column
+        }
+      }
+      if (
+        column.syncRouteSorter &&
+        !columnSyncRouteSorterKeyMapRules[column.syncRouteSorter.name]
+      ) {
+        columnSyncRouteSorterKeyMapRules[column.syncRouteSorter.name] = {
+          rules: {},
+          column
+        }
+      }
       // TODO: 重复的 rule name
       Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
     }
@@ -277,5 +295,9 @@ export const getColumnsRouteRules = (
   columns.forEach((column) => {
     _handleColumn(column)
   })
-  return columnKeyMapRules
+  return {
+    columnKeyMapRules,
+    columnSyncRouteSorterKeyMapRules,
+    columnSyncRouteFilterKeyMapRules
+  }
 }
