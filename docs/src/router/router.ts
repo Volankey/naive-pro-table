@@ -41,9 +41,24 @@ const router = createRouter({
             label: '基础用法'
           },
           {
+            key: 'filter',
+            path: '/example/filter',
+            label: '过滤'
+          },
+          {
+            key: 'pagination',
+            path: '/example/pagination',
+            label: '分页'
+          },
+          {
             key: 'custom-params',
             path: '/example/custom-params',
             label: '自定义参数'
+          },
+          {
+            key: 'complex',
+            path: '/example/complex',
+            label: '复杂示例'
           }
         ])
       },
@@ -56,6 +71,18 @@ const router = createRouter({
           path: '/example/custom-params',
           component: () =>
             import('../demos/zhCN/custom-params/custom-params.demo.md')
+        },
+        {
+          path: '/example/filter',
+          component: () => import('../demos/zhCN/filter/filter.demo.md')
+        },
+        {
+          path: '/example/pagination',
+          component: () => import('../demos/zhCN/pagination/pagination.demo.md')
+        },
+        {
+          path: '/example/complex',
+          component: () => import('../demos/zhCN/complex/complex.demo.md')
         }
       ]
     }

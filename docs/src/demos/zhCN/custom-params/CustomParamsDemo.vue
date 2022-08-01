@@ -2,7 +2,7 @@
   <n-space vertical>
     <n-space>
       <div>
-        name:
+        suffix:
         <n-input
           :value="customParamsStore.customParamsValue.value.suffix"
           style="width: 300px"
@@ -11,9 +11,10 @@
       </div>
       <div>
         age:
-        <n-input
+        <n-input-number
+          clearable
           :value="customParamsStore.customParamsValue.value.age"
-          style="width: 300px"
+          style="width: 300px; display: inline-block"
           @update:value="customParamsStore.updateCustomParams('age', $event)"
         />
       </div>
@@ -41,10 +42,20 @@ import type {
 } from 'naive-ui-protable-alpha'
 
 const proTableRef = ref<ProTableIns | null>(null)
-const customParamsStore = useCustomParamsStore({
-  suffix: null,
-  age: null
-})
+const customParamsStore = useCustomParamsStore(
+  {
+    suffix: null,
+    age: null
+  },
+  {
+    age: {
+      type: 'number',
+      transform: (value: string) => {
+        return value !== null ? parseInt(value) : null
+      }
+    }
+  }
+)
 
 type Column = {
   name: string

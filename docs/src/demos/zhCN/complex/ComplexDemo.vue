@@ -8,6 +8,7 @@
     ></n-input>
     age:
     <n-input-number
+      clearable
       :value="customParamsStore.customParamsValue.value.age"
       style="width: 300px; display: inline-block"
       @update:value="customParamsStore.updateCustomParams('age', $event)"
@@ -79,13 +80,13 @@ const customParamsStore = useCustomParamsStore<{
 }>(
   {
     search: null,
-    age: 1
+    age: null
   },
   {
     age: {
       type: 'number',
       transform: (value: string) => {
-        return parseInt(value)
+        return value !== null ? parseInt(value) : null
       }
     }
   }
