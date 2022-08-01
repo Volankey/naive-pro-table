@@ -35,7 +35,7 @@ export const createCommonColsRef = () =>
       key: 'sex',
       filter: true,
       syncRouteFilter: {
-        name: 'sexfilter',
+        name: 'sex',
         rule: {
           type: 'array'
         }
@@ -172,7 +172,7 @@ export async function createTable(columnsRef?: any, tableProps: any = {}) {
   }
 }
 
-export async function createMultipleTable() {
+export async function createMultipleTable(initUrl?) {
   const getData = vi.fn((params, sort, filter, page, pageSize) => {
     return Promise.resolve(
       createSourceData(params, sort, filter, page, pageSize)
@@ -193,7 +193,10 @@ export async function createMultipleTable() {
       })
     ])
   )
-
+  if (initUrl) {
+    router.push(initUrl)
+    await flushPromises()
+  }
   const wrapper = mount(
     {
       template: `<router-view></router-view>`,

@@ -33,8 +33,9 @@ test('test status in another table', async () => {
 })
 
 test('test status after refresh', async () => {
-  location.reload()
-  const { wrapper, router } = await createMultipleTable()
+  const { wrapper, router } = await createMultipleTable(
+    '/?table.age.sort=descend&tableCopy.age.sort=ascend'
+  )
   await flushPromises()
 
   const sorters = wrapper.findAllComponents('.n-data-table-sorter')

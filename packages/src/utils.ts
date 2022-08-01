@@ -181,7 +181,7 @@ export const useTableRequest = (
       Object.entries(filter).reduce((result, [key, filterValues]) => {
         if (
           (Array.isArray(filterValues) && filterValues?.length !== 0) ||
-          filterValues
+          (!Array.isArray(filterValues) && filterValues)
         ) {
           result[key] = filterValues
           paramsStore.updateFilter(key, filterValues)
