@@ -180,11 +180,8 @@ export const useTableRequest = (
     filter &&
       Object.entries(filter).reduce((result, [key, filterValues]) => {
         if (
-          !(
-            filterValues &&
-            Array.isArray(filterValues) &&
-            filterValues?.length === 0
-          )
+          filterValues &&
+          !(Array.isArray(filterValues) && filterValues?.length === 0)
         ) {
           result[key] = filterValues
           paramsStore.updateFilter(key, filterValues)
