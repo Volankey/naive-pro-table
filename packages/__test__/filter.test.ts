@@ -62,8 +62,11 @@ test('test set multiple filters', async () => {
 })
 
 test('test filter after refresh', async () => {
-  location.reload()
-  const { wrapper, router, result } = await createFilterTest(renderProps)
+  const { wrapper, router, result } = await createFilterTest(
+    renderProps,
+    undefined,
+    '/?sex.filter=all&sex.filter=man'
+  )
   await flushPromises()
   const route = router.currentRoute.value
 

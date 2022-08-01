@@ -46,8 +46,11 @@ test('change sorter to ascend', async () => {
 })
 
 test('test sorter after fresh', async () => {
-  location.reload()
-  const { wrapper, router, result } = await createSorterTest(renderProps)
+  const { wrapper, router, result } = await createSorterTest(
+    renderProps,
+    undefined,
+    '/?age.sort=ascend'
+  )
   await flushPromises()
   const route = router.currentRoute.value
   const sorterIcon = wrapper.find('.n-data-table-sorter--asc')
