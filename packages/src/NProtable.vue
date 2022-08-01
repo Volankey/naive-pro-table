@@ -136,9 +136,8 @@ defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
 paramsStoreRef.value.initQuery(
-  syncFromRouter(),
-  mergedPaginationRef,
-  props.queryPrefix
+  syncFromRouter(props.queryPrefix),
+  mergedPaginationRef
 )
 
 onMounted(() => {

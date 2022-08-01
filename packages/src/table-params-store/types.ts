@@ -30,9 +30,11 @@ export interface QueryOptions<T = false> {
   pageSize?: number
 }
 
-export type RouteQuery = {
-  key: string
-  value: LocationQueryValue | LocationQueryValue[]
-  type: string
-}
-export type RoueQueryParsed = Record<string, Record<string, RouteQuery>>
+export type RoueQueryParsed = Record<
+  string,
+  {
+    key: string
+    value: LocationQueryValue | LocationQueryValue[]
+    type: string
+  }[]
+>
