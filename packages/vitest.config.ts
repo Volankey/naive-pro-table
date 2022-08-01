@@ -9,6 +9,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: [path.resolve(__dirname, '__test__/setup.ts')]
+    setupFiles: [path.resolve(__dirname, '__test__/setup.ts')],
+    coverage: {
+      reporter: ['text', 'html', 'lcov']
+    }
   }
 })
