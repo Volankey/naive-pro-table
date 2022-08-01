@@ -8,9 +8,12 @@ import type {
 } from './types'
 import type { SortState } from 'naive-ui/lib/data-table/src/interface'
 import { isFinite } from 'lodash-es'
+import { getColumnsRouteRules } from '../utils'
 
 export class TableParamsStore {
   keyMapColumnAndRule: KeyMapColumnAndRule
+  syncRouteSorterKeyMapColumnAndRule: KeyMapColumnAndRule
+  syncRouteFilterKeyMapColumnAndRule: KeyMapColumnAndRule
   queryRef: Ref<{
     params?: unknown | null
     sort?: any | null
@@ -23,23 +26,40 @@ export class TableParamsStore {
   customParams: CustomParams | undefined
 
   constructor({
-    keyMapColumnAndRule,
+    syncRouteKeyMapColumnAndRule,
     customParams,
     onUpdateQuery
   }: {
-    keyMapColumnAndRule: KeyMapColumnAndRule
+    syncRouteKeyMapColumnAndRule: ReturnType<typeof getColumnsRouteRules>
     customParams?: CustomParams
     onUpdateQuery: (query: QueryOptions) => void
   }) {
-    this.keyMapColumnAndRule = keyMapColumnAndRule
+    this.keyMapColumnAndRule = syncRouteKeyMapColumnAndRule.columnKeyMapRules
+    this.syncRouteSorterKeyMapColumnAndRule =
+      syncRouteKeyMapColumnAndRule.columnSyncRouteSorterKeyMapRules
+    this.syncRouteFilterKeyMapColumnAndRule =
+      syncRouteKeyMapColumnAndRule.columnSyncRouteFilterKeyMapRules
     this.customParams = customParams
     this.onUpdateQuery = onUpdateQuery
+  }
+  _initSorter(routeKey: string, value: any) {
+    if (!this.syncRouteSorterKeyMapColumnAndRule[routeKey]) {
+      return
+    }
+    const { column } = this.syncRouteSorterKeyMapColumnAndRule[routeKey]
+    this._updateSorterValue(column.key!, value)
+  }
+  _initFilter(routeKey: string, value: any) {
+    if (!this.syncRouteFilterKeyMapColumnAndRule[routeKey]) {
+      return
+    }
+    const { column } = this.syncRouteFilterKeyMapColumnAndRule[routeKey]
+    value && this._updateFilterValue(column.key!, value)
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
     paginationRef: Ref<PaginationProps>
   ) {
-    const keyMapColumnAndRule = this.keyMapColumnAndRule
     const params: any = this.customParams?.customParamsValue.value
 
     this.paginationRef = paginationRef
@@ -51,25 +71,17 @@ export class TableParamsStore {
     }
     Object.values(routeQueryParsed).forEach((queryItems) => {
       queryItems.forEach((queryItem) => {
-        const { key, value, type } = queryItem
-        if (
-          (type === 'sort' || type === 'filter') &&
-          keyMapColumnAndRule[key]
-        ) {
-          const columnAndRule = keyMapColumnAndRule[key]
-          const { column } = columnAndRule
-          if (column.syncRouteFilter && type === 'filter') {
-            value && this._updateFilterValue(column.key!, value)
-          }
-          if (column.syncRouteSorter && type === 'sort') {
-            this._updateSorterValue(column.key!, value)
-          }
+        const { key: routeKey, value, type } = queryItem
+        if (type === 'sort') {
+          this._initSorter(routeKey, value)
+        } else if (type === 'filter') {
+          this._initFilter(routeKey, value)
         } else if (type === 'page' && value) {
           this._updatePageValue(+value)
         } else if (type === 'pageSize' && value) {
           this._updatePageSizeValue(+value)
         } else if (type === 'params') {
-          params[key] = value
+          params[routeKey] = value
         }
       })
     })
