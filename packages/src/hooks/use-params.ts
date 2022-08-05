@@ -58,11 +58,15 @@ export function useCustomParamsStore<T extends Record<string, any> = any>(
     customParamsRef.value = filteredParams as T
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }
+  function _initCustomParams(params: any) {
+    customParamsRef.value = params
+  }
   const customParamsStore = {
     customParamsValue: customParamsReadonly,
     setCustomParams,
     updateCustomParams,
-    setCallback: (callback: (params: Record<string, any>) => void) => {
+    _initCustomParams,
+    _setCallback: (callback: (params: Record<string, any>) => void) => {
       ;(customParamsStore as any)._afterSet = callback
     },
     syncCustomParams

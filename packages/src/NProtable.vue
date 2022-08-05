@@ -71,7 +71,7 @@ const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
   handleFetchTableData()
 }
 if (props.customParamsStore) {
-  props.customParamsStore.setCallback(handleCustomParamsUpdate)
+  props.customParamsStore._setCallback(handleCustomParamsUpdate)
 }
 
 const loadingRef = ref(false)
