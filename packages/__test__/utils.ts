@@ -24,13 +24,11 @@ export async function createTest(
     pageSize: 0
   }
   const getData = vi.fn((params, sort, filter, page, pageSize) => {
-    Object.assign(result, {
-      params,
-      sort,
-      filter,
-      page,
-      pageSize
-    })
+    Object.entries({ params, sort, filter, page, pageSize }).forEach(
+      ([k, v]) => {
+        result[k] = v
+      }
+    )
     return Promise.resolve(
       createSourceData(params, sort, filter, page, pageSize)
     )

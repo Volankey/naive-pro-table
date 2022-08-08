@@ -24,6 +24,16 @@ test('default pageSize = 15', async () => {
   await flushPromises()
   expect(result.pageSize).equal(15)
 })
+test('init url page = 2', async () => {
+  const { result } = await createPageTest(
+    renderProps,
+    undefined,
+    '/?page.page=2'
+  )
+  await flushPromises()
+  expect(result.pageSize).equal(15)
+  expect(result.page).equal(2)
+})
 test('change page = 2 then the pageSize = 20', async () => {
   const { wrapper, result, router } = await createPageTest(renderProps)
   const pagination = wrapper.getComponent(NPagination)
