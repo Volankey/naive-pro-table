@@ -59,9 +59,13 @@ const paramsStoreRef = computed(
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
 )
-const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
+const handleCustomParamsUpdate = (
+  customParams: Record<string, any>,
+  init = false
+) => {
   // search should reset page
-  paramsStoreRef.value.updatePage(1)
+  if (!init) paramsStoreRef.value.updatePage(1)
+
   handleSyncRouterQuery(
     paramsStoreRef.value.queryRef.value as any,
     syncRouteRuleColumnRef.value.columnKeyMapRules,
@@ -71,7 +75,7 @@ const handleCustomParamsUpdate = (customParams: Record<string, any>) => {
   handleFetchTableData()
 }
 if (props.customParamsStore) {
-  props.customParamsStore.setCallback(handleCustomParamsUpdate)
+  props.customParamsStore._setCallback(handleCustomParamsUpdate)
 }
 
 const loadingRef = ref(false)

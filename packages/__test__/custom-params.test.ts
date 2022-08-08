@@ -1,10 +1,14 @@
 import { flushPromises } from '@vue/test-utils'
-import { NInput, NInputNumber } from 'naive-ui'
-import { expect, test } from 'vitest'
+import { NInput, NInputNumber, NPagination } from 'naive-ui'
+import { expect, test, vi } from 'vitest'
 import { h } from 'vue'
 import { useCustomParamsStore } from '../src'
 import { createTest } from './utils'
-
+// use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
+vi.mock('lodash-es/debounce', () => ({
+  default: vi.fn((fn) => fn),
+  __esModule: true
+}))
 const tableProps = {
   pagination: {
     defaultPageSize: 15,
@@ -29,6 +33,7 @@ async function createCustomParamsTest(
   const renderAgeAndSearch = () => {
     return [
       h(NInput, {
+        class: 'search-input',
         value: customParamsStore.customParamsValue.value.search,
         onUpdateValue: (v) => customParamsStore.updateCustomParams('search', v)
       }),
@@ -54,16 +59,43 @@ async function createCustomParamsTest(
 }
 test('test custom params with initUrl', async () => {
   const { wrapper, result } = await createCustomParamsTest(
-    '/?page.page=1&pageSize.pageSize=14&search.params=asd&age.params=124'
+    '?page.page=2&search.params=123&age.params=10'
   )
   await flushPromises()
+
   const inputNumber = wrapper.findComponent(NInputNumber)
   const input = wrapper.findComponent(NInput)
-  expect(inputNumber.vm.value).equal(124)
-  expect(input.vm.value).equal('asd')
+  expect(inputNumber.vm.value).equal(10)
+  expect(input.vm.value).equal('123')
   expect(result.params).toEqual({
-    search: 'asd',
-    age: 124
+    search: '123',
+    age: 10
+  })
+  expect(result.page).toEqual(2)
+})
+
+test('test custom params change reset page to 1', async () => {
+  const { wrapper, result, router } = await createCustomParamsTest('/')
+  await flushPromises()
+
+  const input = wrapper.findComponent(NInput)
+
+  const pagination = wrapper.findComponent(NPagination)
+  if (typeof pagination.vm['onUpdate:page'] === 'function') {
+    pagination.vm['onUpdate:page'](2)
+  }
+  await flushPromises()
+  expect(pagination.vm.page).equal(2)
+  if (typeof input.vm.onUpdateValue === 'function') {
+    input.vm.onUpdateValue('test' as any)
+    await flushPromises()
+  }
+  expect(router.currentRoute.value.query['page.page']).equal('1')
+  expect(result.page).equal(1)
+  expect(input.vm.value).equal('test')
+  expect(result.params).toEqual({
+    search: 'test',
+    age: null
   })
 })
 
@@ -75,12 +107,14 @@ test('test custom params with initValue', async () => {
   await flushPromises()
   const inputNumber = wrapper.findComponent(NInputNumber)
   const input = wrapper.findComponent(NInput)
+
   expect(inputNumber.vm.value).equal(10)
   expect(input.vm.value).equal('hello')
   expect(result.params).toEqual({
-    search: 'hello',
-    age: 10
+    age: 10,
+    search: 'hello'
   })
+
   expect(router.currentRoute.value.query['search.params']).equal('hello')
   expect(router.currentRoute.value.query['age.params']).equal('10')
 })

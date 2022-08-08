@@ -11,7 +11,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: [path.resolve(__dirname, '__test__/setup.ts')],
     coverage: {
-      reporter: ['text', 'html', 'lcov']
+      reporter: ['text', 'html', 'lcov'],
+      exclude: ['__test__']
     }
   }
 })

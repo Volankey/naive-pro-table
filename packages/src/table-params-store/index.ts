@@ -164,7 +164,7 @@ export class TableParamsStore {
   }
   _updateParamsValue(params: any) {
     if (this.customParams) {
-      this.customParams.setCustomParams(params)
+      this.customParams._initCustomParams(params)
     }
   }
   updateParams() {

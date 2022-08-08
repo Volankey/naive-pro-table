@@ -1,6 +1,6 @@
 import { DateFormatter } from './../src/value-type-render/interface'
 import { flushPromises } from '@vue/test-utils'
-import { ProColumn } from 'naive-ui-protable-alpha'
+import { ProColumn } from '../src'
 import { expect, test } from 'vitest'
 import { ref } from 'vue'
 import { avatarSrc, createTable } from './common'

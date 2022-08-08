@@ -45,11 +45,11 @@ export function useCustomParamsStore<T extends Record<string, any> = any>(
     return filteredParams
   }
 
-  function setCustomParams(params: T) {
+  function setCustomParams(params: T, init = false) {
     transform(params)
     const filteredParams = validate(params)
     customParamsRef.value = filteredParams as T
-    ;(customParamsStore as any)?._afterSet?.(filteredParams)
+    ;(customParamsStore as any)?._afterSet?.(filteredParams, init)
   }
   function updateCustomParams(key: string, v: any) {
     const nextParams = { ...customParamsRef.value, [key]: v }
@@ -58,11 +58,17 @@ export function useCustomParamsStore<T extends Record<string, any> = any>(
     customParamsRef.value = filteredParams as T
     ;(customParamsStore as any)?._afterSet?.(filteredParams)
   }
+  function _initCustomParams(params: T) {
+    setCustomParams(params, true)
+  }
   const customParamsStore = {
     customParamsValue: customParamsReadonly,
     setCustomParams,
     updateCustomParams,
-    setCallback: (callback: (params: Record<string, any>) => void) => {
+    _initCustomParams,
+    _setCallback: (
+      callback: (params: Record<string, any>, syncRoute: boolean) => void
+    ) => {
       ;(customParamsStore as any)._afterSet = callback
     },
     syncCustomParams
