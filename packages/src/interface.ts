@@ -78,6 +78,8 @@ export interface ProTableIns {
   refresh: (opt?: { showLoading?: boolean }) => void
 }
 
+export * from './value-type-render/interface'
+
 // {
 //     title //,
 //     tooltip,
