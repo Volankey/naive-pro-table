@@ -121,29 +121,33 @@ export function syncRouterQuery() {
     customParams?: Record<string, any>,
     tablePrefix?: string
   ) {
-    const routeQuery = { ...route.query }
-    const query = getQuery(
-      tableQuery,
-      routeQuery,
-      columnKeyMapColAndRules,
-      customParams,
-      tablePrefix
-    )
-    const nextQuery = {
-      ...routeQuery,
-      ...query
-    }
-    Object.entries(nextQuery).forEach(([k, v]) => {
-      if (v === null) {
-        ;(nextQuery as any)[k] = undefined
+    //  NOTE: 这里使用setTimeout是为了处理在同一个事件循环中 进行多次 updateRouter 的情况
+    //  因为 router.replace() 返回是一个微任务，所以多次触发获取到的route.query都是一样的，上一次的触发的值没有更新到路由上
+    setTimeout(() => {
+      const routeQuery = { ...route.query }
+      const query = getQuery(
+        tableQuery,
+        routeQuery,
+        columnKeyMapColAndRules,
+        customParams,
+        tablePrefix
+      )
+      const nextQuery = {
+        ...routeQuery,
+        ...query
       }
-    })
+      Object.entries(nextQuery).forEach(([k, v]) => {
+        if (v === null) {
+          ;(nextQuery as any)[k] = undefined
+        }
+      })
 
-    const next = router.resolve({
-      ...router.currentRoute.value,
-      query: nextQuery
+      const next = router.resolve({
+        ...router.currentRoute.value,
+        query: nextQuery
+      })
+      router.replace(next)
     })
-    router.replace(next)
   }
 }
 
