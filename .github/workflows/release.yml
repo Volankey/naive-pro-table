@@ -2,12 +2,21 @@ on:
   release:
     types: [published]
 jobs:
-  curl:
+  send-msg:
     runs-on: ubuntu-latest
     steps:
-    - name: sen-feishu-msg
-      uses: wei/curl@v1
+    - name: post message
+      uses: foxundermoon/feishu-action@v2
       with:
-        args: "-X POST -H \"Content-Type: application/json\" \
--d '{\"msg_type\":\"text\",\"content\":{\"text\":\"版本发布通知 \n title:${{github.event.payload.release.name}}\nversion:${{github.event.payload.release.tag_name}}\n详情:${{github.event.payload.release.html_url}}\"}}' \
-  https://open.feishu.cn/open-apis/bot/v2/hook/${{ secrets.FEISHU_NOTIYFY_TOKEN }}"
+        url: https://open.feishu.cn/open-apis/bot/v2/hook/${{ secrets.FEISHU_NOTIYFY_TOKEN }}
+        msg_type: post
+        content: |
+          post:
+            zh_cn:
+              title: "版本发布通知: ${{ github.event.release.name }}"
+              content:
+              - - tag: text
+                  text: "version: ${{ github.event.release.tag_name }}"
+              - - tag: a
+                  text: '详情信息'
+                  href: ${{ github.event.release.html_url }}
