@@ -13,7 +13,7 @@ jobs:
         content: |
           post:
             zh_cn:
-              title: "${{ github.event.payload.release.name }}""
+              title: ${{ github.event.payload.release.name }}
               content:
               - - tag: a
                   text: '详情信息'
