@@ -8,6 +8,6 @@ jobs:
     - name: sen-feishu-msg
       uses: wei/curl@v1
       with:
-        args: "-X POST -H \"Content-Type: application/json" \
-	-d '{\"msg_type\":\"text\",\"content\":{\"text\":\"版本发布通知 \n title:${{github.event.payload.release.name}}\nversion:${{github.event.payload.release.tag_name}}\n详情:${{github.event.payload.release.html_url}}\"}}' \
+        args: "-X POST -H \"Content-Type: application/json\" \
+-d '{\"msg_type\":\"text\",\"content\":{\"text\":\"版本发布通知 \n title:${{github.event.payload.release.name}}\nversion:${{github.event.payload.release.tag_name}}\n详情:${{github.event.payload.release.html_url}}\"}}' \
   https://open.feishu.cn/open-apis/bot/v2/hook/${{ secrets.FEISHU_NOTIYFY_TOKEN }}"
