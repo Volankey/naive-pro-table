@@ -13,8 +13,8 @@ jobs:
         content: |
           post:
             zh_cn:
-              title: ${{github.event.payload.release.name}}
+              title: "${{ github.event.payload.release.name }}""
               content:
               - - tag: a
                   text: '详情信息'
-                  href: ${{github.event.payload.release.html_url}}
+                  href: "${{ github.event.payload.release.html_url }}"
