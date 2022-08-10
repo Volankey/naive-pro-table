@@ -18,9 +18,9 @@
 
   </template>
   <template #demo>
-    <FilterDemo />
+    <SyncRouterDemo />
   </template>
 
-@[code html](./FilterDemo.vue)
+@[code html](./SyncRouterDemo.vue)
 
 </DemoWrap>

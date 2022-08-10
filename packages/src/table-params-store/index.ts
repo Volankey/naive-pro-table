@@ -1,3 +1,4 @@
+import { SyncRoutePage, SyncRoutePageSize } from './../interface'
 import { CustomParams } from './../hooks/use-params'
 import { PaginationProps } from 'naive-ui'
 import { ref, type Ref } from 'vue'
@@ -24,13 +25,18 @@ export class TableParamsStore {
   onUpdateQuery: (query: QueryOptions) => void
   paginationRef: Ref<PaginationProps> | undefined
   customParams: CustomParams | undefined
-
+  syncRoutePage: SyncRoutePage
+  syncRoutePageSize: SyncRoutePageSize
   constructor({
     syncRouteKeyMapColumnAndRule,
     customParams,
+    syncRoutePage,
+    syncRoutePageSize,
     onUpdateQuery
   }: {
     syncRouteKeyMapColumnAndRule: ReturnType<typeof getColumnsRouteRules>
+    syncRoutePage: SyncRoutePage
+    syncRoutePageSize: SyncRoutePageSize
     customParams?: CustomParams
     onUpdateQuery: (query: QueryOptions) => void
   }) {
@@ -40,6 +46,8 @@ export class TableParamsStore {
     this.syncRouteFilterKeyMapColumnAndRule =
       syncRouteKeyMapColumnAndRule.columnSyncRouteFilterKeyMapRules
     this.customParams = customParams
+    this.syncRoutePage = syncRoutePage
+    this.syncRoutePageSize = syncRoutePageSize
     this.onUpdateQuery = onUpdateQuery
   }
   _initSorter(routeKey: string, value: any) {

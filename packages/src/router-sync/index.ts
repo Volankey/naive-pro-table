@@ -1,3 +1,4 @@
+import { SyncRoutePage, SyncRoutePageSize } from './../interface'
 import { ColumnKeyMapColAndRules } from '../utils'
 import { type LocationQuery, useRoute, useRouter } from 'vue-router'
 import type { QueryOptions, RoueQueryParsed } from '../table-params-store/types'
@@ -19,6 +20,8 @@ function getQuery(
   tableQuery: QueryOptions,
   routeQuery: LocationQuery,
   columnKeyMapColAndRules: ColumnKeyMapColAndRules,
+  syncRoutePage: SyncRoutePage,
+  syncRoutePageSize: SyncRoutePageSize,
   customParams?: Record<string, any>,
   tablePrefix?: string
 ) {
@@ -72,14 +75,17 @@ function getQuery(
   }
 
   function getPageQuery(pageNumber: number | undefined) {
-    const k = _getQueryKey('page', 'page')
+    const k = _getQueryKey(syncRoutePage ? syncRoutePage.name : 'page', 'page')
     return {
       [k]: pageNumber || null
     }
   }
 
   function getPageSizeQuery(pageSize: number | undefined) {
-    const k = _getQueryKey('pageSize', 'pageSize')
+    const k = _getQueryKey(
+      syncRoutePageSize ? syncRoutePageSize.name : 'pageSize',
+      'pageSize'
+    )
     return {
       [k]: pageSize || null
     }
@@ -118,6 +124,8 @@ export function syncRouterQuery() {
   return function updateRouter(
     tableQuery: QueryOptions,
     columnKeyMapColAndRules: ColumnKeyMapColAndRules,
+    syncRoutePage: SyncRoutePage,
+    syncRoutePageSize: SyncRoutePageSize,
     customParams?: Record<string, any>,
     tablePrefix?: string
   ) {
@@ -129,6 +137,8 @@ export function syncRouterQuery() {
         tableQuery,
         routeQuery,
         columnKeyMapColAndRules,
+        syncRoutePage,
+        syncRoutePageSize,
         customParams,
         tablePrefix
       )

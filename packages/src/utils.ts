@@ -190,6 +190,7 @@ export const useTableRequest = (
         }
         return result
       }, {} as any)
+    paramsStore.updatePage(1)
   }
 
   const handlePageChange = (page: number) => {

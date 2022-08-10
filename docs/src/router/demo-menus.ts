@@ -10,6 +10,11 @@ export const demoMenus = [
     label: '过滤'
   },
   {
+    key: 'sorter',
+    path: '/example/sorter',
+    label: '排序'
+  },
+  {
     key: 'pagination',
     path: '/example/pagination',
     label: '分页'
@@ -28,6 +33,11 @@ export const demoMenus = [
     key: 'header-group',
     path: '/example/header-group',
     label: '表头分组'
+  },
+  {
+    key: 'sync-router',
+    path: '/example/sync-router',
+    label: '同步路由'
   },
   {
     key: 'complex',
