@@ -21,6 +21,4 @@
     <SyncRouterDemo />
   </template>
 
-@[code html](./SyncRouterDemo.vue)
-
-</DemoWrap>
+@[code html](./SyncRouterDemo.vue) </DemoWrap>

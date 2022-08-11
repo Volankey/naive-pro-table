@@ -57,3 +57,79 @@ test('change page = 2 then the pageSize = 20', async () => {
   expect(route.query['pageSize.pageSize']).equal('20')
   expect(route.query['page.page']).equal('1')
 })
+
+test('syncRoutePage name set to p', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...renderProps,
+    syncRoutePage: {
+      name: 'p'
+    }
+  })
+  await router.push('/')
+  await flushPromises()
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
+    pagination.vm?.['onUpdate:page'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query['p.page']).equal('2')
+  expect(result.page).toEqual(2)
+})
+
+test('syncRoutePage name set to false', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...renderProps,
+    syncRoutePage: false
+  })
+  await router.push('/')
+  await flushPromises()
+
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
+    pagination.vm?.['onUpdate:page'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query).toEqual({})
+  expect(result.page).toEqual(2)
+})
+
+test('syncRoutePage name set to s', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...renderProps,
+    syncRoutePageSize: {
+      name: 's'
+    }
+  })
+  await router.push('/')
+  await flushPromises()
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:pageSize'])) {
+    pagination.vm?.['onUpdate:pageSize'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query['s.pageSize']).equal('2')
+  expect(result.pageSize).toEqual(2)
+})
+
+test('syncRoutePageSize name set to false', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...renderProps,
+    syncRoutePageSize: false
+  })
+  await router.push('/')
+  await flushPromises()
+
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:pageSize'])) {
+    pagination.vm?.['onUpdate:pageSize'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query).toEqual({
+    'page.page': '1'
+  })
+  expect(result.pageSize).toEqual(2)
+})
