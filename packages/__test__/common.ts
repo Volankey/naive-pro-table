@@ -50,6 +50,22 @@ export const createCommonColsRef = () =>
           disabled: true
         }
       }
+    },
+    {
+      title: 'filter sex',
+      dataIndex: 'filterSex',
+      filter: true,
+      sorter: true,
+      valueEnum: {
+        all: { label: '全部1' },
+        man: {
+          label: '男1'
+        },
+        woman: {
+          label: '女1',
+          disabled: true
+        }
+      }
     }
   ])
 export type ColumnData = {

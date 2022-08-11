@@ -85,19 +85,36 @@ test('clear filter', async () => {
   const { wrapper, router, result } = await createFilterTest(renderProps)
   const filterIcon = wrapper.find('.n-data-table-filter')
   await filterIcon.trigger('click')
-
+  await flushPromises()
   const { cancelButton } = getCheckboxAndButton(wrapper)
-  cancelButton.trigger('click')
+  await cancelButton.trigger('click')
 
   // check 1.url 2.apiRequest
   await flushPromises()
   const route = router.currentRoute.value
-  expect(route.query).toEqual({ sex: undefined })
+  expect(route.query).toEqual({ 'page.page': '1' })
   expect(result.filter).toEqual({ sex: undefined })
 
   await filterIcon.trigger('click')
-  const { checkbox } = getCheckboxAndButton(wrapper)
-  expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(false)
-  expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(false)
+  await flushPromises()
+  const { checkbox: checkbox1 } = getCheckboxAndButton(wrapper)
+  expect(result.filter).toEqual({})
+  expect(checkbox1[0].find('.n-checkbox--checked').exists()).toBe(false)
+  expect(checkbox1[1].find('.n-checkbox--checked').exists()).toBe(false)
   expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(false)
+})
+
+test('test filter without syncRouteFilter', async () => {
+  const { wrapper, router, result } = await createFilterTest(renderProps)
+  const filterIcon = wrapper.findAll('.n-data-table-filter')[1]
+  await filterIcon.trigger('click')
+  await flushPromises()
+
+  const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
+  await checkbox[1].trigger('click')
+  await confirmButton.trigger('click')
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query['filterSex.filter']).toEqual(undefined)
+  expect(result.filter.filterSex).toEqual(['man'])
 })

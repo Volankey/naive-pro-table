@@ -1,20 +1,20 @@
 <DemoWrap>
   <template #header>
 
-### 过滤器
+### 同步路由
 
   </template>
   <template #tip>
 
-在配置列时设定`filter`以支持对列进行过滤。
-
   <n-alert title="注意" type="warning">
 
-在 Protable 中，若 `sync-route` 不为 `false` 时，可配置 `syncRouteFilter` 进行同步路由。 对于过滤项，可通过 `filterOptions` 或 `valueEnum` 来配置。若同时配置，`valueEnum` 的优先级高于`filterOptions`。
-
-当 `filter` 更新的时候，`page` 会被重置为 1 。
+注意 `Protable` 上 `sync-route` 此项设置优先级最高，若设置为 `false` 将关闭所有同步路由功能。
 
   </n-alert>
+
+若需要 `filter` 或者 `sorter` 同步路由，请配置 `syncRouteFilter` 或者 `syncRouteSorter` ，若不配置，默认**不同步**路由。
+
+若需要 `page` 或者 `pageSize` 同步路由，请配置 `syncRoutePage` 或者 `syncRoutePageSize`，若不配置，默认是**同步**路由的。
 
   </template>
   <template #demo>

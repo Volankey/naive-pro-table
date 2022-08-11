@@ -42,7 +42,7 @@ function getQuery(
           const routeKey = column.syncRouteSorter.name
           const k = _getQueryKey(routeKey, 'sort')
           delete routeQuery[k]
-          if (value !== false) {
+          if (value !== false && value !== undefined) {
             res[k] = value
           } else {
             res[k] = null
@@ -75,6 +75,9 @@ function getQuery(
   }
 
   function getPageQuery(pageNumber: number | undefined) {
+    if (syncRoutePage === false) {
+      return {}
+    }
     const k = _getQueryKey(syncRoutePage ? syncRoutePage.name : 'page', 'page')
     return {
       [k]: pageNumber || null
@@ -82,6 +85,9 @@ function getQuery(
   }
 
   function getPageSizeQuery(pageSize: number | undefined) {
+    if (syncRoutePageSize === false) {
+      return {}
+    }
     const k = _getQueryKey(
       syncRoutePageSize ? syncRoutePageSize.name : 'pageSize',
       'pageSize'

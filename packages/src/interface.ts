@@ -79,9 +79,13 @@ export interface ProTableIns {
   refresh: (opt?: { showLoading?: boolean }) => void
 }
 
-export type SyncRoutePage = SyncRouteNameRule
+export type SyncRoutePage =
+  | {
+      name: string
+    }
+  | false
 
-export type SyncRoutePageSize = SyncRouteNameRule
+export type SyncRoutePageSize = SyncRoutePage
 
 export * from './value-type-render/interface'
 
