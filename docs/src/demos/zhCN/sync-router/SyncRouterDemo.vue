@@ -2,8 +2,12 @@
   <ProTable
     :pagination="{
       defaultPageSize: 2,
-      defaultPage: 1
+      defaultPage: 1,
+      pageSizes: [2, 4],
+      showSizePicker: true
     }"
+    :sync-route-page="syncRoutePage"
+    :sync-route-page-size="false"
     ref="proTableRef"
     :columns="columns"
     :api-request="apiRequest"
@@ -24,8 +28,12 @@ type Column = {
   name: string
   gender: 'man' | 'woman' | 'none'
   address: string
+  age: number
 }
-
+// 自定义 page 同步路由参数名称
+const syncRoutePage = {
+  name: 'p'
+}
 const createSourceData = (
   params: unknown,
   sort: any,
@@ -44,27 +52,44 @@ const createSourceData = (
     {
       name: 'John Brown',
       gender: 'man',
-      address: 'New York No. 1 Lake Park'
+      address: 'New York No. 1 Lake Park',
+      age: 1
     },
     {
       name: 'Jim Green',
       gender: 'none',
-      address: 'London No. 1 Lake Park'
+      address: 'London No. 1 Lake Park',
+      age: 2
     },
     {
       name: 'Megumi Noda',
       gender: 'woman',
-      address: 'Paris No.7 Mozart'
+      address: 'Paris No.7 Mozart',
+      age: 3
     },
     {
       name: 'Shinichi Chiaki',
       gender: 'man',
-      address: 'Paris No.7 Mozart'
+      address: 'Paris No.7 Mozart',
+      age: 4
     },
     {
       name: 'Jolyne Cujoh',
       gender: 'woman',
-      address: 'New York No.1 Lake Park'
+      address: 'New York No.1 Lake Park',
+      age: 5
+    },
+    {
+      name: 'Jolyne Li',
+      gender: 'woman',
+      address: 'New York No.1 Lake Park',
+      age: 5
+    },
+    {
+      name: 'Volankey Cujoh',
+      gender: 'man',
+      address: 'Mars',
+      age: 18
     }
   ]
   let itemCount = data.length
@@ -92,13 +117,11 @@ const createSourceData = (
 const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name'
+    dataIndex: 'name'
   },
   {
     title: 'Gender',
     dataIndex: 'gender',
-    key: 'gender',
     filter: true,
     syncRouteFilter: {
       name: 'gender',
@@ -124,7 +147,6 @@ const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Address',
     dataIndex: 'address',
-    key: 'address',
     filter: true,
     sorter: true,
     syncRouteFilter: {
@@ -149,6 +171,33 @@ const columns = ref<ProColumn<Column>[]>([
       Paris: {
         label: 'Paris'
       }
+    }
+  },
+  {
+    title: 'Age(排序不同步路由)',
+    dataIndex: 'age',
+    sorter: true,
+    render(text) {
+      return text + '(不配置syncRouteSorter就不同步)'
+    }
+  },
+  {
+    title: 'Filter(排序不同步路由)',
+    filter: true,
+    dataIndex: 'filter',
+    valueEnum: {
+      'New York': {
+        label: 'New York'
+      },
+      London: {
+        label: 'London'
+      },
+      Paris: {
+        label: 'Paris'
+      }
+    },
+    render() {
+      return '不配置syncRouteFilter就不同步'
     }
   }
 ])

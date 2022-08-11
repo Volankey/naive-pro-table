@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm run build:dev",
     "prepublishOnly": "npm run build",
-    "build:dev": "vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve && vite build -w",
+    "build:dev": "vue-tsc --outDir dist/types --declaration --emitDeclarationOnly --jsx preserve  -w & vite build -w",
     "build": "rm -rf dist && vue-tsc --declaration --emitDeclarationOnly --jsx preserve && vite build",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",

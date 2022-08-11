@@ -1,7 +1,6 @@
 import { h } from 'vue'
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
 import { useMenus } from '../hooks/menus/use-menus'
-import Home from '../views/home/Home.vue'
 import { demoMenus } from './demo-menus'
 
 const router = createRouter({
@@ -9,22 +8,22 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      component: Home,
+      redirect: '/started',
       meta: {
-        useHeader: false
+        useSider: false
       }
     },
     {
       path: '/started',
       meta: {
-        useHeader: false
+        useSider: false
       },
       component: () => import('../started/zhCN/index.md')
     },
     {
       path: '/api',
       meta: {
-        useHeader: false
+        useSider: false
       },
       component: () => import('../api/zhCN/index.md')
     },

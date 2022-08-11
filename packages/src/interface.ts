@@ -29,6 +29,13 @@ export type RenderCell<T = any> = (
   actions: any
 ) => VNodeChild
 
+export type SyncRouteNameRule =
+  | {
+      name: string
+      rule?: Rule
+    }
+  | false
+
 export type ProTableBasicColumn<T = InternalRowData> = {
   key?: string
   title?: TableColumnTitle
@@ -37,14 +44,8 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
-  syncRouteSorter?: {
-    name: string
-    rule: Rule
-  }
-  syncRouteFilter?: {
-    name: string
-    rule: Rule
-  }
+  syncRouteSorter?: SyncRouteNameRule
+  syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType
   render?: RenderCell<T>
   filters?: boolean | Array<{ label: string; value: string | number }>
@@ -77,6 +78,14 @@ export type Mutable<T> = { -readonly [P in keyof T]: T[P] }
 export interface ProTableIns {
   refresh: (opt?: { showLoading?: boolean }) => void
 }
+
+export type SyncRoutePage =
+  | {
+      name: string
+    }
+  | false
+
+export type SyncRoutePageSize = SyncRoutePage
 
 export * from './value-type-render/interface'
 

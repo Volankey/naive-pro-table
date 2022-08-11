@@ -6,7 +6,13 @@ import type {
   DataTableColumns
 } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
-import type { ApiRequest, ProColumn, ProTableIns } from './interface'
+import type {
+  ApiRequest,
+  ProColumn,
+  ProTableIns,
+  SyncRoutePage,
+  SyncRoutePageSize
+} from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
 import { syncFromRouter, syncRouterQuery } from './router-sync'
@@ -24,12 +30,20 @@ const props = withDefaults(
     remote?: boolean
     queryPrefix?: string
     syncRoute?: boolean
+    syncRoutePage?: SyncRoutePage
+    syncRoutePageSize?: SyncRoutePageSize
     customParamsStore?: CustomParams
     dateFormatter?: DateFormatter
   }>(),
   {
     remote: true,
-    syncRoute: true
+    syncRoute: true,
+    syncRoutePage: () => ({
+      name: 'page'
+    }),
+    syncRoutePageSize: () => ({
+      name: 'pageSize'
+    })
   }
 )
 
@@ -46,6 +60,8 @@ const handleUpdateQuery = (query: QueryOptions<false>) => {
   handleSyncRouterQuery(
     query,
     syncRouteRuleColumnRef.value.columnKeyMapRules,
+    props.syncRoutePage,
+    props.syncRoutePageSize,
     props.customParamsStore?.customParamsValue.value,
     props.queryPrefix
   )
@@ -55,6 +71,8 @@ const paramsStoreRef = computed(
   () =>
     new TableParamsStore({
       syncRouteKeyMapColumnAndRule: syncRouteRuleColumnRef.value,
+      syncRoutePage: props.syncRoutePage,
+      syncRoutePageSize: props.syncRoutePageSize,
       customParams: props.customParamsStore,
       onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
     })
@@ -69,6 +87,8 @@ const handleCustomParamsUpdate = (
   handleSyncRouterQuery(
     paramsStoreRef.value.queryRef.value as any,
     syncRouteRuleColumnRef.value.columnKeyMapRules,
+    props.syncRoutePage,
+    props.syncRoutePageSize,
     customParams,
     props.queryPrefix
   )

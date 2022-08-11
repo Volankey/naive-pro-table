@@ -190,6 +190,7 @@ export const useTableRequest = (
         }
         return result
       }, {} as any)
+    paramsStore.updatePage(1)
   }
 
   const handlePageChange = (page: number) => {
@@ -226,7 +227,7 @@ export const getRouteRuleFilter = (
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column }
+      [name]: { rule: rule ?? {}, column }
     }
   }
   return {}
@@ -242,7 +243,7 @@ export const getRouteRuleSorter = (
       console.warn('pro/table:', `${name} has already existed.`)
     }
     return {
-      [name]: { rule, column }
+      [name]: { rule: rule || {}, column }
     }
   }
   return {}
@@ -262,9 +263,9 @@ export const getColumnsRouteRules = (columns: ProColumn<any>[]) => {
     } else {
       const filter = getRouteRuleFilter(column, {})
       const sorter = getRouteRuleSorter(column, {})
-
-      if (!columnKeyMapRules[column.key!]) {
-        columnKeyMapRules[column.key!] = {
+      const colKey = column.key || column.dataIndex
+      if (!columnKeyMapRules[colKey]) {
+        columnKeyMapRules[colKey] = {
           rules: {},
           column
         }
@@ -287,8 +288,7 @@ export const getColumnsRouteRules = (columns: ProColumn<any>[]) => {
           column
         }
       }
-      // TODO: 重复的 rule name
-      Object.assign(columnKeyMapRules[column.key!].rules, filter, sorter)
+      Object.assign(columnKeyMapRules[colKey].rules, filter, sorter)
     }
   }
 

@@ -1,3 +1,4 @@
+import { SyncRoutePage, SyncRoutePageSize } from './../interface'
 import { CustomParams } from './../hooks/use-params'
 import { PaginationProps } from 'naive-ui'
 import { ref, type Ref } from 'vue'
@@ -24,13 +25,18 @@ export class TableParamsStore {
   onUpdateQuery: (query: QueryOptions) => void
   paginationRef: Ref<PaginationProps> | undefined
   customParams: CustomParams | undefined
-
+  syncRoutePage: SyncRoutePage
+  syncRoutePageSize: SyncRoutePageSize
   constructor({
     syncRouteKeyMapColumnAndRule,
     customParams,
+    syncRoutePage,
+    syncRoutePageSize,
     onUpdateQuery
   }: {
     syncRouteKeyMapColumnAndRule: ReturnType<typeof getColumnsRouteRules>
+    syncRoutePage: SyncRoutePage
+    syncRoutePageSize: SyncRoutePageSize
     customParams?: CustomParams
     onUpdateQuery: (query: QueryOptions) => void
   }) {
@@ -40,6 +46,8 @@ export class TableParamsStore {
     this.syncRouteFilterKeyMapColumnAndRule =
       syncRouteKeyMapColumnAndRule.columnSyncRouteFilterKeyMapRules
     this.customParams = customParams
+    this.syncRoutePage = syncRoutePage
+    this.syncRoutePageSize = syncRoutePageSize
     this.onUpdateQuery = onUpdateQuery
   }
   _initSorter(routeKey: string, value: any) {
@@ -47,14 +55,14 @@ export class TableParamsStore {
       return
     }
     const { column } = this.syncRouteSorterKeyMapColumnAndRule[routeKey]
-    this._updateSorterValue(column.key!, value)
+    this._updateSorterValue(column.key || column.dataIndex, value)
   }
   _initFilter(routeKey: string, value: any) {
     if (!this.syncRouteFilterKeyMapColumnAndRule[routeKey]) {
       return
     }
     const { column } = this.syncRouteFilterKeyMapColumnAndRule[routeKey]
-    value && this._updateFilterValue(column.key!, value)
+    value && this._updateFilterValue(column.key || column.dataIndex, value)
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
@@ -93,8 +101,12 @@ export class TableParamsStore {
 
     const storeQuery = this.queryRef.value
 
-    const filterKey = column.key
-    if (column.syncRouteFilter?.rule.type === 'array') {
+    const filterKey = column.key || column.dataIndex
+    if (
+      column.syncRouteFilter &&
+      column.syncRouteFilter.rule &&
+      column.syncRouteFilter.rule.type === 'array'
+    ) {
       if (value === undefined || Array.isArray(value)) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -112,13 +124,13 @@ export class TableParamsStore {
     if (!storeQuery['filter']) {
       storeQuery['filter'] = {}
     }
-    Object.assign(storeQuery['filter'], { [filterKey!]: value })
+    Object.assign(storeQuery['filter'], { [filterKey]: value })
   }
   _updateSorterValue(columnKey: string, value: any) {
     const storeQuery = this.queryRef.value
     const columnAndRule = this.keyMapColumnAndRule[columnKey]
     const { column } = columnAndRule
-    const sorterKey = column.key
+    const sorterKey = column.key || column.dataIndex
     // validate sort order is ascend or descend
     const isValid = ['ascend', 'descend', false].includes(value)
     if (!isValid) {
@@ -130,7 +142,7 @@ export class TableParamsStore {
       storeQuery['sort'] = {}
     }
 
-    Object.assign(storeQuery['sort'], { [sorterKey!]: value })
+    Object.assign(storeQuery['sort'], { [sorterKey]: value })
     if (!isValid) {
       // clear invalid sort order
       this.handleQueryUpdate()

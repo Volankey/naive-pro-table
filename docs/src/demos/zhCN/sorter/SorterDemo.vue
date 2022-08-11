@@ -1,13 +1,5 @@
 <template>
-  <ProTable
-    :pagination="{
-      defaultPageSize: 2,
-      defaultPage: 1
-    }"
-    ref="proTableRef"
-    :columns="columns"
-    :api-request="apiRequest"
-  />
+  <ProTable ref="proTableRef" :columns="columns" :api-request="apiRequest" />
 </template>
 
 <script lang="ts" setup>
@@ -40,7 +32,7 @@ const createSourceData = (
     page,
     pageSize
   })
-  let data: Column[] = [
+  const data: Column[] = [
     {
       name: 'John Brown',
       gender: 'man',
@@ -67,24 +59,9 @@ const createSourceData = (
       address: 'New York No.1 Lake Park'
     }
   ]
-  let itemCount = data.length
-  data = data
-    .filter((item) => {
-      return filter
-        ? (filter.gender ? filter.gender.includes(item.gender) : true) &&
-            (filter.address
-              ? filter.address.some((addr: string) =>
-                  item.address.includes(addr)
-                )
-              : true)
-        : true
-    })
-    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize)
-
-  const hasFilter = filter?.gender || filter?.address
   return {
-    pageSize: 2,
-    itemCount: hasFilter ? data.length : itemCount,
+    pageSize: 15,
+    itemCount: 5,
     data
   }
 }
@@ -100,26 +77,13 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'gender',
     key: 'gender',
     filter: true,
-    syncRouteFilter: {
-      name: 'gender',
-      rule: {
-        type: 'array'
-      }
-    },
-    filterOptions: [
-      {
-        label: '男',
-        value: 'man'
-      },
-      {
-        label: '女',
-        value: 'woman'
-      },
-      {
-        label: '无',
-        value: 'none'
-      }
-    ]
+    sorter: true
+    // syncRouteSorter: {
+    //   name: 'gender',
+    //   rule: {
+    //     type: 'string'
+    //   }
+    // }
   },
   {
     title: 'Address',
@@ -127,27 +91,10 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'address',
     filter: true,
     sorter: true,
-    syncRouteFilter: {
-      name: 'addr',
-      rule: {
-        type: 'array'
-      }
-    },
     syncRouteSorter: {
       name: 'addr',
       rule: {
         type: 'string'
-      }
-    },
-    valueEnum: {
-      'New York': {
-        label: 'New York'
-      },
-      London: {
-        label: 'London'
-      },
-      Paris: {
-        label: 'Paris'
       }
     }
   }

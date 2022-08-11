@@ -27,6 +27,7 @@ declare module '@vue/runtime-core' {
     NAlert: typeof import('naive-ui')['NAlert']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
+    NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDivider: typeof import('naive-ui')['NDivider']
     NGrid: typeof import('naive-ui')['NGrid']
     NGridItem: typeof import('naive-ui')['NGridItem']
@@ -44,5 +45,9 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SiderMenus: typeof import('./components/SiderMenus.vue')['default']
+    'Sorter.demo': typeof import('./demos/zhCN/sorter/sorter.demo.md')['default']
+    SorterDemo: typeof import('./demos/zhCN/sorter/SorterDemo.vue')['default']
+    'SyncRouter.demo': typeof import('./demos/zhCN/sync-router/sync-router.demo.md')['default']
+    SyncRouterDemo: typeof import('./demos/zhCN/sync-router/SyncRouterDemo.vue')['default']
   }
 }
