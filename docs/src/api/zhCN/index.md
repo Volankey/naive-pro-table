@@ -6,3 +6,4 @@
 | --- | --- | --- | --- |
 | api-request | <n-a href="#ApiRequest">ApiRequest</n-a> | - - | 接口请求数据 |
 | columns | <n-a href="#ProColumn">ProColumn</n-a>[] | [] | 列配置 |
+| sync-route | `boolean` | `true` | 是否同步路由，此项设置优先级最高，默认开启 |

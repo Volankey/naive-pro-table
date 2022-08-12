@@ -40,6 +40,11 @@ export const demoMenus = [
     label: '同步路由'
   },
   {
+    key: 'no-sync-router',
+    path: '/example/no-sync-router',
+    label: '不同步路由'
+  },
+  {
     key: 'complex',
     path: '/example/complex',
     label: '复杂示例'
