@@ -57,14 +57,15 @@ watch(
 
 const handleSyncRouterQuery = syncRouterQuery()
 const handleUpdateQuery = (query: QueryOptions<false>) => {
-  handleSyncRouterQuery(
-    query,
-    syncRouteRuleColumnRef.value.columnKeyMapRules,
-    props.syncRoutePage,
-    props.syncRoutePageSize,
-    props.customParamsStore?.customParamsValue.value,
-    props.queryPrefix
-  )
+  if (props.syncRoute)
+    handleSyncRouterQuery(
+      query,
+      syncRouteRuleColumnRef.value.columnKeyMapRules,
+      props.syncRoutePage,
+      props.syncRoutePageSize,
+      props.customParamsStore?.customParamsValue.value,
+      props.queryPrefix
+    )
   handleFetchTableData()
 }
 const paramsStoreRef = computed(
@@ -74,7 +75,7 @@ const paramsStoreRef = computed(
       syncRoutePage: props.syncRoutePage,
       syncRoutePageSize: props.syncRoutePageSize,
       customParams: props.customParamsStore,
-      onUpdateQuery: props.syncRoute ? handleUpdateQuery : () => void 0
+      onUpdateQuery: handleUpdateQuery
     })
 )
 const handleCustomParamsUpdate = (
