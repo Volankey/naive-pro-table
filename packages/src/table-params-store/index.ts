@@ -115,6 +115,7 @@ export class TableParamsStore {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         column.filterOptionValues = [value]
+        value = [value]
       }
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
