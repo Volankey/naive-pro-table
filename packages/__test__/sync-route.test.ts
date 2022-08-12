@@ -21,7 +21,7 @@ const renderProps = {
 }
 const createPageTest = createTest
 
-test('syncRoutePageSize name set to false', async () => {
+test('syncRoute = false', async () => {
   const { wrapper, router, result } = await createPageTest({
     ...renderProps,
     syncRoutePageSize: false
