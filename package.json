@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "private":true,
+  "private": true,
   "directories": {
     "example": "example"
   },
@@ -46,7 +46,7 @@
     "dev:pkg": "pnpm run  -C packages dev",
     "build:pkg": "pnpm run -C packages build",
     "build:docs": "pnpm run -C docs build",
-    "dev:docs": "pnpm run -C docs docs:dev",
+    "dev:docs": "pnpm run -C docs dev",
     "prepare": "husky install",
     "lint": "pnpm run lint:code && pnpm run lint:type",
     "lint:type": "pnpm run typecheck:pkg",
