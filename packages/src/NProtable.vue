@@ -150,13 +150,15 @@ const handleFetchTableData = debounce(
     try {
       const resp = await props.apiRequest(...tableApiRequestArgsRef.value)
       tableDataRef.value = resp.data
-      if (resp.pageCount) {
+      if (resp.pageCount !== undefined) {
         pageCountRef.value = resp.pageCount
-      } else if (resp.itemCount) {
+      } else if (resp.itemCount !== undefined) {
         itemCountRef.value = resp.itemCount
+      } else {
+        throw new Error('pageCount or itemCount must be defined')
       }
     } catch (error) {
-      console.error(error)
+      console.error('[naive-ui-protable]: ', error)
     }
     loadingRef.value = false
   }
@@ -187,5 +189,9 @@ onMounted(() => {
     :onUpdateSorter="handleSortChange"
     :onUpdatePageSize="handlePageSizeChange"
     :onUpdatePage="handlePageChange"
-  />
+  >
+    <template #empty>
+      <slot name="empty"></slot>
+    </template>
+  </NDataTable>
 </template>
