@@ -191,7 +191,7 @@ onMounted(() => {
     :onUpdatePage="handlePageChange"
   >
     <template #empty>
-      <slot name="empty"></slot>
+      <slot name="empty" />
     </template>
   </NDataTable>
 </template>
