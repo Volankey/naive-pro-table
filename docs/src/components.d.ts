@@ -42,6 +42,7 @@ declare module '@vue/runtime-core' {
     'NoSyncRouter.demo': typeof import('./demos/zhCN/no-sync-router/no-sync-router.demo.md')['default']
     NOSyncRouterDemo: typeof import('./demos/zhCN/no-sync-router/NOSyncRouterDemo.vue')['default']
     NSpace: typeof import('naive-ui')['NSpace']
+    NText: typeof import('naive-ui')['NText']
     'Pagination.demo': typeof import('./demos/zhCN/pagination/pagination.demo.md')['default']
     PaginationDemo: typeof import('./demos/zhCN/pagination/PaginationDemo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
