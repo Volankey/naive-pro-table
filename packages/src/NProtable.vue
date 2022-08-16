@@ -5,7 +5,7 @@ import type {
   DataTableProps,
   DataTableColumns
 } from 'naive-ui'
-import { NDataTable } from 'naive-ui'
+import { NDataTable, NEmpty } from 'naive-ui'
 import type {
   ApiRequest,
   ProColumn,
@@ -191,7 +191,9 @@ onMounted(() => {
     :onUpdatePage="handlePageChange"
   >
     <template #empty>
-      <slot name="empty"></slot>
+      <slot name="empty">
+        <NEmpty />
+      </slot>
     </template>
   </NDataTable>
 </template>

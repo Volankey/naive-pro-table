@@ -42,15 +42,14 @@
   "scripts": {
     "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
     "typecheck:pkg": "pnpm run -C packages typecheck",
-    "dev:example": "pnpm run -C example dev",
     "dev:pkg": "pnpm run  -C packages dev",
     "build:pkg": "pnpm run -C packages build",
     "build:docs": "pnpm run -C docs build",
-    "dev:docs": "pnpm run -C docs dev",
+    "dev:docs": "pnpm run build:pkg && pnpm run -C docs dev",
     "prepare": "husky install",
     "lint": "pnpm run lint:code && pnpm run lint:type",
     "lint:type": "pnpm run typecheck:pkg",
-    "lint:code": "eslint \"{packages,example}/**/*.{ts,tsx,js,vue}\""
+    "lint:code": "eslint packages/**/*.{ts,tsx,js,vue}"
   },
   "repository": {
     "type": "git",
