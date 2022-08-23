@@ -1,7 +1,7 @@
 <template>
   <div>
     <n-h4>无数据隐藏分页器</n-h4>
-    <EmptyTable :pagination-no-data="false" />
+    <EmptyTable :paginate-no-data="false" />
   </div>
   <n-divider />
   <div>

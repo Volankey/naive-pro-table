@@ -4,7 +4,7 @@
     :sync-route="false"
     :columns="columns"
     :api-request="apiRequest"
-    :pagination-no-data="paginationNoData"
+    :paginate-no-data="paginateNoData"
   >
     <template #empty>
       <slot name="empty" />
@@ -23,10 +23,10 @@ import type {
 
 withDefaults(
   defineProps<{
-    paginationNoData?: boolean
+    paginateNoData?: boolean
   }>(),
   {
-    paginationNoData: true
+    paginateNoData: true
   }
 )
 
@@ -35,28 +35,6 @@ type Column = {
   name: string
   gender: 'man' | 'woman' | 'none'
   address: string
-}
-
-const createSourceData = (
-  params: unknown,
-  sort: any,
-  filter: any,
-  page: number,
-  pageSize: number
-): { pageSize: number; itemCount: number; data: Column[] } => {
-  console.log('fetch query: ', {
-    params,
-    sort,
-    filter,
-    page,
-    pageSize
-  })
-  const data: Column[] = []
-  return {
-    pageSize: 15,
-    itemCount: 0,
-    data
-  }
 }
 
 const columns = ref<ProColumn<Column>[]>([
@@ -68,62 +46,23 @@ const columns = ref<ProColumn<Column>[]>([
   {
     title: 'Gender',
     dataIndex: 'gender',
-    key: 'gender',
-    filter: true,
-    syncRouteFilter: {
-      name: 'gender',
-      rule: {
-        type: 'array'
-      }
-    },
-    filterOptions: [
-      {
-        label: '男',
-        value: 'man'
-      },
-      {
-        label: '女',
-        value: 'woman'
-      },
-      {
-        label: '无',
-        value: 'none'
-      }
-    ]
+    key: 'gender'
   },
   {
     title: 'Address',
     dataIndex: 'address',
-    key: 'address',
-    filter: true,
-    sorter: true,
-    syncRouteFilter: {
-      name: 'addr',
-      rule: {
-        type: 'array'
-      }
-    },
-    syncRouteSorter: {
-      name: 'addr',
-      rule: {
-        type: 'string'
-      }
-    },
-    valueEnum: {
-      newYork: {
-        label: 'New York'
-      },
-      london: {
-        label: 'London'
-      },
-      paris: {
-        label: 'Paris'
-      }
-    }
+    key: 'address'
   }
 ])
 
 const apiRequest: ApiRequest = (params, sort, filter, page, pageSize) => {
-  return Promise.resolve(createSourceData(params, sort, filter, page, pageSize))
+  console.log('fetch query: ', {
+    params,
+    sort,
+    filter,
+    page,
+    pageSize
+  })
+  return Promise.resolve({ data: [], pageSize: 15, itemCount: 0 })
 }
 </script>

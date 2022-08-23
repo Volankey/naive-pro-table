@@ -66,18 +66,16 @@ export class TableParamsStore {
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
-    paginationRef?: Ref<PaginationProps>
+    paginationRef: Ref<PaginationProps>
   ) {
     const params: any = this.customParams?.customParamsValue.value
 
-    if (paginationRef) {
-      this.paginationRef = paginationRef
-      if (paginationRef.value.defaultPage !== undefined) {
-        this._updatePageValue(paginationRef.value.defaultPage)
-      }
-      if (paginationRef.value.defaultPageSize !== undefined) {
-        this._updatePageSizeValue(paginationRef.value.defaultPageSize)
-      }
+    this.paginationRef = paginationRef
+    if (paginationRef.value.defaultPage !== undefined) {
+      this._updatePageValue(paginationRef.value.defaultPage)
+    }
+    if (paginationRef.value.defaultPageSize !== undefined) {
+      this._updatePageSizeValue(paginationRef.value.defaultPageSize)
     }
     Object.values(routeQueryParsed).forEach((queryItems) => {
       queryItems.forEach((queryItem) => {
