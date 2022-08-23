@@ -66,16 +66,18 @@ export class TableParamsStore {
   }
   initQuery(
     routeQueryParsed: RoueQueryParsed,
-    paginationRef: Ref<PaginationProps>
+    paginationRef?: Ref<PaginationProps>
   ) {
     const params: any = this.customParams?.customParamsValue.value
 
-    this.paginationRef = paginationRef
-    if (paginationRef.value.defaultPage !== undefined) {
-      this._updatePageValue(paginationRef.value.defaultPage)
-    }
-    if (paginationRef.value.defaultPageSize !== undefined) {
-      this._updatePageSizeValue(paginationRef.value.defaultPageSize)
+    if (paginationRef) {
+      this.paginationRef = paginationRef
+      if (paginationRef.value.defaultPage !== undefined) {
+        this._updatePageValue(paginationRef.value.defaultPage)
+      }
+      if (paginationRef.value.defaultPageSize !== undefined) {
+        this._updatePageSizeValue(paginationRef.value.defaultPageSize)
+      }
     }
     Object.values(routeQueryParsed).forEach((queryItems) => {
       queryItems.forEach((queryItem) => {
@@ -138,7 +140,6 @@ export class TableParamsStore {
       console.warn(`[naive-protable] invalid sort order: ${value}`)
       value = false
     }
-    column.sortOrder = value
     if (!storeQuery['sort']) {
       storeQuery['sort'] = {}
     }
@@ -156,8 +157,6 @@ export class TableParamsStore {
     const storeQuery = this.queryRef.value
     storeQuery['sort'] &&
       Object.keys(storeQuery['sort']).forEach((columnKey) => {
-        const { column } = this.keyMapColumnAndRule[columnKey]
-        column.sortOrder = undefined
         storeQuery['sort'][columnKey] = false
       })
 

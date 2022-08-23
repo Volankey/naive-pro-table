@@ -27,6 +27,7 @@ const props = withDefaults(
     apiRequest: ApiRequest
     columns: ProColumn<any>[]
     pagination?: Partial<PaginationProps>
+    paginationNoData?: boolean
     remote?: boolean
     queryPrefix?: string
     syncRoute?: boolean
@@ -38,6 +39,7 @@ const props = withDefaults(
   {
     remote: true,
     syncRoute: true,
+    paginationNoData: true,
     syncRoutePage: () => ({
       name: 'page'
     }),
@@ -103,20 +105,22 @@ const loadingRef = ref(false)
 const pageCountRef = ref(0)
 const itemCountRef = ref(0)
 
-const mergedPaginationRef = computed(() => {
-  const res = {
-    ...(props.pagination && typeof props.pagination === 'object'
-      ? props.pagination
-      : {}),
-    ...paginationRef.value
-  }
-  if (itemCountRef.value) {
-    res.itemCount = itemCountRef.value
-  } else {
-    res.pageCount = pageCountRef.value
-  }
-  return res
-})
+const mergedPaginationRef = props.paginationNoData
+  ? computed(() => {
+      const res = {
+        ...(props.pagination && typeof props.pagination === 'object'
+          ? props.pagination
+          : {}),
+        ...paginationRef.value
+      }
+      if (itemCountRef.value) {
+        res.itemCount = itemCountRef.value
+      } else {
+        res.pageCount = pageCountRef.value
+      }
+      return res
+    })
+  : undefined
 const tableDataRef = ref<any[]>([])
 function mergedHandleColumn(col: ProColumn<any>) {
   return handleColumn(col, {
