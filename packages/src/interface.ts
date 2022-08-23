@@ -48,9 +48,7 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType
   render?: RenderCell<T>
-  filters?: boolean | Array<{ label: string; value: string | number }>
   sorter?: DataTableBaseColumn<T>['sorter']
-  sortOrder?: boolean
   filter?: DataTableBaseColumn<T>['filter']
 }
 
