@@ -7,7 +7,7 @@ import type {
   QueryOptions,
   RoueQueryParsed
 } from './types'
-import type { SortState } from 'naive-ui/lib/data-table/src/interface'
+import type { DataTableSortState as SortState } from 'naive-ui'
 import { isFinite } from 'lodash-es'
 import { getColumnsRouteRules } from '../utils'
 
@@ -138,6 +138,7 @@ export class TableParamsStore {
       console.warn(`[naive-protable] invalid sort order: ${value}`)
       value = false
     }
+    column.sortOrder = value
     if (!storeQuery['sort']) {
       storeQuery['sort'] = {}
     }
@@ -155,6 +156,8 @@ export class TableParamsStore {
     const storeQuery = this.queryRef.value
     storeQuery['sort'] &&
       Object.keys(storeQuery['sort']).forEach((columnKey) => {
+        const { column } = this.keyMapColumnAndRule[columnKey]
+        column.sortOrder = undefined
         storeQuery['sort'][columnKey] = false
       })
 

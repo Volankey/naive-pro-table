@@ -96,6 +96,7 @@ type DateFormatter =
 | key | `string` | `undefined` | 当列的 key |
 | render | `RenderCell<T>` | `undefined` | 渲染函数，渲染列中每一行的单元格，参考[RenderCell](#RenderCell) |
 | sorter | `boolean \| function \| 'default'` | `undefined` | 该列是否允许排序，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 sorter |
+| sortOrder | `boolean \| 'ascend' \| 'descend'` | `undefined` | 列的默认排序 |
 | syncRouteFilter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可筛选列的路由同步规则 |
 | syncRouteSorter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可排序列的路由同步规则 |
 | title | `string \| (column: ProTableBasicColumn) => VNodeChild` | `undefined` | 列的标题信息，可为渲染函数 |
@@ -135,6 +136,8 @@ type ProTableBasicColumn<T = InternalRowData> = {
 </n-card>
 
 #### RenderCell
+
+> `RenderCell` 中的 `text` 根据数据列所配置的 `dataIndex` 由 `rowData` 中获得。
 
 <n-card>
 

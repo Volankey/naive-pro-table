@@ -44,6 +44,7 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
+  sortOrder?: 'ascend' | 'descend' | false
   syncRouteSorter?: SyncRouteNameRule
   syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType
