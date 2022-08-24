@@ -13,6 +13,9 @@ export default defineConfig({
     coverage: {
       reporter: ['text', 'html', 'lcov'],
       exclude: ['__test__']
+    },
+    deps: {
+      inline: ['date-fns']
     }
   }
 })
