@@ -7,6 +7,11 @@ import type {
 } from 'naive-ui'
 
 import type { Rule } from './table-params-store/types'
+import {
+  TableBaseColumn,
+  TableExpandColumn,
+  TableSelectionColumn
+} from 'naive-ui/es/data-table/src/interface'
 
 interface InternalRowData {
   [key: string]: unknown
@@ -53,11 +58,12 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   filter?: DataTableBaseColumn<T>['filter']
 }
 
-export type ProColumn<T = InternalRowData> = Omit<
-  Partial<DataTableColumn<T>>,
-  keyof ProTableBasicColumn
-> &
-  ProTableBasicColumn<T>
+export type ProColumn<T = InternalRowData> =
+  | (Omit<Partial<DataTableColumn<T>>, keyof ProTableBasicColumn> &
+      ProTableBasicColumn<T>)
+  | TableBaseColumn<T>
+  | TableSelectionColumn<T>
+  | TableExpandColumn<T>
 
 export type ApiRequestArgs = [
   params: any | null,

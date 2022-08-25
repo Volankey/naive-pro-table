@@ -105,7 +105,7 @@ const loadingRef = ref(false)
 const pageCountRef = ref(0)
 const itemCountRef = ref(0)
 
-const mergedPagination = computed(() => {
+const mergedPaginationWithPropsRef = computed(() => {
   const res = {
     ...(props.pagination && typeof props.pagination === 'object'
       ? props.pagination
@@ -120,7 +120,9 @@ const mergedPagination = computed(() => {
   return res
 })
 
-const mergedPaginationRef = props.paginateNoData ? mergedPagination : undefined
+const mergedPagination = computed(() => {
+  return props.paginateNoData ? mergedPaginationWithPropsRef.value : undefined
+})
 
 const tableDataRef = ref<any[]>([])
 function mergedHandleColumn(col: ProColumn<any>) {
@@ -174,7 +176,7 @@ defineExpose<ProTableIns>({
 })
 paramsStoreRef.value.initQuery(
   syncFromRouter(props.queryPrefix),
-  mergedPagination
+  mergedPaginationWithPropsRef
 )
 handleInitSortQuery(paramsStoreRef.value)
 
@@ -188,7 +190,7 @@ onMounted(() => {
     v-bind="dataTableProps"
     :remote="remote"
     class="n-data-protable"
-    :pagination="mergedPaginationRef"
+    :pagination="mergedPagination"
     :data="tableDataRef"
     :loading="loadingRef"
     :columns="mergedColumnsRef"
