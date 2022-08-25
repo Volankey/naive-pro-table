@@ -1,12 +1,12 @@
 <DemoWrap>
   <template #header>
 
-### 过滤器
+### 排序
 
   </template>
   <template #tip>
 
-在配置列时设定`filter`以支持对列进行过滤。
+在配置列时设定`sorter`以支持对列进行排序。可通过配置`sortOrder`为可排序的列设置默认排序状态。
 
   <n-alert title="注意" type="warning">
 

@@ -12,9 +12,9 @@ import type { ApiRequestArgs, ProColumn } from './interface'
 import type { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import type {
-  FilterState,
-  SortState
-} from 'naive-ui/lib/data-table/src/interface'
+  DataTableFilterState as FilterState,
+  DataTableSortState as SortState
+} from 'naive-ui'
 import CommonCopy from './components/CommonCopy'
 import type { Rule, Rules } from './table-params-store/types'
 import type { TableParamsStore } from './table-params-store/index'
@@ -203,8 +203,26 @@ export const useTableRequest = (
     paramsStore.updatePage(1)
   }
 
+  const handleInitSortQuery = (paramsStore: TableParamsStore) => {
+    const sorterKeyMapColumn = paramsStore.syncRouteSorterKeyMapColumnAndRule
+    Object.keys(sorterKeyMapColumn).forEach((item: string) => {
+      const column = sorterKeyMapColumn[item].column
+      const dataIndex = column.dataIndex
+      const sorter = column.sorter
+      const sortOrder = column.sortOrder
+      if (sortOrder) {
+        handleSortChange({
+          columnKey: dataIndex,
+          sorter,
+          order: sortOrder
+        } as SortState)
+      }
+    })
+  }
+
   return {
     tableApiRequestArgsRef,
+    handleInitSortQuery,
     handleSortChange,
     handleFilterChange,
     handlePageChange,

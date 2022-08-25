@@ -44,13 +44,12 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
+  sortOrder?: 'ascend' | 'descend' | false
   syncRouteSorter?: SyncRouteNameRule
   syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType
   render?: RenderCell<T>
-  filters?: boolean | Array<{ label: string; value: string | number }>
   sorter?: DataTableBaseColumn<T>['sorter']
-  sortOrder?: boolean
   filter?: DataTableBaseColumn<T>['filter']
 }
 

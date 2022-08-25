@@ -1,6 +1,9 @@
 import { expect, test, vi } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
+import { ref } from 'vue'
+import { ProColumn } from '../src'
+import { createTable } from './common'
 
 // use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
 vi.mock('lodash-es/debounce', () => ({
@@ -61,4 +64,48 @@ test('test sorter after fresh', async () => {
 
 test('change sorter to false', async () => {
   await sorterRouteAndRequestTest(false)
+})
+
+// test default sort order
+const createCommonColsRef = () =>
+  ref<ProColumn<{ name: string }>[]>([
+    {
+      title: 'score',
+      dataIndex: 'score',
+      sorter: true,
+      sortOrder: 'descend',
+      syncRouteSorter: {
+        name: 'score',
+        rule: {
+          type: 'string'
+        }
+      }
+    }
+  ])
+
+test('test default sort order', async () => {
+  const colsRef = createCommonColsRef()
+  const { wrapper, router, result } = await createTable(colsRef)
+  let route = router.currentRoute.value
+  // check icon
+  let sorterIcon = wrapper.find('.n-data-table-sorter--desc')
+  expect(sorterIcon.exists()).toBe(true)
+  // check apiRequest
+  expect(result.sort['score']).equal('descend')
+  // check url
+  expect(route.query['score.sort']).equal('descend')
+
+  const sorter = wrapper.find('.n-data-table-sorter')
+  console.log(sorter.html())
+  // sort trigger
+  await sorter.trigger('click')
+  await flushPromises()
+  route = router.currentRoute.value
+  // check icon
+  sorterIcon = wrapper.find('.n-data-table-sorter--asc')
+  expect(sorterIcon.exists()).toBe(true)
+  // check apiRequest
+  expect(result.sort['score']).equal('ascend')
+  // check url
+  expect(route.query['score.sort']).equal('ascend')
 })

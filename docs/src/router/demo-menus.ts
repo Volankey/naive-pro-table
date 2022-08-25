@@ -48,5 +48,10 @@ export const demoMenus = [
     key: 'complex',
     path: '/example/complex',
     label: '复杂示例'
+  },
+  {
+    key: 'empty-table',
+    path: '/example/empty-table',
+    label: '空表格'
   }
 ]

@@ -117,7 +117,6 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'age',
     key: 'age',
     sorter: true,
-    sortOrder: false,
     syncRouteSorter: {
       name: 'age',
       rule: {
@@ -131,7 +130,6 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'sex',
     filter: true,
     sorter: true,
-    sortOrder: false,
     syncRouteSorter: {
       name: 'sex',
       rule: {
