@@ -207,26 +207,33 @@ export const useTableRequest = (
     paramsStore.updatePage(1)
   }
 
-  const handleInitSortQuery = (paramsStore: TableParamsStore) => {
-    const sorterKeyMapColumn = paramsStore.syncRouteSorterKeyMapColumnAndRule
-    Object.keys(sorterKeyMapColumn).forEach((item: string) => {
-      const column = sorterKeyMapColumn[item].column
-      const dataIndex = column.dataIndex
+  const handleInitQuery = (paramsStore: TableParamsStore) => {
+    const keyMapColumn = paramsStore.keyMapColumnAndRule
+
+    Object.keys(keyMapColumn).forEach((columnKey: string) => {
+      const column = keyMapColumn[columnKey].column
       const sorter = column.sorter
       const sortOrder = column.sortOrder
-      if (sortOrder) {
+      const filter = column.filter
+      const filterItems = column.filterItems
+
+      if (sorter && sortOrder) {
         handleSortChange({
-          columnKey: dataIndex,
+          columnKey,
           sorter,
           order: sortOrder
         } as SortState)
+      }
+
+      if (filter && filterItems) {
+        handleFilterChange({ [columnKey]: filterItems } as FilterState)
       }
     })
   }
 
   return {
     tableApiRequestArgsRef,
-    handleInitSortQuery,
+    handleInitQuery,
     handleSortChange,
     handleFilterChange,
     handlePageChange,

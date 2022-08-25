@@ -87,20 +87,21 @@ type DateFormatter =
 ### ProColumn Properties
 
 | 名称 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | children | <n-a href='#ProTableBasicColumn'>ProTableBasicColumn</n-a>[] | `undefined` | 列中的子列 |
 | copyable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可复制，自定义渲染可参考[RenderCell](#RenderCell) |
 | dataIndex | `string` | - - | 列的数据索引，不可重复（必填） |
 | editable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可编辑，自定义渲染可参考[RenderCell](#RenderCell) |
-| filter | `boolean \| (optionValue: string \| number, rowData: object) => boolean \| 'default'` | `undefined` | 该列是否允许筛选，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 filter |
+| filter | `boolean \| (optionValue: string \| number, rowData: object) => boolean \| 'default'` | `undefined` | 该列是否允许过滤，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 filter |
+| filterItems | `Array<string | number>` | `undefined` | 列的默认过滤状态 |
 | key | `string` | `undefined` | 当列的 key |
 | render | `RenderCell<T>` | `undefined` | 渲染函数，渲染列中每一行的单元格，参考[RenderCell](#RenderCell) |
 | sorter | `boolean \| function \| 'default'` | `undefined` | 该列是否允许排序，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 sorter |
 | sortOrder | `boolean \| 'ascend' \| 'descend'` | `undefined` | 列的默认排序 |
-| syncRouteFilter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可筛选列的路由同步规则 |
+| syncRouteFilter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可过滤列的路由同步规则 |
 | syncRouteSorter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可排序列的路由同步规则 |
 | title | `string \| (column: ProTableBasicColumn) => VNodeChild` | `undefined` | 列的标题信息，可为渲染函数 |
-| valueEnum | <n-a href='#ValueEnum'>ValueEnum</n-a> | `undefined` | 筛选项的枚举值 |
+| valueEnum | <n-a href='#ValueEnum'>ValueEnum</n-a> | `undefined` | 过滤项的枚举值 |
 | valueType | `'date' \| 'datetime' \| 'fromNow' \| 'img'` | `undefined` | 列中的特殊数据类型 |
 
 #### ProTableBasicColumn

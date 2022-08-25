@@ -6,7 +6,7 @@
   </template>
   <template #tip>
 
-在配置列时设定`filter`以支持对列进行过滤。
+在配置列时设定`filter`以支持对列进行过滤。可通过配置`filterItems`为可过滤的列设置默认过滤状态。
 
   <n-alert title="注意" type="warning">
 
