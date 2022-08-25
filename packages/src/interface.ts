@@ -5,12 +5,11 @@ import type {
   DataTableBaseColumn,
   DataTableFilterState
 } from 'naive-ui'
-
 import type { Rule } from './table-params-store/types'
 import {
   TableExpandColumn,
   TableSelectionColumn
-} from 'naive-ui/lib/data-table/src/interface'
+} from 'node_modules/naive-ui/es/data-table/src/interface'
 
 interface InternalRowData {
   [key: string]: unknown
