@@ -209,6 +209,9 @@ export const useTableRequest = (
 
   const handleInitQuery = (paramsStore: TableParamsStore) => {
     const keyMapColumn = paramsStore.keyMapColumnAndRule
+    const sorts: SortState[] = []
+    // 是否为多列排序设置默认状态
+    let initMultipleSort = false
 
     Object.keys(keyMapColumn).forEach((columnKey: string) => {
       const column = keyMapColumn[columnKey].column
@@ -216,19 +219,33 @@ export const useTableRequest = (
       const sortOrder = column.sortOrder
       const filter = column.filter
       const filterItems = column.filterItems
-
       if (sorter && sortOrder) {
-        handleSortChange({
-          columnKey,
-          sorter,
-          order: sortOrder
-        } as SortState)
+        // 判断设置了默认值中的首列是否为多列排序中一列
+        if (!sorts.length) {
+          initMultipleSort = typeof sorter === 'object' && 'multiple' in sorter
+        }
+        // 以下两种情况为当前列设置默认排序状态
+        // 1. 设置了默认值的首列
+        // 2. 首列为多列排序中的一列的前提下，当前列也在多列排序中
+        if (
+          (initMultipleSort &&
+            typeof sorter === 'object' &&
+            'multiple' in sorter) ||
+          !sorts.length
+        ) {
+          sorts.push({
+            columnKey,
+            sorter,
+            order: sortOrder
+          } as SortState)
+        }
       }
 
       if (filter && filterItems) {
         handleFilterChange({ [columnKey]: filterItems } as FilterState)
       }
     })
+    handleSortChange(sorts)
   }
 
   return {

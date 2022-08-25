@@ -10,6 +10,7 @@
 | date-formatter | <n-a href="#DateFormatter">DateFormatter</n-a> | `undefined` | 日期格式化 |
 | data-table-props | `object` | `{}` | 属性参考 [NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props) |
 | pagination | `false \| object` | `undefined` | 属性参考 [NaiveUI Pagination props](https://www.naiveui.com/zh-CN/os-theme/components/pagination#Pagination-Props) |
+| paginate-no-data | `boolean` | `true` | 当数据表为空时，是否展示分页器 |
 | query-prefix | `string` | `undefined` | 同步路由时所携带的表格前缀 |
 | remote | `boolean` | `true` | 表格是否对数据进行自动分页，默认开启 |
 | sync-route | `boolean` | `true` | 是否同步路由，此项设置优先级最高，默认开启 |

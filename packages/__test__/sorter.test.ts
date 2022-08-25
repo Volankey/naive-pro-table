@@ -72,7 +72,9 @@ const createCommonColsRef = () =>
     {
       title: 'score',
       dataIndex: 'score',
-      sorter: true,
+      sorter: {
+        multiple: 2
+      },
       sortOrder: 'descend',
       syncRouteSorter: {
         name: 'score',
@@ -80,32 +82,29 @@ const createCommonColsRef = () =>
           type: 'string'
         }
       }
+    },
+    {
+      title: 'age',
+      dataIndex: 'age',
+      sorter: {
+        multiple: 1
+      },
+      sortOrder: 'ascend'
     }
   ])
 
 test('test default sort order', async () => {
   const colsRef = createCommonColsRef()
   const { wrapper, router, result } = await createTable(colsRef)
-  let route = router.currentRoute.value
+  const route = router.currentRoute.value
   // check icon
-  let sorterIcon = wrapper.find('.n-data-table-sorter--desc')
-  expect(sorterIcon.exists()).toBe(true)
+  const scoreSorter = wrapper.find('.n-data-table-sorter--desc')
+  const ageSorter = wrapper.find('.n-data-table-sorter--asc')
+  expect(scoreSorter.exists()).toBe(true)
+  expect(ageSorter.exists()).toBe(true)
   // check apiRequest
-  expect(result.sort['score']).equal('descend')
+  expect(result.sort).toEqual({ score: 'descend', age: 'ascend' })
   // check url
   expect(route.query['score.sort']).equal('descend')
-
-  const sorter = wrapper.find('.n-data-table-sorter')
-  console.log(sorter.html())
-  // sort trigger
-  await sorter.trigger('click')
-  await flushPromises()
-  route = router.currentRoute.value
-  // check icon
-  sorterIcon = wrapper.find('.n-data-table-sorter--asc')
-  expect(sorterIcon.exists()).toBe(true)
-  // check apiRequest
-  expect(result.sort['score']).equal('ascend')
-  // check url
-  expect(route.query['score.sort']).equal('ascend')
+  expect(route.query['age.sort']).equal(undefined)
 })
