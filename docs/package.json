@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,6 +24,6 @@
     "unplugin-vue-components": "^0.21.1",
     "vite": "^3.0.0",
     "vite-plugin-naive-ui-md": "0.1.1",
-    "vue-tsc": "^0.38.4"
+    "vue-tsc": "^0.40.1"
   }
 }
