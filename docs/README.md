@@ -13,6 +13,7 @@ pnpm add naive-ui-protable-alpha -D
 
 ## TODO
 
-- [ ] conifguable columns
-- [x] syncRoutePage & synceRoutePageSize
+- [ ] configuable columns doing...
+- [ ] default filter value doing...
 - [ ] syncRouteSorter & syncRouteFilter validator and transform
+- [x] syncRoutePage & synceRoutePageSize
