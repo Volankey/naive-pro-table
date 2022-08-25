@@ -8,7 +8,6 @@ import type {
 
 import type { Rule } from './table-params-store/types'
 import {
-  TableBaseColumn,
   TableExpandColumn,
   TableSelectionColumn
 } from 'naive-ui/es/data-table/src/interface'
@@ -57,11 +56,14 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   sorter?: DataTableBaseColumn<T>['sorter']
   filter?: DataTableBaseColumn<T>['filter']
 }
+export type ProColumnBaseColumn<T = InternalRowData> = Omit<
+  Partial<DataTableColumn<T>>,
+  keyof ProTableBasicColumn
+> &
+  ProTableBasicColumn<T>
 
 export type ProColumn<T = InternalRowData> =
-  | (Omit<Partial<DataTableColumn<T>>, keyof ProTableBasicColumn> &
-      ProTableBasicColumn<T>)
-  | TableBaseColumn<T>
+  | ProColumnBaseColumn<T>
   | TableSelectionColumn<T>
   | TableExpandColumn<T>
 

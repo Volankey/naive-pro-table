@@ -8,7 +8,11 @@ import {
   h,
   type Ref
 } from 'vue'
-import type { ApiRequestArgs, ProColumn } from './interface'
+import type {
+  ApiRequestArgs,
+  ProColumn,
+  ProColumnBaseColumn
+} from './interface'
 import type { DataTableColumn, PaginationProps } from 'naive-ui'
 import { get } from 'lodash-es'
 import type {
@@ -25,7 +29,7 @@ interface RenderOptions {
   text: string | number
   index: number
   rowData: any
-  column: ProColumn<any>
+  column: ProColumnBaseColumn<any>
 }
 
 export const RenderHelper = (context: { render: string | (() => VNode) }) => {
@@ -50,7 +54,7 @@ const columnRenderHandler = {
   }
 }
 const columnConfigHandlers = {
-  valueEnum(column: ProColumn<any>) {
+  valueEnum(column: ProColumnBaseColumn<any>) {
     if (column.valueEnum) {
       const valueEnum = column.valueEnum
       const filterOptions = Object.entries(valueEnum).map(([key, data]) => ({
@@ -68,7 +72,7 @@ const setColumnRenderConfig = (renderOptions: RenderOptions) => {
   })
 }
 
-const setColumnConfig = (column: ProColumn<any>) => {
+const setColumnConfig = (column: ProColumnBaseColumn<any>) => {
   Object.keys(columnConfigHandlers).forEach((key) => {
     if (column[key as keyof ProColumn<any>] !== undefined) {
       columnConfigHandlers[key as keyof typeof columnConfigHandlers](column)
@@ -77,7 +81,7 @@ const setColumnConfig = (column: ProColumn<any>) => {
 }
 
 const getMergedColumnRender = (
-  column: ProColumn<any>,
+  column: ProColumnBaseColumn<any>,
   handleColumnOps: HandleColumnOps
 ) => {
   return (rowData: unknown, rowIndex: any) => {
@@ -123,7 +127,7 @@ export type HandleColumnOps = {
 }
 
 export const handleColumn = (
-  column: ProColumn<any>,
+  column: ProColumnBaseColumn<any>,
   handleColumnOps: HandleColumnOps
 ): DataTableColumn<any> => {
   const tmpColumn = {
@@ -134,7 +138,7 @@ export const handleColumn = (
     key: column.key || column.dataIndex,
     ellipsis: column.ellipsis,
     render: getMergedColumnRender(column, handleColumnOps)
-  } as ProColumn<any>
+  } as ProColumnBaseColumn<any>
 
   setColumnConfig(tmpColumn)
 
@@ -232,11 +236,11 @@ export const useTableRequest = (
 }
 
 export type ColumnRule = {
-  [name: string]: { rule: Rule; column: ProColumn<any> }
+  [name: string]: { rule: Rule; column: ProColumnBaseColumn<any> }
 }
 
 export const getRouteRuleFilter = (
-  column: ProColumn<any>,
+  column: ProColumnBaseColumn<any>,
   rules: Rules
 ): ColumnRule => {
   if ('filter' in column && column.syncRouteFilter) {
@@ -252,7 +256,7 @@ export const getRouteRuleFilter = (
 }
 
 export const getRouteRuleSorter = (
-  column: ProColumn,
+  column: ProColumnBaseColumn,
   rules: Rules
 ): ColumnRule => {
   if ('sorter' in column && column.syncRouteSorter) {
@@ -268,14 +272,14 @@ export const getRouteRuleSorter = (
 }
 export type ColumnKeyMapColAndRules = Record<
   string,
-  { rules: ColumnRule; column: ProColumn<any> }
+  { rules: ColumnRule; column: ProColumnBaseColumn<any> }
 >
-export const getColumnsRouteRules = (columns: ProColumn<any>[]) => {
+export const getColumnsRouteRules = (columns: ProColumnBaseColumn<any>[]) => {
   const columnKeyMapRules: ColumnKeyMapColAndRules = {}
   const columnSyncRouteSorterKeyMapRules: ColumnKeyMapColAndRules = {}
   const columnSyncRouteFilterKeyMapRules: ColumnKeyMapColAndRules = {}
 
-  function _handleColumn(column: ProColumn<any>) {
+  function _handleColumn(column: ProColumnBaseColumn<any>) {
     if ('children' in column) {
       column.children?.forEach((item) => _handleColumn(item))
     } else {

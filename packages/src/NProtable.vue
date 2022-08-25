@@ -11,7 +11,9 @@ import type {
   ProColumn,
   ProTableIns,
   SyncRoutePage,
-  SyncRoutePageSize
+  SyncRoutePageSize,
+  ProTableBasicColumn,
+  ProColumnBaseColumn
 } from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
@@ -49,11 +51,15 @@ const props = withDefaults(
   }
 )
 
-const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
+const syncRouteRuleColumnRef = ref(
+  getColumnsRouteRules(props.columns as ProTableBasicColumn<any>[])
+)
 watch(
   () => props.columns,
   () => {
-    syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
+    syncRouteRuleColumnRef.value = getColumnsRouteRules(
+      props.columns as ProTableBasicColumn<any>[]
+    )
   }
 )
 
@@ -125,13 +131,13 @@ const mergedPagination = computed(() => {
 })
 
 const tableDataRef = ref<any[]>([])
-function mergedHandleColumn(col: ProColumn<any>) {
+function mergedHandleColumn(col: ProColumnBaseColumn<any>) {
   return handleColumn(col, {
     dateFormatter: props.dateFormatter
   })
 }
 const mergedColumnsRef = ref<DataTableColumns>(
-  props.columns.map(mergedHandleColumn)
+  (props.columns as ProColumnBaseColumn[]).map(mergedHandleColumn)
 )
 watch(props.columns, () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
