@@ -173,7 +173,7 @@ const columns = ref<ProColumn<Column>[]>([
     title: 'Age(排序不同步路由)',
     dataIndex: 'age',
     sorter: true,
-    render(text) {
+    render(text: any) {
       return text + '(不配置syncRouteSorter就不同步)'
     }
   },

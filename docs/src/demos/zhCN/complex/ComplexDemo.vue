@@ -167,7 +167,7 @@ const columns = ref<ProColumn<Column>[]>([
     title: 'favoraties',
     dataIndex: 'favorates',
     key: 'favorates',
-    render(favorates) {
+    render(favorates: any) {
       return favorates.map((favorate: string) =>
         h(NTag, { style: { marginRight: '10px' } }, { default: () => favorate })
       )
