@@ -34,7 +34,7 @@
     "vue": "3.2.37",
     "vue-router": "4.0.16",
     "vue-tsc": "^0.38.2",
-    "@vitest/coverage-istanbul": "^0.22.1"
+    "@vitest/coverage-c8": "^0.22.1"
   },
   "dependencies": {
     "@vicons/ionicons5": "^0.12.0",
