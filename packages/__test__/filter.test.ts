@@ -134,7 +134,7 @@ const createCommonColsRef = () =>
       title: 'gender',
       dataIndex: 'gender',
       filter: true,
-      filterItems: ['man'],
+      filterOptionValues: ['man'],
       syncRouteFilter: {
         name: 'gender',
         rule: {
@@ -154,7 +154,7 @@ const createCommonColsRef = () =>
       title: 'city',
       dataIndex: 'city',
       filter: true,
-      filterItems: ['London'],
+      filterOptionValues: ['London'],
       valueEnum: {
         London: {
           label: 'London'

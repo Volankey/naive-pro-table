@@ -48,7 +48,9 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   copyable?: boolean | RenderCell<T>
   dataIndex: string
   sortOrder?: 'ascend' | 'descend' | false
-  filterItems?: Array<string | number>
+  filterMultiple?: boolean
+  filterOptionValue?: string | number
+  filterOptionValues?: Array<string | number>
   syncRouteSorter?: SyncRouteNameRule
   syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType

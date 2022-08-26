@@ -88,13 +88,15 @@ type DateFormatter =
 ### ProColumn Properties
 
 | 名称 | 类型 | 默认值 | 说明 |
-| --- | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | children | <n-a href='#ProTableBasicColumn'>ProTableBasicColumn</n-a>[] | `undefined` | 列中的子列 |
 | copyable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可复制，自定义渲染可参考[RenderCell](#RenderCell) |
 | dataIndex | `string` | - - | 列的数据索引，不可重复（必填） |
 | editable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可编辑，自定义渲染可参考[RenderCell](#RenderCell) |
 | filter | `boolean \| (optionValue: string \| number, rowData: object) => boolean \| 'default'` | `undefined` | 该列是否允许过滤，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 filter |
-| filterItems | `Array<string | number>` | `undefined` | 列的默认过滤状态 |
+| filterMultiple | `boolean` | `true` | 过滤时是否可多选 |
+| filterOptionValue | `string \| number` | `undefined` | 列的默认过滤状态(过滤器单选时生效) |
+| filterOptionValues | `Array<string \| number>` | `undefined` | 列的默认过滤状态(过滤器多选时生效) |
 | key | `string` | `undefined` | 当列的 key |
 | render | `RenderCell<T>` | `undefined` | 渲染函数，渲染列中每一行的单元格，参考[RenderCell](#RenderCell) |
 | sorter | `boolean \| function \| 'default'` | `undefined` | 该列是否允许排序，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 sorter |

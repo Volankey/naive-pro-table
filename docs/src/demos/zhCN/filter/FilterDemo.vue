@@ -95,11 +95,12 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'gender',
     key: 'gender',
     filter: true,
-    filterItems: ['man', 'woman'],
+    filterMultiple: false,
+    filterOptionValue: 'man',
     syncRouteFilter: {
       name: 'gender',
       rule: {
-        type: 'array'
+        type: 'string'
       }
     },
     filterOptions: [
@@ -123,6 +124,7 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'address',
     filter: true,
     sorter: true,
+    filterOptionValues: ['London', 'New York'],
     syncRouteFilter: {
       name: 'addr',
       rule: {
