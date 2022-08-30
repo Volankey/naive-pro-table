@@ -93,10 +93,12 @@ const createCommonColsRef = () =>
     }
   ])
 
-test('test default sort order', async () => {
+const checkDefaultSorter = async (initUrl?: string) => {
   const colsRef = createCommonColsRef()
   const { wrapper, router, result } = await createTable(colsRef)
-  const route = router.currentRoute.value
+  if (initUrl) {
+    router.push(initUrl)
+  }
   // check icon
   const scoreSorter = wrapper.find('.n-data-table-sorter--desc')
   const ageSorter = wrapper.find('.n-data-table-sorter--asc')
@@ -105,6 +107,47 @@ test('test default sort order', async () => {
   // check apiRequest
   expect(result.sort).toEqual({ score: 'descend', age: 'ascend' })
   // check url
+  await flushPromises()
+  const route = router.currentRoute.value
   expect(route.query['score.sort']).equal('descend')
+  expect(route.query['age.sort']).equal(undefined)
+}
+
+test('test default sort order', async () => {
+  await checkDefaultSorter()
+
+  // test default sorter with empty initUrl
+  await checkDefaultSorter('')
+})
+
+test('initUrl with no-sync-route sorter', async () => {
+  const { wrapper, router, result } = await createSorterTest(
+    renderProps,
+    undefined,
+    '/?age.sort=ascend&filterSex.sort=descend'
+  )
+  await flushPromises()
+  const sorter = wrapper.findAllComponents('.n-data-table-sorter')
+  expect(sorter[0].html()).toContain('--asc')
+  expect(sorter[1].html()).not.toContain('--asc')
+  expect(sorter[1].html()).not.toContain('--desc')
+  const route = router.currentRoute.value
+  expect(result.sort).toEqual({ age: 'ascend' })
+  expect(route.query['age.sort']).equal('ascend')
+  expect(route.query['filterSex.sort']).equal('descend')
+})
+
+test('initUrl with invalid sort value', async () => {
+  const { wrapper, router, result } = await createSorterTest(
+    renderProps,
+    undefined,
+    '/?age.sort=error'
+  )
+  await flushPromises()
+  const sorter = wrapper.find('.n-data-table-sorter')
+  expect(sorter.html()).not.toContain('--asc')
+  expect(sorter.html()).not.toContain('--desc')
+  const route = router.currentRoute.value
+  expect(result.sort['age']).toEqual(false)
   expect(route.query['age.sort']).equal(undefined)
 })

@@ -1,7 +1,13 @@
 import { expect, test, vi } from 'vitest'
 import { flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createTest } from './utils'
-import { NCheckboxGroup, NCheckbox, NButton } from 'naive-ui'
+import {
+  NCheckboxGroup,
+  NCheckbox,
+  NButton,
+  NRadioGroup,
+  NRadio
+} from 'naive-ui'
 import { ref } from 'vue'
 import { ProColumn } from '../src'
 import { createTable } from './common'
@@ -20,12 +26,21 @@ function getCheckboxAndButton(wrapper: VueWrapper) {
   const checkboxGroup = wrapper.getComponent(NCheckboxGroup)
   const checkbox = checkboxGroup.findAllComponents(NCheckbox)
   const operateButton = wrapper.findAllComponents(NButton)
-  const cancelButton = operateButton[0]
-  const confirmButton = operateButton[1]
   return {
     checkbox,
-    cancelButton,
-    confirmButton
+    cancelButton: operateButton[0],
+    confirmButton: operateButton[1]
+  }
+}
+
+function getRadioAndButton(wrapper: VueWrapper) {
+  const radioGroup = wrapper.getComponent(NRadioGroup)
+  const radio = radioGroup.findAllComponents(NRadio)
+  const operateButton = wrapper.findAllComponents(NButton)
+  return {
+    radio,
+    cancelButton: operateButton[0],
+    confirmButton: operateButton[1]
   }
 }
 
@@ -166,9 +181,13 @@ const createCommonColsRef = () =>
     }
   ])
 
-test('test default filter', async () => {
+const checkDefaultFilter = async (initUrl?: string) => {
   const colsRef = createCommonColsRef()
   const { wrapper, router, result } = await createTable(colsRef)
+  if (initUrl) {
+    router.push(initUrl)
+  }
+  await flushPromises()
   const filterIcons = wrapper.findAllComponents('.n-data-table-filter')
   const genderFilter = filterIcons[0]
   const cityFilter = filterIcons[1]
@@ -190,4 +209,80 @@ test('test default filter', async () => {
   expect(route.query['gender.filter']).toEqual(['man'])
   expect(route.query['city.filter']).toEqual(undefined)
   expect(result.filter).toEqual({ gender: ['man'], city: ['London'] })
+}
+
+test('test default filter', async () => {
+  await checkDefaultFilter()
+
+  // test default filter with empty initUrl
+  await checkDefaultFilter('/')
 })
+
+test('initUrl with no-sync-route filter', async () => {
+  const { wrapper, router, result } = await createFilterTest(
+    renderProps,
+    undefined,
+    '/?sex.filter=man&filterSex.filter=man'
+  )
+  await flushPromises()
+  const filter = wrapper.findAllComponents('.n-data-table-filter')
+  expect(filter[0].html()).toContain('--active')
+  expect(filter[1].html()).not.toContain('--active')
+  const route = router.currentRoute.value
+  expect(result.filter).toEqual({ sex: ['man'] })
+  expect(route.query['sex.filter']).toEqual(['man'])
+  expect(route.query['filterSex.filter']).toEqual('man')
+})
+
+const createSingleChoiceFilterColsRef = () =>
+  ref<ProColumn<{ name: string }>[]>([
+    {
+      title: 'course',
+      dataIndex: 'course',
+      filter: true,
+      filterMultiple: false,
+      filterOptionValue: 'chinese',
+      syncRouteFilter: {
+        name: 'course',
+        rule: {
+          type: 'string'
+        }
+      },
+      valueEnum: {
+        chinese: {
+          label: 'Chinese'
+        },
+        english: {
+          label: 'English'
+        }
+      }
+    }
+  ])
+test('single choice filter', async () => {
+  const colsRef = createSingleChoiceFilterColsRef()
+  const { wrapper, router, result } = await createTable(colsRef)
+  const filterIcon = wrapper.find('.n-data-table-filter')
+  let route = router.currentRoute.value
+  expect(filterIcon.html()).toContain('n-data-table-filter--active')
+  expect(route.query['course.filter']).equal('chinese')
+  expect(result.filter).toEqual({ course: 'chinese' })
+
+  await filterIcon.trigger('click')
+  const { radio, confirmButton } = getRadioAndButton(wrapper)
+  expect(radio[0].html()).toContain('--checked')
+  expect(radio[1].html()).not.toContain('--checked')
+
+  await radio[1].trigger('click')
+  expect(radio[0].html()).not.toContain('--checked')
+  expect(radio[1].html()).toContain('--checked')
+
+  await confirmButton.trigger('click')
+  await flushPromises()
+  route = router.currentRoute.value
+  expect(filterIcon.html()).toContain('n-data-table-filter--active')
+  expect(route.query['course.filter']).equal('english')
+  expect(result.filter).toEqual({ course: 'english' })
+})
+
+// TODO: test error value in filter
+// TODO: test init url with multiple selection to single choice filter

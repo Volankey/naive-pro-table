@@ -37,7 +37,9 @@ test('test status in another table', async () => {
   const route = router.currentRoute.value
   expect(route.query).toEqual({
     'table.age.sort': 'ascend',
-    'tableCopy.age.sort': 'descend'
+    'tableCopy.age.sort': 'descend',
+    'table.page.page': '1',
+    'tableCopy.page.page': '1'
   })
   expect(sorter.html()).toContain('n-data-table-sorter--desc')
 })
@@ -55,7 +57,9 @@ test('test status after refresh', async () => {
   const route = router.currentRoute.value
   expect(route.query).toEqual({
     'table.age.sort': 'descend',
-    'tableCopy.age.sort': 'ascend'
+    'tableCopy.age.sort': 'ascend',
+    'table.page.page': '1',
+    'tableCopy.page.page': '1'
   })
   expect(sorter.html()).toContain('n-data-table-sorter--desc')
   expect(sorterCopy.html()).toContain('n-data-table-sorter--asc')
@@ -71,7 +75,8 @@ test('change one status to false', async () => {
 
   const route = router.currentRoute.value
   expect(route.query).toEqual({
-    'table.age.sort': 'descend'
+    'table.age.sort': 'descend',
+    'table.page.page': '1'
   })
   expect(sorter.html()).toContain('n-data-table-sorter--desc')
   // FIXME: test

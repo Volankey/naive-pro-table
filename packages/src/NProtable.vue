@@ -146,7 +146,7 @@ watch(props.columns, () => {
 })
 
 const {
-  handleInitQuery,
+  initDefaultSortAndFilterQuery,
   handleSortChange,
   handleFilterChange,
   handlePageChange,
@@ -180,11 +180,13 @@ const handleFetchTableData = debounce(
 defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
+
+initDefaultSortAndFilterQuery(paramsStoreRef.value)
+
 paramsStoreRef.value.initQuery(
   syncFromRouter(props.queryPrefix),
   mergedPaginationWithPropsRef
 )
-handleInitQuery(paramsStoreRef.value)
 
 onMounted(() => {
   handleFetchTableData()

@@ -177,23 +177,30 @@ export const useTableRequest = (
       paramsStore.clearQuery('sort')
     }
   }
-  const handleFilterChange = (filter: FilterState | null) => {
+  const handleFilterChange = (filter: FilterState | FilterState[] | null) => {
     const paramsStore = paramsStoreRef.value
 
-    // 处理 filterValues 无选项的时候返回 null
-    filter &&
-      Object.entries(filter).reduce((result, [key, filterValues]) => {
-        if (
-          (Array.isArray(filterValues) && filterValues?.length !== 0) ||
-          (!Array.isArray(filterValues) && filterValues)
-        ) {
-          result[key] = filterValues
-          paramsStore.updateFilter(key, filterValues)
-        } else {
-          paramsStore.updateFilter(key, undefined)
-        }
-        return result
-      }, {} as any)
+    function _handleFilterChange(curFilter: FilterState | null) {
+      // 处理 filterValues 无选项的时候返回 null
+      curFilter &&
+        Object.entries(curFilter).reduce((result, [key, filterValues]) => {
+          if (
+            (Array.isArray(filterValues) && filterValues?.length !== 0) ||
+            (!Array.isArray(filterValues) && filterValues)
+          ) {
+            result[key] = filterValues
+            paramsStore.updateFilter(key, filterValues)
+          } else {
+            paramsStore.updateFilter(key, undefined)
+          }
+          return result
+        }, {} as any)
+    }
+
+    Array.isArray(filter)
+      ? filter.forEach((cur) => _handleFilterChange(cur))
+      : _handleFilterChange(filter)
+
     paramsStore.updatePage(1)
   }
 
@@ -207,9 +214,10 @@ export const useTableRequest = (
     paramsStore.updatePage(1)
   }
 
-  const handleInitQuery = (paramsStore: TableParamsStore) => {
+  const initDefaultSortAndFilterQuery = (paramsStore: TableParamsStore) => {
     const keyMapColumn = paramsStore.keyMapColumnAndRule
     const sorts: SortState[] = []
+    const filters: FilterState[] = []
 
     Object.keys(keyMapColumn).forEach((columnKey: string) => {
       const column = keyMapColumn[columnKey].column
@@ -218,6 +226,7 @@ export const useTableRequest = (
       const filter = column.filter
       const filterOptionValue = column.filterOptionValue
       const filterOptionValues = column.filterOptionValues
+      // default sort
       if (sorter && sortOrder) {
         if (
           (typeof sorter === 'object' && 'multiple' in sorter) ||
@@ -230,21 +239,23 @@ export const useTableRequest = (
           } as SortState)
         }
       }
-
+      // default filter
       if (filter && (filterOptionValues || filterOptionValue)) {
         const defaultFilter =
           column.filterMultiple === false
             ? filterOptionValue
             : filterOptionValues
-        handleFilterChange({ [columnKey]: defaultFilter } as FilterState)
+        filters.push({ [columnKey]: defaultFilter } as FilterState)
       }
     })
+
     handleSortChange(sorts)
+    handleFilterChange(filters)
   }
 
   return {
     tableApiRequestArgsRef,
-    handleInitQuery,
+    initDefaultSortAndFilterQuery,
     handleSortChange,
     handleFilterChange,
     handlePageChange,
