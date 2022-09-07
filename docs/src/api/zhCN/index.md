@@ -10,6 +10,7 @@
 | date-formatter | <n-a href="#DateFormatter">DateFormatter</n-a> | `undefined` | 日期格式化 |
 | data-table-props | `object` | `{}` | 属性参考 [NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props) |
 | pagination | `false \| object` | `undefined` | 属性参考 [NaiveUI Pagination props](https://www.naiveui.com/zh-CN/os-theme/components/pagination#Pagination-Props) |
+| paginate-no-data | `boolean` | `true` | 当数据表为空时，是否展示分页器 |
 | query-prefix | `string` | `undefined` | 同步路由时所携带的表格前缀 |
 | remote | `boolean` | `true` | 表格是否对数据进行自动分页，默认开启 |
 | sync-route | `boolean` | `true` | 是否同步路由，此项设置优先级最高，默认开启 |
@@ -92,15 +93,18 @@ type DateFormatter =
 | copyable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可复制，自定义渲染可参考[RenderCell](#RenderCell) |
 | dataIndex | `string` | - - | 列的数据索引，不可重复（必填） |
 | editable | `boolean \| RenderCell<T>` | `undefined` | 该列中每行是否可编辑，自定义渲染可参考[RenderCell](#RenderCell) |
-| filter | `boolean \| (optionValue: string \| number, rowData: object) => boolean \| 'default'` | `undefined` | 该列是否允许筛选，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 filter |
+| filter | `boolean \| (optionValue: string \| number, rowData: object) => boolean \| 'default'` | `undefined` | 该列是否允许过滤，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 filter |
+| filterMultiple | `boolean` | `true` | 过滤时是否可多选 |
+| filterOptionValue | `string \| number` | `undefined` | 列的默认过滤状态(过滤器单选时生效) |
+| filterOptionValues | `Array<string \| number>` | `undefined` | 列的默认过滤状态(过滤器多选时生效) |
 | key | `string` | `undefined` | 当列的 key |
 | render | `RenderCell<T>` | `undefined` | 渲染函数，渲染列中每一行的单元格，参考[RenderCell](#RenderCell) |
 | sorter | `boolean \| function \| 'default'` | `undefined` | 该列是否允许排序，属性同[NaiveUI DataTable props](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)中 sorter |
 | sortOrder | `boolean \| 'ascend' \| 'descend'` | `undefined` | 列的默认排序 |
-| syncRouteFilter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可筛选列的路由同步规则 |
+| syncRouteFilter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可过滤列的路由同步规则 |
 | syncRouteSorter | <n-a href="#SyncRouteNameRule">SyncRouteNameRule</n-a> | `undefined` | 可排序列的路由同步规则 |
 | title | `string \| (column: ProTableBasicColumn) => VNodeChild` | `undefined` | 列的标题信息，可为渲染函数 |
-| valueEnum | <n-a href='#ValueEnum'>ValueEnum</n-a> | `undefined` | 筛选项的枚举值 |
+| valueEnum | <n-a href='#ValueEnum'>ValueEnum</n-a> | `undefined` | 过滤项的枚举值 |
 | valueType | `'date' \| 'datetime' \| 'fromNow' \| 'img'` | `undefined` | 列中的特殊数据类型 |
 
 #### ProTableBasicColumn
