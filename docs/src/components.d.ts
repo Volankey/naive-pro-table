@@ -23,6 +23,7 @@ declare module '@vue/runtime-core' {
     FilterDemo: typeof import('./demos/zhCN/filter/FilterDemo.vue')['default']
     'HeaderGroup.demo': typeof import('./demos/zhCN/header-group/header-group.demo.md')['default']
     HeaderGroupDemo: typeof import('./demos/zhCN/header-group/HeaderGroupDemo.vue')['default']
+    MultipleSorterDemo: typeof import('./demos/zhCN/sorter/MultipleSorterDemo.vue')['default']
     MultipleTable: typeof import('./demos/zhCN/multiple-table/MultipleTable.vue')['default']
     'MultipleTable.demo': typeof import('./demos/zhCN/multiple-table/multiple-table.demo.md')['default']
     MultipleTableDemo: typeof import('./demos/zhCN/multiple-table/MultipleTableDemo.vue')['default']
