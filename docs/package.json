@@ -10,20 +10,20 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "highlight.js": "^11.6.0",
-    "naive-ui": "^2.30.6",
-    "sass": "^1.54.0",
-    "vfonts": "^0.0.3",
-    "vue": "^3.2.37",
+    "highlight.js": "11.6.0",
+    "naive-ui": "2.30.6",
+    "sass": "1.54.0",
+    "vfonts": "0.0.3",
+    "vue": "3.2.37",
     "vue-router": "4.0.16"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue": "3.0.0",
     "naive-ui-protable-alpha": "workspace:*",
     "typescript": "4.7.4",
-    "unplugin-vue-components": "^0.21.1",
-    "vite": "^3.0.0",
+    "unplugin-vue-components": "0.21.1",
+    "vite": "3.0.0",
     "vite-plugin-naive-ui-md": "0.1.1",
-    "vue-tsc": "^0.40.1"
+    "vue-tsc": "0.40.1"
   }
 }
