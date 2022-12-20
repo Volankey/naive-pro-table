@@ -40,7 +40,7 @@
     ]
   },
   "scripts": {
-    "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
+    "format": "prettier --write **/src/**/*.{ts,md,vue}",
     "typecheck:pkg": "pnpm run -C packages typecheck",
     "dev:pkg": "pnpm run  -C packages dev",
     "build:pkg": "pnpm run -C packages build",

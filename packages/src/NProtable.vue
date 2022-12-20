@@ -127,7 +127,11 @@ const mergedPaginationWithPropsRef = computed(() => {
 })
 
 const mergedPagination = computed(() => {
-  return props.paginateNoData ? mergedPaginationWithPropsRef.value : undefined
+  return props.paginateNoData ||
+    mergedPaginationWithPropsRef.value.itemCount > 0 ||
+    mergedPaginationWithPropsRef.value.pageCount > 0
+    ? mergedPaginationWithPropsRef.value
+    : undefined
 })
 
 const tableDataRef = ref<any[]>([])
