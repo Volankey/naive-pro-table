@@ -127,9 +127,8 @@ const mergedPaginationWithPropsRef = computed(() => {
 })
 
 const mergedPagination = computed(() => {
-  return props.paginateNoData ||
-    mergedPaginationWithPropsRef.value.itemCount > 0 ||
-    mergedPaginationWithPropsRef.value.pageCount > 0
+  const { itemCount, pageCount } = mergedPaginationWithPropsRef.value
+  return props.paginateNoData || itemCount || pageCount
     ? mergedPaginationWithPropsRef.value
     : undefined
 })
