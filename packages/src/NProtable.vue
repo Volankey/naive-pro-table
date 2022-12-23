@@ -20,6 +20,7 @@ import type { QueryOptions } from './table-params-store/types'
 import debounce from 'lodash-es/debounce'
 import { CustomParams } from './hooks'
 import type { DateFormatter } from './value-type-render/interface'
+// import { useConfigurableColumns } from './hooks/use-configuareable-columns'
 
 const props = withDefaults(
   defineProps<{
@@ -34,6 +35,7 @@ const props = withDefaults(
     syncRoutePageSize?: SyncRoutePageSize
     customParamsStore?: CustomParams
     dateFormatter?: DateFormatter
+    configurable?: boolean
   }>(),
   {
     remote: true,
@@ -43,7 +45,8 @@ const props = withDefaults(
     }),
     syncRoutePageSize: () => ({
       name: 'pageSize'
-    })
+    }),
+    configurable: false
   }
 )
 
@@ -126,6 +129,7 @@ function mergedHandleColumn(col: ProColumn<any>) {
 const mergedColumnsRef = ref<DataTableColumns>(
   props.columns.map(mergedHandleColumn)
 )
+
 watch(props.columns, () => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

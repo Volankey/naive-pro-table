@@ -2,16 +2,15 @@ import { ProColumn } from './../../interface'
 
 export interface ConfigItemState {
   visible: boolean
+  locked: boolean
+  // draggable: boolean
 }
+
 export interface ConfigurableInitColumn extends ProColumn {
-  configurable: {
-    defaultState: Partial<ConfigItemState>
-  }
+  configurable: Partial<ConfigItemState>
 }
 export interface ConfigurableColumn extends ProColumn {
-  configurable: {
-    state: Partial<ConfigItemState>
-  }
+  configurable: Partial<ConfigItemState>
 }
 export interface Config {
   storage?: {
@@ -19,4 +18,11 @@ export interface Config {
     storageKey: string
     mode: 'sessionStorage' | 'localStorage'
   }
+}
+
+export interface SimpleColumn {
+  readonly key: string
+  readonly label: string
+  readonly locked: boolean
+  visible: boolean
 }

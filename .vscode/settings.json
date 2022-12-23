@@ -1,5 +1,5 @@
 {
-    "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
+    // "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true,
     "eslint.format.enable": true,
