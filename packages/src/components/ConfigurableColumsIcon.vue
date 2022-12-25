@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import Draggable from 'vuedraggable'
 import {
   computed,
@@ -246,4 +246,4 @@ const handleItemClk = (key: string) => {
     flex-grow: 1;
   }
 }
-</style>
+</style> -->

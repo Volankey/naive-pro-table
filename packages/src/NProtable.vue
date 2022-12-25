@@ -1,10 +1,6 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted, withDefaults } from 'vue'
-import type {
-  PaginationProps,
-  DataTableProps,
-  DataTableColumns
-} from 'naive-ui'
+import { computed, ref, watch, onMounted, withDefaults, Ref } from 'vue'
+import type { PaginationProps, DataTableProps, DataTableColumn } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
 import type {
   ApiRequest,
@@ -20,7 +16,6 @@ import type { QueryOptions } from './table-params-store/types'
 import debounce from 'lodash-es/debounce'
 import { CustomParams } from './hooks'
 import type { DateFormatter } from './value-type-render/interface'
-// import { useConfigurableColumns } from './hooks/use-configuareable-columns'
 
 const props = withDefaults(
   defineProps<{
@@ -126,15 +121,17 @@ function mergedHandleColumn(col: ProColumn<any>) {
     dateFormatter: props.dateFormatter
   })
 }
-const mergedColumnsRef = ref<DataTableColumns>(
-  props.columns.map(mergedHandleColumn)
-)
 
-watch(props.columns, () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
-})
+const mergedColumnsRef: Ref<DataTableColumn[]> = ref([])
+watch(
+  () => props.columns,
+  () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
+  },
+  { immediate: true, deep: true }
+)
 
 const {
   handleSortChange,
