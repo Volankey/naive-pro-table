@@ -1,201 +1,196 @@
-import { ProColumn } from '../../interface'
-import { ref, Ref, watch } from 'vue'
-import {
-  Config,
-  ConfigurableColumn,
-  ConfigurableInitColumn,
-  SimpleColumn
-} from './types'
+// import { ProColumn } from '../../interface'
+// import { computed, onMounted, ref, Ref, watch } from 'vue'
+// import { Config, ConfigurableInitColumn, ConfigurableColumn } from './types'
 
-function objectArrayToMap<T extends any[]>(
-  arr: T,
-  key: string,
-  targetKey: string
-) {
-  const map: Map<string | undefined, any> = new Map()
-  arr.forEach((item) => {
-    map.set(item[key], item[targetKey])
-  })
-  return map
-}
+// function deepClone(obj: any): any {
+//   if (typeof obj !== 'object' || obj === null || obj === undefined) {
+//     return obj
+//   }
+//   if (obj instanceof Array) {
+//     return obj.map((item: any) => deepClone(item))
+//   }
+//   if (obj instanceof Object) {
+//     const res: any = {}
+//     Object.entries(obj).forEach(([key, value]) => {
+//       res[key] = deepClone(value)
+//     })
+//     return res
+//   }
+// }
 
-function sortBySimpleCols<T extends ProColumn>(
-  sourceCols: T[],
-  simpleCols: SimpleColumn[]
-): T[] {
-  const set = new Set(simpleCols.map((col) => col.key).reverse())
-  const res = [...sourceCols]
-  set.forEach((colKey) => {
-    const findColIndex = res.findIndex((col) => col.key === colKey)
-    if (findColIndex !== -1) {
-      const findCol = res.splice(findColIndex, 1)
-      res.unshift(...findCol)
-    }
-  })
-  return res
-}
+// function objectArrayToMap<T extends any[]>(
+//   arr: T,
+//   key: string,
+//   targetKey: string
+// ) {
+//   const map: Map<string | undefined, any> = new Map()
+//   arr.forEach((item) => {
+//     map.set(item[key], item[targetKey])
+//   })
+//   return map
+// }
 
-function getFromStorage(key: string, mode: 'sessionStorage' | 'localStorage') {
-  try {
-    const data = window[mode].getItem(key)
-    return data ? JSON.parse(data) : undefined
-  } catch (error) {
-    return undefined
-  }
-}
+// function sortByConfigurableCols<T extends ProColumn>(
+//   sourceCols: T[],
+//   configurableCols: ConfigurableColumn[]
+// ): T[] {
+//   const set = new Set(configurableCols.map((col) => col.key).reverse())
+//   const res = [...sourceCols]
+//   set.forEach((colKey) => {
+//     const findColIndex = res.findIndex((col) => col.key === colKey)
+//     if (findColIndex !== -1) {
+//       const findCol = res.splice(findColIndex, 1)
+//       res.unshift(...findCol)
+//     }
+//   })
+//   return res
+// }
 
-function setToStorage(
-  key: string,
-  data: any,
-  mode: 'sessionStorage' | 'localStorage'
-) {
-  try {
-    window[mode].setItem(key, JSON.stringify(data))
-  } catch (error) {
-    // do nothing
-  }
-}
+// function getFromStorage(key: string, mode: 'sessionStorage' | 'localStorage') {
+//   try {
+//     const data = window[mode].getItem(key)
+//     return data ? JSON.parse(data) : undefined
+//   } catch (error) {
+//     return undefined
+//   }
+// }
 
-function initSimpleColsWithCache(
-  cols: ConfigurableInitColumn[],
-  cacheSimpleCols: SimpleColumn[]
-): SimpleColumn[] {
-  const cacheMap = objectArrayToMap(cacheSimpleCols, 'key', 'visible')
-  const sortCols = sortBySimpleCols(cols, cacheSimpleCols)
-  return sortCols.map((col) => {
-    const visible = cacheMap.has(col.key) ? cacheMap.get(col.key) : true
-    return {
-      key: col.key ?? '',
-      label: typeof col.title === 'string' ? col.title : '',
-      visible: visible
-    }
-  })
-}
+// function setToStorage(
+//   key: string,
+//   data: any,
+//   mode: 'sessionStorage' | 'localStorage'
+// ) {
+//   try {
+//     window[mode].setItem(key, JSON.stringify(data))
+//   } catch (error) {
+//     // do nothing
+//   }
+// }
 
-function updateBackupColsBySimpleCols(
-  simpleCols: SimpleColumn[],
-  backupCols: ConfigurableColumn[]
-): ConfigurableColumn[] {
-  const simpleMap = objectArrayToMap(simpleCols, 'key', 'visible')
-  const sortCols = sortBySimpleCols(backupCols, simpleCols)
-  return sortCols.map((col) => {
-    const visible = simpleMap.has(col.key) ? simpleMap.get(col.key) : true
-    return {
-      ...col,
-      configurable: {
-        visible: visible
-      }
-    }
-  })
-}
+// function initConfigurableColsWithCache(
+//   cols: ConfigurableInitColumn[],
+//   cacheCols: ConfigurableColumn[]
+// ): ConfigurableColumn[] {
+//   const cacheMap = objectArrayToMap(cacheCols, 'key', 'visible')
+//   const sortCols = sortByConfigurableCols(cols, cacheCols)
+//   return sortCols.map((col) => {
+//     const visible = cacheMap.has(col.key) ? cacheMap.get(col.key) : true
+//     return {
+//       key: col.key ?? '',
+//       label: typeof col.title === 'string' ? col.title : '',
+//       visible: visible
+//     }
+//   })
+// }
 
-function updateFinalColsByBackupCols(
-  backupCols: ConfigurableColumn[]
-): ProColumn[] {
-  const filterBackupCols = backupCols.filter((col) => {
-    return col.configurable.visible
-  })
-  return configurableColsToProTableCols(filterBackupCols)
-}
-function deepClone(obj: any): any {
-  if (typeof obj !== 'object' || obj === null || obj === undefined) {
-    return obj
-  }
-  if (obj instanceof Array) {
-    return obj.map((item: any) => deepClone(item))
-  }
-  if (obj instanceof Object) {
-    const res: any = {}
-    Object.entries(obj).forEach(([key, value]) => {
-      res[key] = deepClone(value)
-    })
-    return res
-  }
-}
-function configurableColsToProTableCols(
-  configurableCols: ConfigurableColumn[]
-): ProColumn[] {
-  const configurableColsTemp = deepClone(configurableCols)
-  return configurableColsTemp.map((col: any) => {
-    Reflect.deleteProperty(col, 'configurable')
-    return col
-  })
-}
+// function updateProTableColsByConfigurableMap(
+//   columnsMap: Map<string, ProColumn>,
+//   configurableColumnsMap: Map<string, ConfigurableColumn>
+// ): ProColumn[] {
+//   const res: ProColumn[] = []
+//   configurableColumnsMap.forEach((value, key) => {
+//     if (value.visible) {
+//       if (columnsMap.get(key) !== undefined) res.push(columnsMap.get(key))
+//     }
+//   })
+//   return res
+// }
 
-function removeStorageItem(config: Config): void {
-  window[config.storage.mode].removeItem(config.storage.storageKey)
-}
+// function configurableColsToProTableCols(
+//   configurableCols: ConfigurableInitColumn[]
+// ): ProColumn[] {
+//   const configurableColsTemp = deepClone(configurableCols)
+//   return configurableColsTemp.map((col: any) => {
+//     Reflect.deleteProperty(col, 'configurable')
+//     return col
+//   })
+// }
 
-export function useConfigurableColumns(
-  columnRef: Ref<ConfigurableInitColumn[]>,
-  config: Config
-): {
-  finalColumnsRef: Ref<ProColumn<any>[]>
-  simpleColumnsRef: Ref<SimpleColumn[]>
-  clearCache: () => void
-} {
-  const backupColumnsRef: Ref<ConfigurableColumn[]> = ref([]) //备份cols和simpleCols是一一对应的
-  const finalColumnsRef: Ref<ProColumn<any>[]> = ref([])
-  const simpleColumnsRef: Ref<SimpleColumn[]> = ref([])
+// function removeStorageItem(config: Config): void {
+//   window[config.storage.mode].removeItem(config.storage.storageKey)
+// }
 
-  watch(
-    simpleColumnsRef,
-    (simpleCols) => {
-      backupColumnsRef.value = updateBackupColsBySimpleCols(
-        simpleCols,
-        backupColumnsRef.value
-      )
-      //更新finalCol
-      finalColumnsRef.value = updateFinalColsByBackupCols(
-        backupColumnsRef.value
-      )
-    },
-    { deep: true, immediate: true }
-  )
+// export function useConfigurableColumns(
+//   columns: ConfigurableInitColumn[],
+//   config: Config
+// ): {
+//   proTableColumnsRef: Ref<ProColumn<any>[]>
+//   configurableColumnsRef: Ref<ConfigurableColumn[]>
+//   clearCache: () => void
+// } {
+//   const proTableColumnsRef: Ref<ProColumn<any>[]> = ref([])
+//   const configurableColumnsRef: Ref<ConfigurableColumn[]> = ref([])
+//   const columnsMap: Map<string, ProColumn> = new Map(
+//     columns.map((col) => {
+//       const colClone = deepClone(col)
+//       Reflect.deleteProperty(colClone, 'configurable')
+//       return [
+//         colClone.key,
+//         {
+//           ...colClone
+//         }
+//       ]
+//     })
+//   )
+//   const configurableColumnsMap = computed(() => {
+//     return new Map(
+//       configurableColumnsRef.value.map((col) => {
+//         return [
+//           col.key,
+//           {
+//             ...col
+//           }
+//         ]
+//       })
+//     )
+//   })
 
-  watch(
-    simpleColumnsRef,
-    (simpleCols) => {
-      // 更新Storage
-      setToStorage(config.storage.storageKey, simpleCols, config.storage.mode)
-    },
-    {
-      deep: true
-    }
-  )
-  //每次外部更新columnRef，备份一份cols，并且根据cache和备份生成finalCol，同时生成simpleCol
-  watch(
-    columnRef,
-    () => {
-      backupColumnsRef.value = columnRef.value
-      finalColumnsRef.value = configurableColsToProTableCols(columnRef.value)
-      const cacheSimpleCols =
-        getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
-      simpleColumnsRef.value = initSimpleColsWithCache(
-        columnRef.value,
-        cacheSimpleCols
-      )
-    },
-    {
-      immediate: true
-    }
-  )
+//   watch(
+//     configurableColumnsRef,
+//     (configurableColumns) => {
+//       proTableColumnsRef.value = updateProTableColsByConfigurableMap(
+//         backupColumnsRef.value
+//       )
+//     },
+//     { deep: true, immediate: true }
+//   )
 
-  function clearCache() {
-    removeStorageItem(config)
-    backupColumnsRef.value = columnRef.value
-    finalColumnsRef.value = configurableColsToProTableCols(columnRef.value)
-    const cacheSimpleCols =
-      getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
-    simpleColumnsRef.value = initSimpleColsWithCache(
-      columnRef.value,
-      cacheSimpleCols
-    )
-  }
+//   watch(
+//     configurableColumnsRef,
+//     (simpleCols) => {
+//       // 更新Storage
+//       setToStorage(config.storage.storageKey, simpleCols, config.storage.mode)
+//     },
+//     {
+//       deep: true
+//     }
+//   )
 
-  return {
-    finalColumnsRef,
-    simpleColumnsRef,
-    clearCache
-  }
-}
+//   onMounted(() => {
+//     proTableColumnsRef.value = configurableColsToProTableCols(columnRef.value)
+//     const cacheSimpleCols =
+//       getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
+//     configurableColumnsRef.value = initConfigurableColsWithCache(
+//       columnRef.value,
+//       cacheSimpleCols
+//     )
+//   })
+
+//   function clearCache() {
+//     removeStorageItem(config)
+//     backupColumnsRef.value = columnRef.value
+//     proTableColumnsRef.value = configurableColsToProTableCols(columnRef.value)
+//     const cacheSimpleCols =
+//       getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
+//     configurableColumnsRef.value = initConfigurableColsWithCache(
+//       columnRef.value,
+//       cacheSimpleCols
+//     )
+//   }
+
+//   return {
+//     proTableColumnsRef,
+//     configurableColumnsRef,
+//     clearCache
+//   }
+// }
