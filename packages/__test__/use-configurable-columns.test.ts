@@ -77,6 +77,5 @@ describe('test hook use-configurable-columns', () => {
     simpleColumnsRef.value.reverse()
     await nextTick()
     expect(finalColumnsRef.value).toStrictEqual([...ProTableColumns].reverse())
-    console.log(window.localStorage.getItem('testTable'))
   })
 })
