@@ -67,7 +67,6 @@ function initSimpleColsWithCache(
     return {
       key: col.key ?? '',
       label: typeof col.title === 'string' ? col.title : '',
-      locked: col.configurable.locked ?? false,
       visible: visible
     }
   })
@@ -84,7 +83,6 @@ function updateBackupColsBySimpleCols(
     return {
       ...col,
       configurable: {
-        locked: col.configurable.locked,
         visible: visible
       }
     }
@@ -94,9 +92,38 @@ function updateBackupColsBySimpleCols(
 function updateFinalColsByBackupCols(
   backupCols: ConfigurableColumn[]
 ): ProColumn[] {
-  return backupCols.filter((col) => {
+  const filterBackupCols = backupCols.filter((col) => {
     return col.configurable.visible
   })
+  return configurableColsToProTableCols(filterBackupCols)
+}
+function deepClone(obj: any): any {
+  if (typeof obj !== 'object' || obj === null || obj === undefined) {
+    return obj
+  }
+  if (obj instanceof Array) {
+    return obj.map((item: any) => deepClone(item))
+  }
+  if (obj instanceof Object) {
+    const res: any = {}
+    Object.entries(obj).forEach(([key, value]) => {
+      res[key] = deepClone(value)
+    })
+    return res
+  }
+}
+function configurableColsToProTableCols(
+  configurableCols: ConfigurableColumn[]
+): ProColumn[] {
+  const configurableColsTemp = deepClone(configurableCols)
+  return configurableColsTemp.map((col: any) => {
+    Reflect.deleteProperty(col, 'configurable')
+    return col
+  })
+}
+
+function removeStorageItem(config: Config): void {
+  window[config.storage.mode].removeItem(config.storage.storageKey)
 }
 
 export function useConfigurableColumns(
@@ -105,6 +132,7 @@ export function useConfigurableColumns(
 ): {
   finalColumnsRef: Ref<ProColumn<any>[]>
   simpleColumnsRef: Ref<SimpleColumn[]>
+  clearCache: () => void
 } {
   const backupColumnsRef: Ref<ConfigurableColumn[]> = ref([]) //备份cols和simpleCols是一一对应的
   const finalColumnsRef: Ref<ProColumn<any>[]> = ref([])
@@ -135,13 +163,12 @@ export function useConfigurableColumns(
       deep: true
     }
   )
-
   //每次外部更新columnRef，备份一份cols，并且根据cache和备份生成finalCol，同时生成simpleCol
   watch(
     columnRef,
     () => {
       backupColumnsRef.value = columnRef.value
-      finalColumnsRef.value = columnRef.value
+      finalColumnsRef.value = configurableColsToProTableCols(columnRef.value)
       const cacheSimpleCols =
         getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
       simpleColumnsRef.value = initSimpleColsWithCache(
@@ -153,8 +180,22 @@ export function useConfigurableColumns(
       immediate: true
     }
   )
+
+  function clearCache() {
+    removeStorageItem(config)
+    backupColumnsRef.value = columnRef.value
+    finalColumnsRef.value = configurableColsToProTableCols(columnRef.value)
+    const cacheSimpleCols =
+      getFromStorage(config.storage.storageKey, config.storage.mode) ?? []
+    simpleColumnsRef.value = initSimpleColsWithCache(
+      columnRef.value,
+      cacheSimpleCols
+    )
+  }
+
   return {
     finalColumnsRef,
-    simpleColumnsRef
+    simpleColumnsRef,
+    clearCache
   }
 }

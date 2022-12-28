@@ -2,7 +2,6 @@ import { ProColumn } from '../../interface'
 
 export interface ConfigItemState {
   visible: boolean
-  locked: boolean
 }
 
 export interface ConfigurableInitColumn extends ProColumn {
@@ -23,6 +22,6 @@ export interface Config {
 export interface SimpleColumn {
   readonly key: string
   readonly label: string
-  readonly locked: boolean
+  // readonly locked: boolean
   visible: boolean
 }
