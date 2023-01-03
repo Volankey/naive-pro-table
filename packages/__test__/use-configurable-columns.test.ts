@@ -1,6 +1,8 @@
+import { mount, flushPromises } from '@vue/test-utils'
 import { expect, vi, describe, it } from 'vitest'
-import { nextTick, ref } from 'vue'
+import { nextTick } from 'vue'
 import {
+  Config,
   ConfigurableInitColumn,
   ProColumn,
   useConfigurableColumns
@@ -10,9 +12,8 @@ vi.mock('lodash-es/debounce', () => ({
   default: vi.fn((fn) => fn),
   __esModule: true
 }))
-
-describe('test hook use-configurable-columns', () => {
-  const ProTableColumns: ProColumn[] = [
+describe('test hook use-configurable-columns', async () => {
+  const proTableColumns: ProColumn[] = [
     {
       key: 'name',
       title: 'name',
@@ -24,7 +25,7 @@ describe('test hook use-configurable-columns', () => {
       dataIndex: 'birthday'
     }
   ]
-  const columns: ConfigurableInitColumn[] = [
+  const configurableCols: ConfigurableInitColumn[] = [
     {
       key: 'name',
       title: 'name',
@@ -42,40 +43,69 @@ describe('test hook use-configurable-columns', () => {
       }
     }
   ]
-  const columnsRef = ref(columns)
-  const { finalColumnsRef, simpleColumnsRef, clearCache } =
-    useConfigurableColumns(columnsRef, {
-      storage: {
-        mode: 'localStorage',
-        storageKey: 'testTable'
-      }
-    })
+  const config: Config = {
+    storage: {
+      mode: 'localStorage',
+      storageKey: 'testTable'
+    }
+  }
+  let configurableColumnsRef, proTableColumnsRef, clearCache
 
-  it('test columnsRef', () => {
-    expect(columnsRef.value).toStrictEqual(columns)
+  mount({
+    setup() {
+      const hookReturn = useConfigurableColumns(configurableCols, config)
+      configurableColumnsRef = hookReturn.configurableColumnsRef
+      proTableColumnsRef = hookReturn.proTableColumnsRef
+      clearCache = hookReturn.clearCache
+      return { configurableColumnsRef, proTableColumnsRef, clearCache }
+    }
+  })
+  await flushPromises()
+  it('test init return', async () => {
+    expect(proTableColumnsRef.value).toStrictEqual(proTableColumns)
+    expect(configurableColumnsRef.value).toStrictEqual(
+      configurableCols.map((col) => {
+        return {
+          key: col.key,
+          label: col.title,
+          visible: col.configurable.visible
+        }
+      })
+    )
   })
 
-  it('test set SimpleCols birthday visible false', async () => {
-    simpleColumnsRef.value[1].visible = false
+  it('test set configurableCols first col visible false', async () => {
+    configurableColumnsRef.value[0].visible = false
     await nextTick()
-    expect(finalColumnsRef.value).toStrictEqual([ProTableColumns[0]])
+    expect(proTableColumnsRef.value).toStrictEqual(proTableColumns.slice(1))
   })
 
   it('test cache is available', async () => {
-    columnsRef.value[0].configurable.visible = false
+    configurableColumnsRef.value[0].visible = false
+    configurableColumnsRef.value[1].visible = false
     await nextTick()
-    expect(finalColumnsRef.value).toStrictEqual([ProTableColumns[0]])
+    let cache = window[config.storage.mode].getItem(config.storage.storageKey)
+    expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
+
+    configurableColumnsRef.value[0].visible = true
+    configurableColumnsRef.value[1].visible = false
+    await nextTick()
+    cache = window[config.storage.mode].getItem(config.storage.storageKey)
+    expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
   })
 
   it('test clear cache is available', async () => {
     clearCache()
     await nextTick()
-    expect(finalColumnsRef.value).toStrictEqual(ProTableColumns)
+    const cache = window[config.storage.mode].getItem(config.storage.storageKey)
+    expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
   })
 
-  it('test reverse simpleCols, finalCols reversed too', async () => {
-    simpleColumnsRef.value.reverse()
+  it('test reverse configurableCols, proTableCols reversed too', async () => {
+    configurableColumnsRef.value.reverse()
     await nextTick()
-    expect(finalColumnsRef.value).toStrictEqual([...ProTableColumns].reverse())
+    expect(proTableColumnsRef.value).toStrictEqual(
+      [...proTableColumns].reverse()
+    )
   })
 })
