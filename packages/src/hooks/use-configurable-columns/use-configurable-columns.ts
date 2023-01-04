@@ -1,9 +1,19 @@
 import { ProColumn } from '../../interface'
 import { computed, onMounted, ref, Ref, watch } from 'vue'
-import { Config, ConfigurableInitColumn, ConfigurableColumn } from './types'
+import {
+  Config,
+  ConfigurableInitColumn,
+  ConfigurableColumn,
+  ConfigurableHandledColumn
+} from './types'
 
 function deepClone(obj: any): any {
-  if (typeof obj !== 'object' || obj === null || obj === undefined) {
+  if (
+    typeof obj === 'function' ||
+    typeof obj !== 'object' ||
+    obj === null ||
+    obj === undefined
+  ) {
     return obj
   }
   if (obj instanceof Array) {
@@ -40,14 +50,18 @@ function setToStorage(
 }
 
 function initConfigurableColsWithCache(
-  sourceMap: Map<string, ConfigurableInitColumn>,
+  sourceMap: Map<string, ConfigurableHandledColumn>,
   columnsMap: Map<string, ProColumn>,
   cacheCols: ConfigurableColumn[]
 ): ConfigurableColumn[] {
   const res: ConfigurableColumn[] = []
   const cacheKeys = cacheCols.map((col) => col.key)
   cacheCols.forEach((col) => {
-    if (columnsMap.has(col.key)) res.push(col)
+    if (columnsMap.has(col.key))
+      res.push({
+        ...col,
+        label: sourceMap.get(col.key)?.title ?? ''
+      })
   })
   Array(...columnsMap.keys()).forEach((key) => {
     if (!cacheKeys.includes(key)) {
@@ -79,6 +93,20 @@ function removeStorageItem(config: Config): void {
   window[config.storage.mode].removeItem(config.storage.storageKey)
 }
 
+function handleInitConfigurableColumns(
+  columns: ConfigurableInitColumn[]
+): ConfigurableHandledColumn[] {
+  return columns.map((col) => {
+    return {
+      ...col,
+      key: col.key ?? col.dataIndex,
+      configurable: {
+        visible: col.configurable?.visible ?? true
+      }
+    }
+  })
+}
+
 export function useConfigurableColumns(
   columns: ConfigurableInitColumn[],
   config?: Config
@@ -87,20 +115,23 @@ export function useConfigurableColumns(
   configurableColumnsRef: Ref<ConfigurableColumn[]>
   clearCache: () => void
 } {
+  const handledColumns = handleInitConfigurableColumns(columns)
+  console.log(handledColumns, 'handledColumns')
+
   const proTableColumnsRef: Ref<ProColumn<any>[]> = ref([])
   const configurableColumnsRef: Ref<ConfigurableColumn[]> = ref([])
-  const sourceMap: Map<string, ConfigurableInitColumn> = new Map( //configurableInitCols key col映射
-    columns.map((col) => {
+  const sourceMap: Map<string, ConfigurableHandledColumn> = new Map( //初始化配置的columns key col映射
+    handledColumns.map((col) => {
       return [
-        col.key ?? '',
+        col.key,
         {
           ...col
         }
       ]
     })
   )
-  const columnsMap: Map<string, ProColumn> = new Map( //proTableCols key col映射
-    columns.map((col) => {
+  const columnsMap: Map<string, ProColumn> = new Map( //标准全量proTableColumns的 key col映射
+    handledColumns.map((col) => {
       const colClone = deepClone(col)
       Reflect.deleteProperty(colClone, 'configurable')
       return [
@@ -112,7 +143,7 @@ export function useConfigurableColumns(
     })
   )
   const configurableColumnsMap = computed(() => {
-    //configurableCols key col映射
+    //可配置ref key col映射
     return new Map(
       configurableColumnsRef.value.map((col) => {
         return [

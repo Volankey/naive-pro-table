@@ -5,8 +5,13 @@ export interface ConfigItemState {
 }
 
 export interface ConfigurableInitColumn extends ProColumn {
-  configurable: Partial<ConfigItemState>
+  configurable?: ConfigItemState
 }
+
+export type ConfigurableHandledColumn = {
+  key: string
+  configurable: ConfigItemState
+} & ProColumn
 
 export interface Config {
   storage: {
