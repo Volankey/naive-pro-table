@@ -108,4 +108,66 @@ describe('test hook use-configurable-columns', async () => {
       [...proTableColumns].reverse()
     )
   })
+
+  it('test new cols override cache cols', async () => {
+    clearCache()
+    await nextTick()
+    const cache = window[config.storage.mode].getItem(config.storage.storageKey)
+    expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
+    const newConfigurableCols: ConfigurableInitColumn[] = [
+      { dataIndex: 'age', title: 'age' },
+      ...configurableCols,
+      {
+        dataIndex: 'habit',
+        title: 'habit'
+      }
+    ]
+    mount({
+      setup() {
+        const hookReturn = useConfigurableColumns(newConfigurableCols, config)
+        configurableColumnsRef = hookReturn.configurableColumnsRef
+        proTableColumnsRef = hookReturn.proTableColumnsRef
+        clearCache = hookReturn.clearCache
+        return { configurableColumnsRef, proTableColumnsRef, clearCache }
+      }
+    })
+
+    await nextTick()
+    // 新增了2个col，老的col会根据cache进行排序和设置visible，新col会新增在后面
+    expect(proTableColumnsRef.value).toStrictEqual([
+      ...proTableColumns,
+      { dataIndex: 'age', title: 'age', key: 'age' },
+      {
+        dataIndex: 'habit',
+        title: 'habit',
+        key: 'habit'
+      }
+    ])
+
+    clearCache() // 此时会重置我们的cache为初始配置，顺序为age, name, birthday, habit,全显示
+    await nextTick()
+    mount({
+      setup() {
+        const hookReturn = useConfigurableColumns(
+          newConfigurableCols.slice(2), //新的配置只剩下了birthday, habit
+          config
+        )
+        configurableColumnsRef = hookReturn.configurableColumnsRef
+        proTableColumnsRef = hookReturn.proTableColumnsRef
+        clearCache = hookReturn.clearCache
+        return { configurableColumnsRef, proTableColumnsRef, clearCache }
+      }
+    })
+
+    await nextTick()
+    // 如果col相比于cache少了的话，此时我们的返回的可配置列会根据cache对现存的col进行排序和设置visible
+    expect(proTableColumnsRef.value).toStrictEqual([
+      { dataIndex: 'birthday', title: 'birthday', key: 'birthday' },
+      {
+        dataIndex: 'habit',
+        title: 'habit',
+        key: 'habit'
+      }
+    ])
+  })
 })
