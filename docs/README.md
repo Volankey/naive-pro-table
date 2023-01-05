@@ -1,4 +1,5 @@
-# NaiveUI Protable 
+# NaiveUI Protable
+
 <a href="https://codecov.io/gh/iamkun/dayjs"><img src="https://img.shields.io/codecov/c/github/Volankey/naive-pro-table/master.svg?style=flat-square" alt="Codecov"></a>
 
 Protable for NaiveUI, easy to use query route sync.
@@ -13,6 +14,7 @@ pnpm add naive-ui-protable-alpha -D
 
 ## TODO
 
-- [ ] conifguable columns
-- [x] syncRoutePage & synceRoutePageSize
+- [ ] configuable columns doing...
+- [ ] default filter value doing...
 - [ ] syncRouteSorter & syncRouteFilter validator and transform
+- [x] syncRoutePage & synceRoutePageSize

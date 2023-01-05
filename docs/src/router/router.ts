@@ -1,7 +1,9 @@
 import { h } from 'vue'
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
 import { useMenus } from '../hooks/menus/use-menus'
+import { useAnchors } from '../hooks/anchors/use-anchors'
 import { demoMenus } from './demo-menus'
+import { apiAnchors } from './api-anchor'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,20 +12,26 @@ const router = createRouter({
       path: '/',
       redirect: '/started',
       meta: {
-        useSider: false
+        useMenu: false,
+        useAnchor: false
       }
     },
     {
       path: '/started',
       meta: {
-        useSider: false
+        useMenu: false,
+        useAnchor: false
       },
       component: () => import('../started/zhCN/index.md')
     },
     {
       path: '/api',
       meta: {
-        useSider: false
+        useMenu: false
+      },
+      beforeEnter() {
+        const { setAnchorOptions } = useAnchors()
+        setAnchorOptions(apiAnchors)
       },
       component: () => import('../api/zhCN/index.md')
     },
@@ -31,6 +39,9 @@ const router = createRouter({
       path: '/example',
       component: h(RouterView),
       redirect: '/example/basic',
+      meta: {
+        useAnchor: false
+      },
       beforeEnter() {
         // ...
         const { setMenuOptions } = useMenus()

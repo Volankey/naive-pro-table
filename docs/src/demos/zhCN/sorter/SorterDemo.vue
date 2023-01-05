@@ -91,6 +91,7 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'address',
     filter: true,
     sorter: true,
+    sortOrder: 'ascend',
     syncRouteSorter: {
       name: 'addr',
       rule: {

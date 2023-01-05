@@ -117,7 +117,6 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'age',
     key: 'age',
     sorter: true,
-    sortOrder: false,
     syncRouteSorter: {
       name: 'age',
       rule: {
@@ -131,7 +130,6 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'sex',
     filter: true,
     sorter: true,
-    sortOrder: false,
     syncRouteSorter: {
       name: 'sex',
       rule: {
@@ -169,7 +167,7 @@ const columns = ref<ProColumn<Column>[]>([
     title: 'favoraties',
     dataIndex: 'favorates',
     key: 'favorates',
-    render(favorates) {
+    render(favorates: any) {
       return favorates.map((favorate: string) =>
         h(NTag, { style: { marginRight: '10px' } }, { default: () => favorate })
       )

@@ -1,27 +1,27 @@
 {
-    // "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true,
-    "eslint.format.enable": true,
-    "terminal.integrated.tabs.enabled": true,
-    "[typescript]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "explorer.confirmDelete": false,
-    "diffEditor.ignoreTrimWhitespace": true,
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "editor.inlineSuggest.enabled": true,
-    "leek-fund.flash-news": true,
-    "[typescriptreact]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-    "editor.tabSize": 2,
-    "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
-    "[vue]": {
-      "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[html]": {
-      "editor.defaultFormatter": "vscode.html-language-features"
-    },
-    "typescript.tsdk": "node_modules/typescript/lib",
-  }
+  "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace",
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.formatOnSave": true,
+  "eslint.format.enable": true,
+  "terminal.integrated.tabs.enabled": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "explorer.confirmDelete": false,
+  "diffEditor.ignoreTrimWhitespace": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "editor.inlineSuggest.enabled": true,
+  "leek-fund.flash-news": true,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "editor.tabSize": 2,
+  "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+}

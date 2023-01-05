@@ -40,7 +40,7 @@
     ]
   },
   "scripts": {
-    "format": "prettier --write **/src/**/*.{ts,js,md,vue} ",
+    "format": "prettier --write **/src/**/*.{ts,md,vue}",
     "typecheck:pkg": "pnpm run -C packages typecheck",
     "dev:pkg": "pnpm run  -C packages dev",
     "build:pkg": "pnpm run -C packages build",
@@ -49,7 +49,8 @@
     "prepare": "husky install",
     "lint": "pnpm run lint:code && pnpm run lint:type",
     "lint:type": "pnpm run typecheck:pkg",
-    "lint:code": "eslint packages/**/*.{ts,tsx,js,vue}"
+    "lint:code": "eslint packages/**/*.{ts,tsx,js,vue}",
+    "reinstall":"rm -rf node_modules && rm -rf pnpm-lock.yaml && rm -rf docs/node_modules && rm -rf packages/node_modules && pnpm install"
   },
   "repository": {
     "type": "git",

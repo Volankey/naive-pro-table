@@ -5,8 +5,11 @@ import type {
   DataTableBaseColumn,
   DataTableFilterState
 } from 'naive-ui'
-
 import type { Rule } from './table-params-store/types'
+import {
+  TableExpandColumn,
+  TableSelectionColumn
+} from 'node_modules/naive-ui/es/data-table/src/interface'
 
 interface InternalRowData {
   [key: string]: unknown
@@ -44,21 +47,27 @@ export type ProTableBasicColumn<T = InternalRowData> = {
   valueEnum?: ValueEnum
   copyable?: boolean | RenderCell<T>
   dataIndex: string
+  sortOrder?: 'ascend' | 'descend' | false
+  filterMultiple?: boolean
+  filterOptionValue?: string | number
+  filterOptionValues?: Array<string | number>
   syncRouteSorter?: SyncRouteNameRule
   syncRouteFilter?: SyncRouteNameRule
   valueType?: ValueType
   render?: RenderCell<T>
-  filters?: boolean | Array<{ label: string; value: string | number }>
   sorter?: DataTableBaseColumn<T>['sorter']
-  sortOrder?: boolean
   filter?: DataTableBaseColumn<T>['filter']
 }
-
-export type ProColumn<T = InternalRowData> = Omit<
+export type ProColumnBaseColumn<T = InternalRowData> = Omit<
   Partial<DataTableColumn<T>>,
   keyof ProTableBasicColumn
 > &
   ProTableBasicColumn<T>
+
+export type ProColumn<T = InternalRowData> =
+  | ProColumnBaseColumn<T>
+  | TableSelectionColumn<T>
+  | TableExpandColumn<T>
 
 export type ApiRequestArgs = [
   params: any | null,
