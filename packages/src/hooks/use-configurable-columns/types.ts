@@ -21,6 +21,6 @@ export interface Config {
 }
 export interface ConfigurableColumn {
   readonly key: string
-  readonly label: TableColumnTitle
+  readonly title: TableColumnTitle
   visible: boolean
 }

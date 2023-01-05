@@ -67,8 +67,8 @@ describe('test hook use-configurable-columns', async () => {
       configurableCols.map((col) => {
         return {
           key: col.key,
-          label: col.title,
-          visible: col.configurable.visible
+          title: col.title,
+          visible: col.configurable?.visible ?? false
         }
       })
     )

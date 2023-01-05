@@ -60,7 +60,7 @@ function initConfigurableColsWithCache(
     if (columnsMap.has(col.key))
       res.push({
         ...col,
-        label: sourceMap.get(col.key)?.title ?? ''
+        title: sourceMap.get(col.key)?.title ?? ''
       })
   })
   Array(...columnsMap.keys()).forEach((key) => {
@@ -68,7 +68,7 @@ function initConfigurableColsWithCache(
       if (columnsMap.has(key))
         res.push({
           key: key,
-          label: sourceMap.get(key)?.title ?? '',
+          title: sourceMap.get(key)?.title ?? '',
           visible: sourceMap.get(key)?.configurable.visible ?? true
         })
     }
@@ -116,8 +116,6 @@ export function useConfigurableColumns(
   clearCache: () => void
 } {
   const handledColumns = handleInitConfigurableColumns(columns)
-  console.log(handledColumns, 'handledColumns')
-
   const proTableColumnsRef: Ref<ProColumn<any>[]> = ref([])
   const configurableColumnsRef: Ref<ConfigurableColumn[]> = ref([])
   const sourceMap: Map<string, ConfigurableHandledColumn> = new Map( //初始化配置的columns key col映射
