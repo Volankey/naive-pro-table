@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
     BasicDemo: typeof import('./demos/zhCN/basic/BasicDemo.vue')['default']
     'Complex.demo': typeof import('./demos/zhCN/complex/complex.demo.md')['default']
     ComplexDemo: typeof import('./demos/zhCN/complex/ComplexDemo.vue')['default']
+    ConfigurableTableDemo: typeof import('./demos/zhCN/use-configurable-columns/ConfigurableTableDemo.vue')['default']
     'CustomParams.demo': typeof import('./demos/zhCN/custom-params/custom-params.demo.md')['default']
     CustomParamsDemo: typeof import('./demos/zhCN/custom-params/CustomParamsDemo.vue')['default']
     DemoWrap: typeof import('./components/DemoWrap.vue')['default']
@@ -59,5 +60,8 @@ declare module '@vue/runtime-core' {
     SorterDemo: typeof import('./demos/zhCN/sorter/SorterDemo.vue')['default']
     'SyncRouter.demo': typeof import('./demos/zhCN/sync-router/sync-router.demo.md')['default']
     SyncRouterDemo: typeof import('./demos/zhCN/sync-router/SyncRouterDemo.vue')['default']
+    UseConfigurableColumns: typeof import('./demos/zhCN/use-configurable-columns/UseConfigurableColumns.vue')['default']
+    'UseConfigurableColumns.demo': typeof import('./demos/zhCN/use-configurable-columns/use-configurable-columns.demo.md')['default']
+    UseConfigurableColumnsDemo: typeof import('./demos/zhCN/use-configurable-columns/UseConfigurableColumnsDemo.vue')['default']
   }
 }

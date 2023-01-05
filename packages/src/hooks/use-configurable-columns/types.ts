@@ -1,17 +1,17 @@
-import { ProColumn, TableColumnTitle } from '../../interface'
+import { ProColumnBaseColumn, TableColumnTitle } from '../../interface'
 
 export interface ConfigItemState {
   visible: boolean
 }
 
-export interface ConfigurableInitColumn extends ProColumn {
+export interface ConfigurableInitColumn extends ProColumnBaseColumn {
   configurable?: ConfigItemState
 }
 
 export type ConfigurableHandledColumn = {
   key: string
   configurable: ConfigItemState
-} & ProColumn
+} & ProColumnBaseColumn
 
 export interface Config {
   storage: {

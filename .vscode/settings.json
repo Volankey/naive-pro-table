@@ -18,7 +18,7 @@
   "editor.tabSize": 2,
   "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
   "[vue]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "Vue.volar"
   },
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"

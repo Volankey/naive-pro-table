@@ -45,6 +45,11 @@ export const demoMenus = [
     label: '不同步路由'
   },
   {
+    key: 'use-configurable-columns',
+    path: '/example/use-configurable-columns',
+    label: '可配置列'
+  },
+  {
     key: 'complex',
     path: '/example/complex',
     label: '复杂示例'

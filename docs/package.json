@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "highlight.js": "11.6.0",
-    "naive-ui": "2.30.6",
-    "sass": "1.54.0",
-    "vfonts": "0.0.3",
-    "vue": "3.2.37",
-    "vue-router": "4.0.16"
+    "highlight.js": "^11.6.0",
+    "naive-ui": "^2.30.6",
+    "sass": "^1.54.0",
+    "vfonts": "^0.0.3",
+    "vue": "^3.2.37",
+    "vue-router": "4.0.16",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "3.0.0",
