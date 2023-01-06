@@ -1,5 +1,5 @@
 import { ProColumn } from '../../interface'
-import { computed, onMounted, ref, Ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, Ref, watch } from 'vue'
 import {
   Config,
   ConfigurableInitColumn,
@@ -169,7 +169,7 @@ export function useConfigurableColumns(
     }
   )
 
-  onMounted(() => {
+  onBeforeMount(() => {
     const cacheCols =
       (config?.storage &&
         getFromStorage(config.storage.storageKey, config.storage.mode)) ??
