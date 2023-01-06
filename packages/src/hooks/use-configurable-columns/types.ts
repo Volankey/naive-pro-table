@@ -14,7 +14,7 @@ export type ConfigurableHandledColumn = {
 } & ProColumnBaseColumn
 
 export interface Config {
-  storage: {
+  storage?: {
     storageKey: string
     mode: 'sessionStorage' | 'localStorage'
   }

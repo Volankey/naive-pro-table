@@ -206,13 +206,13 @@ interface ValueEnum {
 
 #### useConfigurableColumns
 
-> 该 hook 返回的 `proTableColumnsRef` ， `configurableColumnsRef` ， `clearCache`
+> 该 hook 返回的 `proTableColumnsRef` ， `configurableColumnsRef` ， `reset`
 
 `proTableColumnsRef` 作为 Protable 的 props columns 的值
 
-`configurableColumnsRef` 是我们可以配置表格列的响应式数据，例如 `configurableColumnsRef.value[0].visible=false` 表示隐藏第一列表格
+`configurableColumnsRef` 是我们可以配置表格列的响应式数据，例如 `configurableColumnsRef.value[0].visible=false` 表示隐藏表格的第一列
 
-`clearCache` 当我们修改多次 `configurableColumnsRef` 后，可以通过该函数重置我们的可配置列配置
+`reset` 当我们修改多次 `configurableColumnsRef` 后，该函数可清除 localStorage/sessionStorage 中的缓存，并重置我们的可配置列配置,具体需要参考 storage 属性配置的缓存 mode
 
 ##### Usage
 
@@ -235,7 +235,7 @@ const columns: ConfigurableInitColumn[] = xxx
 // 按照类型补充
 const config: Config = xxx
 
-const { clearCache, configurableColumnsRef, proTableColumnsRef } = useConfigurableColumns(columns, config)
+const { reset, configurableColumnsRef, proTableColumnsRef } = useConfigurableColumns(columns, config)
 
 // 隐藏表格的第一列
 configurableColumnsRef.value[0].visible=false
@@ -244,7 +244,7 @@ configurableColumnsRef.value[0].visible=false
 configurableColumnsRef.value.reverse()
 
 // 重置表格的列配置
-clearCache()
+reset()
 
 </script>
 
@@ -257,6 +257,12 @@ clearCache()
 <n-card>
 
 ```typescript
+interface ConfigurableColumn {
+  readonly key: string
+  readonly title: TableColumnTitle
+  visible: boolean
+}
+
 interface ConfigurableInitColumn extends ProColumnBaseColumn {
   configurable?: ConfigItemState
 }
@@ -274,7 +280,7 @@ function useConfigurableColumns(
 ): {
   proTableColumnsRef: Ref<ProColumn<any>[]>
   configurableColumnsRef: Ref<ConfigurableColumn[]>
-  clearCache: () => void
+  reset: () => void
 }
 ```
 

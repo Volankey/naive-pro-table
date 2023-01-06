@@ -33,6 +33,7 @@ function getFromStorage(key: string, mode: 'sessionStorage' | 'localStorage') {
     const data = window[mode].getItem(key)
     return data ? JSON.parse(data) : undefined
   } catch (error) {
+    console.warn(`获取 ${key} 缓存失败`)
     return undefined
   }
 }
@@ -45,6 +46,7 @@ function setToStorage(
   try {
     window[mode].setItem(key, JSON.stringify(data))
   } catch (error) {
+    console.warn(`设置 ${key} 缓存失败`)
     // do nothing
   }
 }
@@ -90,7 +92,8 @@ function updateProTableColsByConfigurableMap(
 }
 
 function removeStorageItem(config: Config): void {
-  window[config.storage.mode].removeItem(config.storage.storageKey)
+  config.storage &&
+    window[config.storage.mode].removeItem(config.storage.storageKey)
 }
 
 function handleInitConfigurableColumns(
@@ -113,43 +116,28 @@ export function useConfigurableColumns(
 ): {
   proTableColumnsRef: Ref<ProColumn<any>[]>
   configurableColumnsRef: Ref<ConfigurableColumn[]>
-  clearCache: () => void
+  reset: () => void
 } {
   const handledColumns = handleInitConfigurableColumns(columns)
   const proTableColumnsRef: Ref<ProColumn<any>[]> = ref([])
   const configurableColumnsRef: Ref<ConfigurableColumn[]> = ref([])
   const sourceMap: Map<string, ConfigurableHandledColumn> = new Map( //初始化配置的columns key col映射
     handledColumns.map((col) => {
-      return [
-        col.key,
-        {
-          ...col
-        }
-      ]
+      return [col.key, col]
     })
   )
   const columnsMap: Map<string, ProColumn> = new Map( //标准全量proTableColumns的 key col映射
     handledColumns.map((col) => {
       const colClone = deepClone(col)
       Reflect.deleteProperty(colClone, 'configurable')
-      return [
-        colClone.key,
-        {
-          ...colClone
-        }
-      ]
+      return [colClone.key, colClone]
     })
   )
   const configurableColumnsMap = computed(() => {
     //可配置ref key col映射
     return new Map(
       configurableColumnsRef.value.map((col) => {
-        return [
-          col.key,
-          {
-            ...col
-          }
-        ]
+        return [col.key, col]
       })
     )
   })
@@ -169,7 +157,7 @@ export function useConfigurableColumns(
     configurableColumnsRef,
     (configurableCols) => {
       // 更新Storage
-      config &&
+      config?.storage &&
         setToStorage(
           config.storage.storageKey,
           configurableCols,
@@ -183,7 +171,7 @@ export function useConfigurableColumns(
 
   onMounted(() => {
     const cacheCols =
-      (config &&
+      (config?.storage &&
         getFromStorage(config.storage.storageKey, config.storage.mode)) ??
       []
     configurableColumnsRef.value = initConfigurableColsWithCache(
@@ -193,10 +181,10 @@ export function useConfigurableColumns(
     )
   })
 
-  function clearCache() {
-    config && removeStorageItem(config)
+  function reset() {
+    config?.storage && removeStorageItem(config)
     const cacheCols =
-      (config &&
+      (config?.storage &&
         getFromStorage(config.storage.storageKey, config.storage.mode)) ??
       []
     configurableColumnsRef.value = initConfigurableColsWithCache(
@@ -209,6 +197,6 @@ export function useConfigurableColumns(
   return {
     proTableColumnsRef,
     configurableColumnsRef,
-    clearCache
+    reset
   }
 }

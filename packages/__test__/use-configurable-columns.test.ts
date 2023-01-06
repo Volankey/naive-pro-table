@@ -49,15 +49,15 @@ describe('test hook use-configurable-columns', async () => {
       storageKey: 'testTable'
     }
   }
-  let configurableColumnsRef, proTableColumnsRef, clearCache
+  let configurableColumnsRef, proTableColumnsRef, reset
 
   mount({
     setup() {
       const hookReturn = useConfigurableColumns(configurableCols, config)
       configurableColumnsRef = hookReturn.configurableColumnsRef
       proTableColumnsRef = hookReturn.proTableColumnsRef
-      clearCache = hookReturn.clearCache
-      return { configurableColumnsRef, proTableColumnsRef, clearCache }
+      reset = hookReturn.reset
+      return { configurableColumnsRef, proTableColumnsRef, reset }
     }
   })
   await flushPromises()
@@ -95,7 +95,7 @@ describe('test hook use-configurable-columns', async () => {
   })
 
   it('test clear cache is available', async () => {
-    clearCache()
+    reset()
     await nextTick()
     const cache = window[config.storage.mode].getItem(config.storage.storageKey)
     expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
@@ -110,7 +110,7 @@ describe('test hook use-configurable-columns', async () => {
   })
 
   it('test new cols override cache cols', async () => {
-    clearCache()
+    reset()
     await nextTick()
     const cache = window[config.storage.mode].getItem(config.storage.storageKey)
     expect(cache).toStrictEqual(JSON.stringify(configurableColumnsRef.value))
@@ -127,8 +127,8 @@ describe('test hook use-configurable-columns', async () => {
         const hookReturn = useConfigurableColumns(newConfigurableCols, config)
         configurableColumnsRef = hookReturn.configurableColumnsRef
         proTableColumnsRef = hookReturn.proTableColumnsRef
-        clearCache = hookReturn.clearCache
-        return { configurableColumnsRef, proTableColumnsRef, clearCache }
+        reset = hookReturn.reset
+        return { configurableColumnsRef, proTableColumnsRef, reset }
       }
     })
 
@@ -144,7 +144,7 @@ describe('test hook use-configurable-columns', async () => {
       }
     ])
 
-    clearCache() // 此时会重置我们的cache为初始配置，顺序为age, name, birthday, habit,全显示
+    reset() // 此时会重置我们的cache为初始配置，顺序为age, name, birthday, habit,全显示
     await nextTick()
     mount({
       setup() {
@@ -154,8 +154,8 @@ describe('test hook use-configurable-columns', async () => {
         )
         configurableColumnsRef = hookReturn.configurableColumnsRef
         proTableColumnsRef = hookReturn.proTableColumnsRef
-        clearCache = hookReturn.clearCache
-        return { configurableColumnsRef, proTableColumnsRef, clearCache }
+        reset = hookReturn.reset
+        return { configurableColumnsRef, proTableColumnsRef, reset }
       }
     })
 

@@ -18,7 +18,7 @@
       </div>
     </template>
     <template #footer>
-      <n-button size="small" @click="clearCache">重置</n-button>
+      <n-button size="small" @click="reset">重置</n-button>
     </template>
   </Draggable>
 </template>
@@ -116,7 +116,7 @@ const config: Config = {
     storageKey: 'asTable'
   }
 }
-const { clearCache, configurableColumnsRef, proTableColumnsRef } =
+const { reset, configurableColumnsRef, proTableColumnsRef } =
   useConfigurableColumns(columns, config)
 
 const apiRequest: ApiRequest = (params, sort, filter, page, pageSize) => {
