@@ -33,7 +33,7 @@ function getFromStorage(key: string, mode: 'sessionStorage' | 'localStorage') {
     const data = window[mode].getItem(key)
     return data ? JSON.parse(data) : undefined
   } catch (error) {
-    console.warn(`获取 ${key} 缓存失败`)
+    console.error(error)
     return undefined
   }
 }
@@ -46,7 +46,7 @@ function setToStorage(
   try {
     window[mode].setItem(key, JSON.stringify(data))
   } catch (error) {
-    console.warn(`设置 ${key} 缓存失败`)
+    console.error(error)
     // do nothing
   }
 }
