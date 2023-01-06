@@ -206,13 +206,15 @@ interface ValueEnum {
 
 #### useConfigurableColumns
 
-> 该 hook 返回的 `proTableColumnsRef` ， `configurableColumnsRef` ， `reset`
+> 该 hook 返回 `proTableColumnsRef` ， `configurableColumnsRef` ， `reset`
 
-`proTableColumnsRef` 作为 Protable 的 props columns 的值
+`proTableColumnsRef` 作为 ProTable 的 props columns 的值
 
-`configurableColumnsRef` 是我们可以配置表格列的响应式数据，例如 `configurableColumnsRef.value[0].visible=false` 表示隐藏表格的第一列
+`configurableColumnsRef` 是我们可以配置表格列的响应式数据，例如 `configurableColumnsRef.value[0].visible=false` 表示隐藏表格的第一列，[类型参考](#useConfigurableColumns-type-declarations)
 
 `reset` 当我们修改多次 `configurableColumnsRef` 后，该函数可清除 localStorage/sessionStorage 中的缓存，并重置我们的可配置列配置,具体需要参考 storage 属性配置的缓存 mode
+
+<span id='useConfigurableColumns-usage'></span>
 
 ##### Usage
 
@@ -251,6 +253,7 @@ reset()
 ```
 
 </n-card>
+<span id='useConfigurableColumns-type-declarations'></span>
 
 ##### Type Declarations
 
