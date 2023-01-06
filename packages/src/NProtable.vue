@@ -146,7 +146,7 @@ watch(
     // @ts-ignore
     mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
   },
-  { immediate: true, deep: true }
+  { immediate: true, }
 )
 
 const {

@@ -18,10 +18,11 @@
   "editor.tabSize": 2,
   "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
   "[vue]": {
-    "editor.defaultFormatter": "Vue.volar"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
+
