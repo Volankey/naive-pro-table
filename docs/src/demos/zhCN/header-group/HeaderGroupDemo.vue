@@ -75,13 +75,13 @@ const columns = ref<ProColumn<Column>[]>([
         children: [
           {
             title: 'Homework',
-            dataIndex: 'homework1',
+            dataIndex: 'math.homework',
             key: 'homework1',
             sorter: {
               multiple: 2
             },
             syncRouteSorter: {
-              name: 'homework',
+              name: 'math.homework',
               rule: {
                 type: 'string'
               }
@@ -89,13 +89,13 @@ const columns = ref<ProColumn<Column>[]>([
           },
           {
             title: 'Examination',
-            dataIndex: 'exam1',
+            dataIndex: 'math.exam',
             key: 'exam1',
             sorter: {
               multiple: 1
             },
             syncRouteSorter: {
-              name: 'exam',
+              name: 'math.exam',
               rule: {
                 type: 'string'
               }
@@ -110,13 +110,13 @@ const columns = ref<ProColumn<Column>[]>([
         children: [
           {
             title: 'Homework',
-            dataIndex: 'homework2',
+            dataIndex: 'domain.homework',
             key: 'homework2',
             sorter: {
               multiple: 2
             },
             syncRouteSorter: {
-              name: 'homework',
+              name: 'domain.homework',
               rule: {
                 type: 'string'
               }
@@ -124,13 +124,13 @@ const columns = ref<ProColumn<Column>[]>([
           },
           {
             title: 'Examination',
-            dataIndex: 'exam2',
+            dataIndex: 'domain.exam',
             key: 'exam2',
             sorter: {
               multiple: 1
             },
             syncRouteSorter: {
-              name: 'exam',
+              name: 'domain.exam',
               rule: {
                 type: 'string'
               }

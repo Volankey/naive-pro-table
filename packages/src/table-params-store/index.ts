@@ -7,7 +7,7 @@ import type {
   QueryOptions,
   RoueQueryParsed
 } from './types'
-import type { SortState } from 'naive-ui/lib/data-table/src/interface'
+import type { DataTableSortState as SortState } from 'naive-ui'
 import { isFinite } from 'lodash-es'
 import { getColumnsRouteRules } from '../utils'
 

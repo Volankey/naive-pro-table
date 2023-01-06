@@ -1,17 +1,15 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted, withDefaults } from 'vue'
-import type {
-  PaginationProps,
-  DataTableProps,
-  DataTableColumns
-} from 'naive-ui'
+import { computed, ref, watch, onMounted, withDefaults, Ref } from 'vue'
+import type { PaginationProps, DataTableProps, DataTableColumn } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
 import type {
   ApiRequest,
   ProColumn,
   ProTableIns,
   SyncRoutePage,
-  SyncRoutePageSize
+  SyncRoutePageSize,
+  ProTableBasicColumn,
+  ProColumnBaseColumn
 } from './interface'
 import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
@@ -27,6 +25,7 @@ const props = withDefaults(
     apiRequest: ApiRequest
     columns: ProColumn<any>[]
     pagination?: Partial<PaginationProps>
+    paginateNoData?: boolean
     remote?: boolean
     queryPrefix?: string
     syncRoute?: boolean
@@ -34,24 +33,31 @@ const props = withDefaults(
     syncRoutePageSize?: SyncRoutePageSize
     customParamsStore?: CustomParams
     dateFormatter?: DateFormatter
+    configurable?: boolean
   }>(),
   {
     remote: true,
     syncRoute: true,
+    paginateNoData: true,
     syncRoutePage: () => ({
       name: 'page'
     }),
     syncRoutePageSize: () => ({
       name: 'pageSize'
-    })
+    }),
+    configurable: false
   }
 )
 
-const syncRouteRuleColumnRef = ref(getColumnsRouteRules(props.columns))
+const syncRouteRuleColumnRef = ref(
+  getColumnsRouteRules(props.columns as ProTableBasicColumn<any>[])
+)
 watch(
   () => props.columns,
   () => {
-    syncRouteRuleColumnRef.value = getColumnsRouteRules(props.columns)
+    syncRouteRuleColumnRef.value = getColumnsRouteRules(
+      props.columns as ProTableBasicColumn<any>[]
+    )
   }
 )
 
@@ -103,7 +109,7 @@ const loadingRef = ref(false)
 const pageCountRef = ref(0)
 const itemCountRef = ref(0)
 
-const mergedPaginationRef = computed(() => {
+const mergedPaginationWithPropsRef = computed(() => {
   const res = {
     ...(props.pagination && typeof props.pagination === 'object'
       ? props.pagination
@@ -117,22 +123,34 @@ const mergedPaginationRef = computed(() => {
   }
   return res
 })
+
+const mergedPagination = computed(() => {
+  const { itemCount, pageCount } = mergedPaginationWithPropsRef.value
+  return props.paginateNoData || itemCount || pageCount
+    ? mergedPaginationWithPropsRef.value
+    : undefined
+})
+
 const tableDataRef = ref<any[]>([])
-function mergedHandleColumn(col: ProColumn<any>) {
+function mergedHandleColumn(col: ProColumnBaseColumn<any>) {
   return handleColumn(col, {
     dateFormatter: props.dateFormatter
   })
 }
-const mergedColumnsRef = ref<DataTableColumns>(
-  props.columns.map(mergedHandleColumn)
+
+const mergedColumnsRef: Ref<DataTableColumn[]> = ref([])
+watch(
+  () => props.columns,
+  () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
+  },
+  { immediate: true, deep: true }
 )
-watch(props.columns, () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
-})
 
 const {
+  initDefaultSortAndFilterQuery,
   handleSortChange,
   handleFilterChange,
   handlePageChange,
@@ -166,9 +184,12 @@ const handleFetchTableData = debounce(
 defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
+
+initDefaultSortAndFilterQuery(paramsStoreRef.value)
+
 paramsStoreRef.value.initQuery(
   syncFromRouter(props.queryPrefix),
-  mergedPaginationRef
+  mergedPaginationWithPropsRef
 )
 
 onMounted(() => {
@@ -181,7 +202,7 @@ onMounted(() => {
     v-bind="dataTableProps"
     :remote="remote"
     class="n-data-protable"
-    :pagination="mergedPaginationRef"
+    :pagination="mergedPagination"
     :data="tableDataRef"
     :loading="loadingRef"
     :columns="mergedColumnsRef"

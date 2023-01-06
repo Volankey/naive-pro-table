@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "typecheck": "vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -14,15 +15,15 @@
     "sass": "^1.54.0",
     "vfonts": "^0.0.3",
     "vue": "^3.2.37",
-    "vue-router": "4.0.16"
+    "vue-router": "4.0.16",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^3.0.0",
+    "@vitejs/plugin-vue": "3.0.0",
     "naive-ui-protable-alpha": "workspace:*",
-    "typescript": "^4.6.4",
     "unplugin-vue-components": "^0.21.1",
     "vite": "^3.0.0",
     "vite-plugin-naive-ui-md": "0.1.1",
-    "vue-tsc": "^0.38.4"
+    "vue-tsc": "0.40.1"
   }
 }

@@ -67,24 +67,19 @@ const createSourceData = (
       address: 'New York No.1 Lake Park'
     }
   ]
-  let itemCount = data.length
-  data = data
-    .filter((item) => {
-      return filter
-        ? (filter.gender ? filter.gender.includes(item.gender) : true) &&
-            (filter.address
-              ? filter.address.some((addr: string) =>
-                  item.address.includes(addr)
-                )
-              : true)
-        : true
-    })
-    .slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize)
-
-  const hasFilter = filter?.gender || filter?.address
+  data = data.filter((item) => {
+    return filter
+      ? (filter.gender ? filter.gender.includes(item.gender) : true) &&
+          (filter.address
+            ? filter.address.some((addr: string) => item.address.includes(addr))
+            : true)
+      : true
+  })
+  const itemCount = data.length
+  data = data.slice(pageSize * (page - 1), pageSize * (page - 1) + pageSize)
   return {
     pageSize: 2,
-    itemCount: hasFilter ? data.length : itemCount,
+    itemCount,
     data
   }
 }
@@ -100,10 +95,12 @@ const columns = ref<ProColumn<Column>[]>([
     dataIndex: 'gender',
     key: 'gender',
     filter: true,
+    filterMultiple: false,
+    filterOptionValue: 'man',
     syncRouteFilter: {
       name: 'gender',
       rule: {
-        type: 'array'
+        type: 'string'
       }
     },
     filterOptions: [
@@ -127,6 +124,7 @@ const columns = ref<ProColumn<Column>[]>([
     key: 'address',
     filter: true,
     sorter: true,
+    filterOptionValues: ['London', 'New York'],
     syncRouteFilter: {
       name: 'addr',
       rule: {
