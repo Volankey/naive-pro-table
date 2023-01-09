@@ -140,13 +140,13 @@ function mergedHandleColumn(col: ProColumnBaseColumn<any>) {
 
 const mergedColumnsRef: Ref<DataTableColumn[]> = ref([])
 watch(
-  () => props.columns,
+  props.columns,
   () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
   },
-  { immediate: true, }
+  { immediate: true }
 )
 
 const {
