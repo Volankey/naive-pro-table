@@ -80,7 +80,6 @@ test('test set multiple filters', async () => {
   expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
   expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
 })
-
 test('test filter after refresh', async () => {
   const { wrapper, router, result } = await createFilterTest(
     renderProps,
@@ -101,7 +100,6 @@ test('test filter after refresh', async () => {
   expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
   expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
 })
-
 test('clear filter', async () => {
   const { wrapper, router, result } = await createFilterTest(renderProps)
   const filterIcon = wrapper.find('.n-data-table-filter')
