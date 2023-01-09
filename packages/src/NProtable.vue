@@ -1,10 +1,6 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted, withDefaults } from 'vue'
-import type {
-  PaginationProps,
-  DataTableProps,
-  DataTableColumns
-} from 'naive-ui'
+import { computed, ref, watch, onMounted, withDefaults, Ref } from 'vue'
+import type { PaginationProps, DataTableProps, DataTableColumn } from 'naive-ui'
 import { NDataTable } from 'naive-ui'
 import type {
   ApiRequest,
@@ -37,6 +33,7 @@ const props = withDefaults(
     syncRoutePageSize?: SyncRoutePageSize
     customParamsStore?: CustomParams
     dateFormatter?: DateFormatter
+    configurable?: boolean
   }>(),
   {
     remote: true,
@@ -47,7 +44,8 @@ const props = withDefaults(
     }),
     syncRoutePageSize: () => ({
       name: 'pageSize'
-    })
+    }),
+    configurable: false
   }
 )
 
@@ -139,14 +137,17 @@ function mergedHandleColumn(col: ProColumnBaseColumn<any>) {
     dateFormatter: props.dateFormatter
   })
 }
-const mergedColumnsRef = ref<DataTableColumns>(
-  (props.columns as ProColumnBaseColumn[]).map(mergedHandleColumn)
+
+const mergedColumnsRef: Ref<DataTableColumn[]> = ref([])
+watch(
+  props.columns,
+  () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
+  },
+  { immediate: true }
 )
-watch(props.columns, () => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
-})
 
 const {
   initDefaultSortAndFilterQuery,

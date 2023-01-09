@@ -24,7 +24,7 @@ interface ValueEnum {
   [key: string]: ValueEnumItem
 }
 export type RenderColumnCell = (column: ProTableBasicColumn) => VNodeChild
-type TableColumnTitle = string | RenderColumnCell
+export type TableColumnTitle = string | RenderColumnCell
 export type RenderCell<T = any> = (
   text: any,
   rowData: T,

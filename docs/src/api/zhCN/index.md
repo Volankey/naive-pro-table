@@ -201,3 +201,90 @@ interface ValueEnum {
 | 名称  | 参数 | 说明                 |
 | ----- | ---- | -------------------- |
 | empty | `()` | 表格数据为空时的展示 |
+
+### Hooks
+
+#### useConfigurableColumns
+
+> 该 hook 返回 `proTableColumnsRef` ， `configurableColumnsRef` ， `reset`
+
+`proTableColumnsRef` 作为 ProTable 的 props columns 的值
+
+`configurableColumnsRef` 是我们可以配置表格列的响应式数据，例如 `configurableColumnsRef.value[0].visible=false` 表示隐藏表格的第一列，[类型参考](#useConfigurableColumns-type-declarations)
+
+`reset` 当我们修改多次 `configurableColumnsRef` 后，该函数可清除 localStorage/sessionStorage 中的缓存，并重置我们的可配置列配置,具体需要参考 storage 属性配置的缓存 mode
+
+<span id='useConfigurableColumns-usage'></span>
+
+##### Usage
+
+最佳实践请看<n-a href="/example/use-configurable-columns">可配置 Demo</n-a>
+
+<n-card>
+
+```typescript
+
+// Comp.vue
+<template>
+	<ProTable ref="proTableRef" :columns="proTableColumnsRef" :api-request="apiRequest"></ProTable>
+</template>
+
+<script setup lang="ts">
+import ProTable, { useConfigurableColumns, ConfigurableInitColumn, Config, } from "naive-ui-protable-alpha"
+
+// 按照类型补充
+const columns: ConfigurableInitColumn[] = xxx
+// 按照类型补充
+const config: Config = xxx
+
+const { reset, configurableColumnsRef, proTableColumnsRef } = useConfigurableColumns(columns, config)
+
+// 隐藏表格的第一列
+configurableColumnsRef.value[0].visible=false
+
+// 反转表格的列顺序
+configurableColumnsRef.value.reverse()
+
+// 重置表格的列配置
+reset()
+
+</script>
+
+```
+
+</n-card>
+<span id='useConfigurableColumns-type-declarations'></span>
+
+##### Type Declarations
+
+<n-card>
+
+```typescript
+interface ConfigurableColumn {
+  readonly key: string
+  readonly title: TableColumnTitle
+  visible: boolean
+}
+
+interface ConfigurableInitColumn extends ProColumnBaseColumn {
+  configurable?: ConfigItemState
+}
+
+interface Config {
+  storage: {
+    storageKey: string
+    mode: 'sessionStorage' | 'localStorage'
+  }
+}
+
+function useConfigurableColumns(
+  columns: ConfigurableInitColumn[],
+  config?: Config
+): {
+  proTableColumnsRef: Ref<ProColumn<any>[]>
+  configurableColumnsRef: Ref<ConfigurableColumn[]>
+  reset: () => void
+}
+```
+
+</n-card>

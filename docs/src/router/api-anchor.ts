@@ -47,5 +47,17 @@ export const apiAnchors = [
     key: 'slots',
     path: '#Slots',
     label: 'Slots'
+  },
+  {
+    key: 'hooks',
+    path: '#Hooks',
+    label: 'Hooks',
+    children: [
+      {
+        key: 'useConfigurableColumns',
+        path: '#useConfigurableColumns',
+        label: 'useConfigurableColumns'
+      }
+    ]
   }
 ]
