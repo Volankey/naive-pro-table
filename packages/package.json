@@ -1,6 +1,6 @@
 {
   "name": "naive-ui-protable-alpha",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "",
   "scripts": {
     "dev": "npm run build:dev",
