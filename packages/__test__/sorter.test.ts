@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, expect, test, vi, describe } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
 import { ref } from 'vue'
@@ -15,12 +15,49 @@ const renderProps = {
   syncRoute: true
 }
 const createSorterTest = createTest
+describe('test sorter with init url', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  test('initUrl with no-sync-route sorter', async () => {
+    const { wrapper, router, result } = await createSorterTest(
+      renderProps,
+      undefined,
+      '/?age.sort=ascend&filterSex.sort=descend'
+    )
+    await flushPromises()
+    const sorter = wrapper.findAllComponents('.n-data-table-sorter')
+    expect(sorter[0].html()).toContain('--asc')
+    expect(sorter[1].html()).not.toContain('--asc')
+    expect(sorter[1].html()).not.toContain('--desc')
+    const route = router.currentRoute.value
+    expect(result.sort).toEqual({ age: 'ascend' })
+    expect(route.query['age.sort']).equal('ascend')
+    expect(route.query['filterSex.sort']).equal('descend')
+  })
 
+  test('test sorter after fresh', async () => {
+    const { wrapper, router, result } = await createSorterTest(
+      renderProps,
+      undefined,
+      '/?age.sort=ascend'
+    )
+    await flushPromises()
+    const route = router.currentRoute.value
+    const sorterIcon = wrapper.find('.n-data-table-sorter--asc')
+    expect(sorterIcon.exists()).toBe(true)
+    expect(result.sort['age']).equal('ascend')
+    expect(route.query['age.sort']).equal('ascend')
+  })
+})
 async function sorterRouteAndRequestTest(
+  { wrapper, router, result }: Awaited<ReturnType<typeof createTable>>,
   sortType: string | boolean,
   iconType?: string
 ) {
-  const { wrapper, router, result } = await createSorterTest(renderProps)
   const sorter = wrapper.find('.n-data-table-sorter')
   // sort trigger
   await sorter.trigger('click')
@@ -39,31 +76,56 @@ async function sorterRouteAndRequestTest(
     expect(wrapper.find('.n-data-table-sorter--asc').exists()).toBe(false)
   }
 }
+describe('test sorter change descend', async () => {
+  const { wrapper, router, result } = await createSorterTest(renderProps)
 
-test('change sorter to descend', async () => {
-  await sorterRouteAndRequestTest('descend', 'desc')
+  test('change sorter descend', async () => {
+    await sorterRouteAndRequestTest(
+      {
+        wrapper,
+        router,
+        result
+      },
+      'descend',
+      'desc'
+    )
+  })
+  test('change sorter to ascend', async () => {
+    await sorterRouteAndRequestTest(
+      {
+        wrapper,
+        router,
+        result
+      },
+      'ascend',
+      'asc'
+    )
+  })
+  test('change sorter to false', async () => {
+    await sorterRouteAndRequestTest(
+      {
+        wrapper,
+        router,
+        result
+      },
+      false
+    )
+  })
 })
 
-test('change sorter to ascend', async () => {
-  await sorterRouteAndRequestTest('ascend', 'asc')
-})
-
-test('test sorter after fresh', async () => {
+test('initUrl with invalid sort value', async () => {
   const { wrapper, router, result } = await createSorterTest(
     renderProps,
     undefined,
-    '/?age.sort=ascend'
+    '/?age.sort=error'
   )
   await flushPromises()
+  const sorter = wrapper.find('.n-data-table-sorter')
+  expect(sorter.html()).not.toContain('--asc')
+  expect(sorter.html()).not.toContain('--desc')
   const route = router.currentRoute.value
-  const sorterIcon = wrapper.find('.n-data-table-sorter--asc')
-  expect(sorterIcon.exists()).toBe(true)
-  expect(result.sort['age']).equal('ascend')
-  expect(route.query['age.sort']).equal('ascend')
-})
-
-test('change sorter to false', async () => {
-  await sorterRouteAndRequestTest(false)
+  expect(result.sort['age']).toEqual(false)
+  expect(route.query['age.sort']).equal(undefined)
 })
 
 // test default sort order
@@ -118,36 +180,4 @@ test('test default sort order', async () => {
 
   // test default sorter with empty initUrl
   await checkDefaultSorter('')
-})
-
-test('initUrl with no-sync-route sorter', async () => {
-  const { wrapper, router, result } = await createSorterTest(
-    renderProps,
-    undefined,
-    '/?age.sort=ascend&filterSex.sort=descend'
-  )
-  await flushPromises()
-  const sorter = wrapper.findAllComponents('.n-data-table-sorter')
-  expect(sorter[0].html()).toContain('--asc')
-  expect(sorter[1].html()).not.toContain('--asc')
-  expect(sorter[1].html()).not.toContain('--desc')
-  const route = router.currentRoute.value
-  expect(result.sort).toEqual({ age: 'ascend' })
-  expect(route.query['age.sort']).equal('ascend')
-  expect(route.query['filterSex.sort']).equal('descend')
-})
-
-test('initUrl with invalid sort value', async () => {
-  const { wrapper, router, result } = await createSorterTest(
-    renderProps,
-    undefined,
-    '/?age.sort=error'
-  )
-  await flushPromises()
-  const sorter = wrapper.find('.n-data-table-sorter')
-  expect(sorter.html()).not.toContain('--asc')
-  expect(sorter.html()).not.toContain('--desc')
-  const route = router.currentRoute.value
-  expect(result.sort['age']).toEqual(false)
-  expect(route.query['age.sort']).equal(undefined)
 })

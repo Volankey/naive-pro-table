@@ -1,4 +1,4 @@
-import { expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, expect, test, vi, describe } from 'vitest'
 import { flushPromises, type VueWrapper } from '@vue/test-utils'
 import { createTest } from './utils'
 import {
@@ -44,86 +44,163 @@ function getRadioAndButton(wrapper: VueWrapper) {
   }
 }
 
-test('test set single filter', async () => {
-  const { wrapper, router, result } = await createFilterTest(renderProps)
-  const filterIcon = wrapper.getComponent('.n-data-table-filter')
-  expect(filterIcon.html()).not.toContain('n-data-table-filter--active')
-  await filterIcon.trigger('click')
+describe('test filter with init url', async () => {
+  beforeEach(() => {
+    vi.mock('lodash-es/debounce', () => ({
+      default: vi.fn((fn) => fn),
+      __esModule: true
+    }))
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
 
-  const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
-  await checkbox[0].trigger('click')
-  await confirmButton.trigger('click')
-  // check 1.url 2.apiRequest 3.icon
-  await flushPromises()
-  const route = router.currentRoute.value
-  expect(route.query['sex.filter']).toEqual(['all'])
-  expect(result.filter['sex']).toEqual(['all'])
-  expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
-  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+  test('initUrl with no-sync-route filter', async () => {
+    const { wrapper, router, result } = await createFilterTest(
+      renderProps,
+      undefined,
+      '/?sex.filter=man&filterSex.filter=man'
+    )
+
+    const filter = wrapper.findAllComponents('.n-data-table-filter')
+    expect(filter[0].html()).toContain('--active')
+    expect(filter[1].html()).not.toContain('--active')
+    const route = router.currentRoute.value
+    expect(result.filter).toEqual({ sex: ['man'] })
+    expect(route.query['filterSex.filter']).toEqual('man')
+  })
 })
 
-test('test set multiple filters', async () => {
-  const { wrapper, router, result } = await createFilterTest(renderProps)
-  const filterIcon = wrapper.find('.n-data-table-filter')
-  expect(filterIcon.html()).toContain('n-data-table-filter--active')
-  await filterIcon.trigger('click')
+describe('test filter with url', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+  test('test filter after refresh', async () => {
+    const { wrapper, router, result } = await createFilterTest(
+      renderProps,
+      undefined,
+      '/?sex.filter=all&sex.filter=man'
+    )
+    await flushPromises()
 
-  const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
-  await checkbox[1].trigger('click')
-  await confirmButton.trigger('click')
+    const route = router.currentRoute.value
+    vi.useRealTimers()
+    const filterIcon = wrapper.find('.n-data-table-filter')
+    expect(filterIcon.html()).toContain('n-data-table-filter--active')
+    await filterIcon.trigger('click')
+    await flushPromises()
 
-  await flushPromises()
-  const route = router.currentRoute.value
-  expect(route.query['sex.filter']).toEqual(['all', 'man'])
-  expect(result.filter['sex']).toEqual(['all', 'man'])
-  expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
-  expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
-  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+    const { checkbox } = getCheckboxAndButton(wrapper)
+    expect(route.query['sex.filter']).toEqual(['all', 'man'])
+    expect(result.filter['sex']).toEqual(['all', 'man'])
+    expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
+    expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
+    expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+  })
 })
 
-test('test filter after refresh', async () => {
-  const { wrapper, router, result } = await createFilterTest(
-    renderProps,
-    undefined,
-    '/?sex.filter=all&sex.filter=man'
-  )
-  await flushPromises()
-  const route = router.currentRoute.value
+describe('test  single filter', () => {
+  test('test set single filter', async () => {
+    const { wrapper, router, result } = await createFilterTest(renderProps)
+    const filterIcon = wrapper.getComponent('.n-data-table-filter')
+    expect(filterIcon.html()).not.toContain('n-data-table-filter--active')
+    await filterIcon.trigger('click')
 
-  const filterIcon = wrapper.find('.n-data-table-filter')
-  expect(filterIcon.html()).toContain('n-data-table-filter--active')
-  await filterIcon.trigger('click')
+    const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
+    await checkbox[0].trigger('click')
+    await confirmButton.trigger('click')
+    // check 1.url 2.apiRequest 3.icon
+    await flushPromises()
+    const route = router.currentRoute.value
+    expect(route.query['sex.filter']).toEqual(['all'])
+    expect(result.filter['sex']).toEqual(['all'])
+    expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
+    expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+  })
+})
+describe('test single choice filter', () => {
+  test('single choice filter', async () => {
+    const colsRef = createSingleChoiceFilterColsRef()
+    const { wrapper, router, result } = await createTable(colsRef)
+    const filterIcon = wrapper.find('.n-data-table-filter')
+    let route = router.currentRoute.value
+    expect(filterIcon.html()).toContain('n-data-table-filter--active')
+    expect(route.query['course.filter']).equal('chinese')
+    expect(result.filter).toEqual({ course: 'chinese' })
 
-  const { checkbox } = getCheckboxAndButton(wrapper)
-  expect(route.query['sex.filter']).toEqual(['all', 'man'])
-  expect(result.filter['sex']).toEqual(['all', 'man'])
-  expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
-  expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
-  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+    await filterIcon.trigger('click')
+    const { radio, confirmButton } = getRadioAndButton(wrapper)
+    expect(radio[0].html()).toContain('--checked')
+    expect(radio[1].html()).not.toContain('--checked')
+
+    await radio[1].trigger('click')
+    expect(radio[0].html()).not.toContain('--checked')
+    expect(radio[1].html()).toContain('--checked')
+
+    await confirmButton.trigger('click')
+    await flushPromises()
+    route = router.currentRoute.value
+    expect(filterIcon.html()).toContain('n-data-table-filter--active')
+    expect(route.query['course.filter']).equal('english')
+    expect(result.filter).toEqual({ course: 'english' })
+  })
+})
+describe('test mutiple filter', () => {
+  test('test set multiple filters', async () => {
+    const { wrapper, router, result } = await createFilterTest(renderProps)
+    const filterIcon = wrapper.find('.n-data-table-filter')
+    expect(filterIcon.html()).toContain('n-data-table-filter')
+    await filterIcon.trigger('click')
+
+    const { checkbox, confirmButton } = getCheckboxAndButton(wrapper)
+    await checkbox[0].trigger('click')
+    await checkbox[1].trigger('click')
+    await confirmButton.trigger('click')
+
+    await flushPromises()
+    const route = router.currentRoute.value
+    expect(route.query['sex.filter']).toEqual(['all', 'man'])
+    expect(result.filter['sex']).toEqual(['all', 'man'])
+    expect(checkbox[0].find('.n-checkbox--checked').exists()).toBe(true)
+    expect(checkbox[1].find('.n-checkbox--checked').exists()).toBe(true)
+    expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(true)
+  })
 })
 
-test('clear filter', async () => {
-  const { wrapper, router, result } = await createFilterTest(renderProps)
-  const filterIcon = wrapper.find('.n-data-table-filter')
-  expect(filterIcon.html()).toContain('n-data-table-filter--active')
-  await filterIcon.trigger('click')
-  await flushPromises()
-  const { cancelButton } = getCheckboxAndButton(wrapper)
-  await cancelButton.trigger('click')
+describe('test clear filter', () => {
+  test('clear filter', async () => {
+    const { wrapper, router, result } = await createFilterTest(
+      renderProps,
+      undefined,
+      '/?sex.filter=all&sex.filter=man'
+    )
+    const filterIcon = wrapper.find('.n-data-table-filter')
+    expect(filterIcon.html()).toContain('n-data-table-filter')
+    await filterIcon.trigger('click')
+    await flushPromises()
+    const { cancelButton } = getCheckboxAndButton(wrapper)
+    await cancelButton.trigger('click')
 
-  // check 1.url 2.apiRequest
-  await flushPromises()
-  const route = router.currentRoute.value
-  expect(route.query).toEqual({ 'page.page': '1' })
-  expect(result.filter).toEqual({ sex: undefined })
+    // check 1.url 2.apiRequest
+    await flushPromises()
+    const route = router.currentRoute.value
 
-  await filterIcon.trigger('click')
-  await flushPromises()
-  const { checkbox: checkbox1 } = getCheckboxAndButton(wrapper)
-  expect(result.filter).toEqual({})
-  expect(checkbox1[0].find('.n-checkbox--checked').exists()).toBe(false)
-  expect(checkbox1[1].find('.n-checkbox--checked').exists()).toBe(false)
-  expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(false)
+    expect(route.query).toEqual({ 'page.page': '1' })
+
+    expect(result.filter).toEqual({ sex: undefined })
+
+    await filterIcon.trigger('click')
+    await flushPromises()
+    const { checkbox: checkbox1 } = getCheckboxAndButton(wrapper)
+    expect(result.filter).toEqual({})
+    expect(checkbox1[0].find('.n-checkbox--checked').exists()).toBe(false)
+    expect(checkbox1[1].find('.n-checkbox--checked').exists()).toBe(false)
+    expect(wrapper.find('.n-data-table-filter--active').exists()).toBe(false)
+  })
 })
 
 test('test filter without syncRouteFilter', async () => {
@@ -218,22 +295,6 @@ test('test default filter', async () => {
   await checkDefaultFilter('/')
 })
 
-test('initUrl with no-sync-route filter', async () => {
-  const { wrapper, router, result } = await createFilterTest(
-    renderProps,
-    undefined,
-    '/?sex.filter=man&filterSex.filter=man'
-  )
-  await flushPromises()
-  const filter = wrapper.findAllComponents('.n-data-table-filter')
-  expect(filter[0].html()).toContain('--active')
-  expect(filter[1].html()).not.toContain('--active')
-  const route = router.currentRoute.value
-  expect(result.filter).toEqual({ sex: ['man'] })
-  expect(route.query['sex.filter']).toEqual(['man'])
-  expect(route.query['filterSex.filter']).toEqual('man')
-})
-
 const createSingleChoiceFilterColsRef = () =>
   ref<ProColumn<{ name: string }>[]>([
     {
@@ -258,31 +319,6 @@ const createSingleChoiceFilterColsRef = () =>
       }
     }
   ])
-test('single choice filter', async () => {
-  const colsRef = createSingleChoiceFilterColsRef()
-  const { wrapper, router, result } = await createTable(colsRef)
-  const filterIcon = wrapper.find('.n-data-table-filter')
-  let route = router.currentRoute.value
-  expect(filterIcon.html()).toContain('n-data-table-filter--active')
-  expect(route.query['course.filter']).equal('chinese')
-  expect(result.filter).toEqual({ course: 'chinese' })
-
-  await filterIcon.trigger('click')
-  const { radio, confirmButton } = getRadioAndButton(wrapper)
-  expect(radio[0].html()).toContain('--checked')
-  expect(radio[1].html()).not.toContain('--checked')
-
-  await radio[1].trigger('click')
-  expect(radio[0].html()).not.toContain('--checked')
-  expect(radio[1].html()).toContain('--checked')
-
-  await confirmButton.trigger('click')
-  await flushPromises()
-  route = router.currentRoute.value
-  expect(filterIcon.html()).toContain('n-data-table-filter--active')
-  expect(route.query['course.filter']).equal('english')
-  expect(result.filter).toEqual({ course: 'english' })
-})
 
 // TODO: test error value in filter
 // TODO: test init url with multiple selection to single choice filter

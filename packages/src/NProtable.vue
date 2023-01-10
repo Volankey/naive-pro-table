@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-import { computed, ref, watch, onMounted, withDefaults, Ref } from 'vue'
-import type { PaginationProps, DataTableProps, DataTableColumn } from 'naive-ui'
+import { computed, ref, watch, onMounted, withDefaults } from 'vue'
+import type {
+  PaginationProps,
+  DataTableProps,
+  DataTableColumns
+} from 'naive-ui'
 import { NDataTable } from 'naive-ui'
 import type {
   ApiRequest,
@@ -48,17 +52,11 @@ const props = withDefaults(
     configurable: false
   }
 )
-
-const syncRouteRuleColumnRef = ref(
-  getColumnsRouteRules(props.columns as ProTableBasicColumn<any>[])
+const mergedColumnsRef = ref<DataTableColumns>(
+  (props.columns as ProColumnBaseColumn[]).map(mergedHandleColumn)
 )
-watch(
-  () => props.columns,
-  () => {
-    syncRouteRuleColumnRef.value = getColumnsRouteRules(
-      props.columns as ProTableBasicColumn<any>[]
-    )
-  }
+const syncRouteRuleColumnRef = ref(
+  getColumnsRouteRules(mergedColumnsRef.value as ProTableBasicColumn<any>[])
 )
 
 const handleSyncRouterQuery = syncRouterQuery()
@@ -138,16 +136,22 @@ function mergedHandleColumn(col: ProColumnBaseColumn<any>) {
   })
 }
 
-const mergedColumnsRef: Ref<DataTableColumn[]> = ref([])
 watch(
-  props.columns,
+  () => props.columns,
   () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     mergedColumnsRef.value = props.columns.map(mergedHandleColumn)
   },
-  { immediate: true }
+  {
+    deep: true
+  }
 )
+watch(mergedColumnsRef, () => {
+  syncRouteRuleColumnRef.value = getColumnsRouteRules(
+    mergedColumnsRef.value as ProTableBasicColumn<any>[]
+  )
+})
 
 const {
   initDefaultSortAndFilterQuery,
