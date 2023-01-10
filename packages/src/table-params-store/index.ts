@@ -55,9 +55,7 @@ export class TableParamsStore {
       return
     }
     const { column } = this.syncRouteSorterKeyMapColumnAndRule[routeKey]
-    console.log(column, routeKey, value)
     this._updateSorterValue(column.key || column.dataIndex, value)
-    console.log(column, routeKey, value)
   }
   _initFilter(routeKey: string, value: any) {
     if (!this.syncRouteFilterKeyMapColumnAndRule[routeKey]) {

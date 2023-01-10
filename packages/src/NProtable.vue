@@ -164,7 +164,6 @@ const {
 } = useTableRequest(paramsStoreRef, props?.customParamsStore)
 const handleFetchTableData = debounce(
   async ({ showLoading = true }: { showLoading?: boolean } = {}) => {
-    console.log('mergedColumnsRef', mergedColumnsRef.value)
     if (!props.apiRequest) {
       return
     }
