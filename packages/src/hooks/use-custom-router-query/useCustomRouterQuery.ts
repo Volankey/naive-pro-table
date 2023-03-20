@@ -64,7 +64,6 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
     const routeQueryRef = computed<any>({
       get() {
         const data = reactiveRouteOptions.route.query[key]
-        if (data == null) return item.defaultValue ?? null
         if (Array.isArray(data)) return data.filter(Boolean)
         return data
       },
@@ -80,9 +79,11 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         })
       }
     })
-
     reactiveData[key as keyof typeof reactiveData] = computed({
-      get: () => getFromQuery(routeQueryRef.value), //如果存给routeQueryRef是undefined的话直接取的时候会取得默认值
+      get: () => {
+        if (routeQueryRef.value == null) return item.defaultValue
+        return getFromQuery(routeQueryRef.value)
+      }, //如果存给routeQueryRef是undefined的话直接取的时候会取得默认值
       set: (setValue) => {
         routeQueryRef.value = render(setValue) ?? ''
       }
