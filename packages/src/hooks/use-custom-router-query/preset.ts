@@ -13,7 +13,7 @@ export const numberPreset = {
 }
 
 export const datePreset = {
-  render(value: number) {
+  render(value: number | undefined) {
     if (value) {
       const temp = dayjs(value).format('YYYY-MM-DD')
       return temp
@@ -26,12 +26,13 @@ export const datePreset = {
     ) {
       return dayjs(routerQuery, 'YYYY-MM-DD').valueOf()
     }
+    console.error(routerQuery, '路由日期不合法，返回undefined')
     return undefined
   }
 }
 
 export const dateRangePreset = {
-  render(value: number[] | null) {
+  render(value: [number, number] | undefined) {
     if (value) {
       const tempDate = value?.map((item: number) =>
         dayjs(item).format('YYYY-MM-DD')
@@ -40,20 +41,22 @@ export const dateRangePreset = {
     }
   },
   getFromQuery(routerQuery: string | undefined) {
-    let res
+    let res = undefined
     try {
-      res =
-        (routerQuery?.length &&
-          JSON.parse(routerQuery)?.map((item: string) => {
+      res = routerQuery?.length
+        ? JSON.parse(routerQuery)?.map((item: string) => {
             if (dayjs(item, 'YYYY-MM-DD', true).isValid()) {
               return dayjs(item, 'YYYY-MM-DD').valueOf()
             }
-            console.error(item + '路由时间解析失败，返回undefined')
-            throw new Error(item + '路由时间解析失败，返回undefined')
-          })) ??
-        undefined
+            return undefined
+          })
+        : undefined
     } catch {
-      console.warn('路由日期不合法，返回undefined')
+      console.error('路由日期不合法，返回undefined')
+      return undefined
+    }
+    if (!Number.isInteger(res?.[0]) || !Number.isInteger(res?.[1])) {
+      console.error(routerQuery + '路由时间解析失败，返回undefined')
       return undefined
     }
     return res
@@ -84,7 +87,7 @@ export const stringArrayPreset = {
       if (!(parse instanceof Array)) {
         throw new Error('非数组')
       }
-      return parse
+      return parse as string[]
     }
   }
 }
