@@ -12,8 +12,8 @@ type PresetType = 'number' | 'date' | 'dateRange' | 'boolean' | 'stringArray'
 
 type Param<T> = {
   [K in keyof T]: {
-    defaultValue?: T[K] | null
-    render?: (value: undefined | null | T[K]) => string
+    defaultValue?: T[K]
+    render?: (value: undefined | T[K]) => string | undefined
     getFromQuery?: (routerValue: string | undefined) => T[K]
     preset?: PresetType
   }
@@ -45,7 +45,7 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
   const reactiveData = reactive<T>({} as any)
   for (const key in items) {
     const item = items[key]
-    const defaultRender = (value: undefined | null | any) => {
+    const defaultRender = (value: undefined | any) => {
       return value?.toString?.() ?? ''
     }
     const defaultGetFromQuery = (routerValue: string) => {
