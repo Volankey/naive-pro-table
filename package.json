@@ -49,8 +49,8 @@
     "prepare": "husky install",
     "lint": "pnpm run lint:code && pnpm run lint:type",
     "lint:type": "pnpm run typecheck:pkg",
-    "lint:code": "eslint packages/**/*.{ts,tsx,js,vue}",
-    "reinstall":"rm -rf node_modules && rm -rf pnpm-lock.yaml && rm -rf docs/node_modules && rm -rf packages/node_modules && pnpm install"
+    "lint:code": "npx eslint --ext ts,tsx,js,vue packages/",
+    "reinstall": "rm -rf node_modules && rm -rf pnpm-lock.yaml && rm -rf docs/node_modules && rm -rf packages/node_modules && pnpm install"
   },
   "repository": {
     "type": "git",
