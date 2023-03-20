@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { expect, vi, describe, it, beforeEach, afterEach } from 'vitest'
+import { expect, describe, it } from 'vitest'
 import {
   booleanPreset,
   datePreset,
@@ -84,12 +84,6 @@ describe('test hook use-custom-router-query', async () => {
     ).toStrictEqual(['a', 'h'])
     expect(stringArrayPreset.getFromQuery('')).toBe(undefined)
     expect(stringArrayPreset.getFromQuery(undefined)).toBe(undefined)
-  })
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-  afterEach(() => {
-    vi.useRealTimers()
   })
 
   const { router } = await createTest(undefined, undefined, '')
