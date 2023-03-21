@@ -19,7 +19,7 @@ import { getColumnsRouteRules, handleColumn, useTableRequest } from './utils'
 import { TableParamsStore } from './table-params-store'
 import { syncFromRouter, syncRouterQuery } from './router-sync'
 import type { QueryOptions } from './table-params-store/types'
-import { debounce } from 'lodash-es'
+import debounce from 'lodash-es/debounce'
 import { CustomParams } from './hooks'
 import type { DateFormatter } from './value-type-render/interface'
 
