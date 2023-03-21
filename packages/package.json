@@ -15,6 +15,7 @@
   "main": "./dist/src/naive-ui-protable-alpha.umd.js",
   "module": "./dist/src/naive-ui-protable-alpha.es.js",
   "types": "./dist/types/index.d.ts",
+  "type": "module",
   "files": [
     "dist"
   ],
