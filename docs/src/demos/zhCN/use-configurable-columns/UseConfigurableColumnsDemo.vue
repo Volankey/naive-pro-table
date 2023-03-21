@@ -1,10 +1,10 @@
 <template>
   <ProTable
     ref="proTableRef"
-    :columns="proTableColumnsRef"
+    :columns="proTableColumnsRef as any"
     :api-request="apiRequest"
   ></ProTable>
-  <Draggable v-model="configurableColumnsRef" :sort="true" item-key="key">
+  <Draggable :list="configurableColumnsRef as any" :sort="true" item-key="key">
     <template #item="{ element }">
       <div>
         <n-checkbox v-model:checked="element.visible"></n-checkbox>
@@ -94,7 +94,7 @@ const columns: ConfigurableInitColumn[] = [
     dataIndex: 'gender'
   },
   {
-    title: () => h('span', { style: 'color:red;' }, 'Name'),
+    title: () => h('span', { style: 'color:red;' }, 'Name') as any,
     dataIndex: 'name'
   },
 
