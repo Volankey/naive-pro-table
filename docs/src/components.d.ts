@@ -34,6 +34,7 @@ declare module '@vue/runtime-core' {
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
+    NDatePicker: typeof import('naive-ui')['NDatePicker']
     NDivider: typeof import('naive-ui')['NDivider']
     NGrid: typeof import('naive-ui')['NGrid']
     NGridItem: typeof import('naive-ui')['NGridItem']
@@ -49,7 +50,9 @@ declare module '@vue/runtime-core' {
     NMenu: typeof import('naive-ui')['NMenu']
     'NoSyncRouter.demo': typeof import('./demos/zhCN/no-sync-router/no-sync-router.demo.md')['default']
     NOSyncRouterDemo: typeof import('./demos/zhCN/no-sync-router/NOSyncRouterDemo.vue')['default']
+    NSelect: typeof import('naive-ui')['NSelect']
     NSpace: typeof import('naive-ui')['NSpace']
+    NSwitch: typeof import('naive-ui')['NSwitch']
     NText: typeof import('naive-ui')['NText']
     'Pagination.demo': typeof import('./demos/zhCN/pagination/pagination.demo.md')['default']
     PaginationDemo: typeof import('./demos/zhCN/pagination/PaginationDemo.vue')['default']
@@ -63,5 +66,7 @@ declare module '@vue/runtime-core' {
     UseConfigurableColumns: typeof import('./demos/zhCN/use-configurable-columns/UseConfigurableColumns.vue')['default']
     'UseConfigurableColumns.demo': typeof import('./demos/zhCN/use-configurable-columns/use-configurable-columns.demo.md')['default']
     UseConfigurableColumnsDemo: typeof import('./demos/zhCN/use-configurable-columns/UseConfigurableColumnsDemo.vue')['default']
+    'UseCustomRouterQuery.demo': typeof import('./demos/zhCN/use-custom-router-query/use-custom-router-query.demo.md')['default']
+    UseCustomRouterQueryDemo: typeof import('./demos/zhCN/use-custom-router-query/UseCustomRouterQueryDemo.vue')['default']
   }
 }

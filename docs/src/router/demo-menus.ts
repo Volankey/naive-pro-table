@@ -58,5 +58,10 @@ export const demoMenus = [
     key: 'empty-table',
     path: '/example/empty-table',
     label: '空表格'
+  },
+  {
+    key: 'use-custom-router-query',
+    path: '/example/use-custom-router-query',
+    label: '同步路由变量'
   }
 ]
