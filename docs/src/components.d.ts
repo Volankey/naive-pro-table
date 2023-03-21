@@ -64,5 +64,7 @@ declare module '@vue/runtime-core' {
     SyncRouterDemo: typeof import('./demos/zhCN/sync-router/SyncRouterDemo.vue')['default']
     'UseConfigurableColumns.demo': typeof import('./demos/zhCN/use-configurable-columns/use-configurable-columns.demo.md')['default']
     UseConfigurableColumnsDemo: typeof import('./demos/zhCN/use-configurable-columns/UseConfigurableColumnsDemo.vue')['default']
+    'UseCustomRouterQuery.demo': typeof import('./demos/zhCN/use-custom-router-query/use-custom-router-query.demo.md')['default']
+    UseCustomRouterQueryDemo: typeof import('./demos/zhCN/use-custom-router-query/UseCustomRouterQueryDemo.vue')['default']
   }
 }
