@@ -52,7 +52,7 @@ const props = withDefaults(
     configurable: false
   }
 )
-const mergedColumnsRef = ref<DataTableColumns>(
+const mergedColumnsRef = ref<DataTableColumns<any>>(
   (props.columns as ProColumnBaseColumn[]).map(mergedHandleColumn)
 )
 const syncRouteRuleColumnRef = ref(
@@ -209,7 +209,7 @@ onMounted(() => {
     :pagination="mergedPagination"
     :data="tableDataRef"
     :loading="loadingRef"
-    :columns="mergedColumnsRef"
+    :columns="mergedColumnsRef as any"
     :onUpdateFilters="handleFilterChange"
     :onUpdateSorter="handleSortChange"
     :onUpdatePageSize="handlePageSizeChange"
