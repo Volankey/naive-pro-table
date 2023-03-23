@@ -189,14 +189,12 @@ defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
 
-initDefaultSortAndFilterQuery(paramsStoreRef.value)
-
-paramsStoreRef.value.initQuery(
-  syncFromRouter(props.queryPrefix),
-  mergedPaginationWithPropsRef
-)
-
 onMounted(() => {
+  initDefaultSortAndFilterQuery(paramsStoreRef.value)
+  paramsStoreRef.value.initQuery(
+    syncFromRouter(props.queryPrefix),
+    mergedPaginationWithPropsRef
+  )
   handleFetchTableData()
 })
 </script>

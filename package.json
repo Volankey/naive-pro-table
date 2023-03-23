@@ -13,13 +13,13 @@
     "@typescript-eslint/parser": "^5.26.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "eslint": "^8.5.0",
+    "eslint": "^8.36.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-vue": "^8.2.0",
     "husky": "^8.0.1",
     "lint-staged": "^12.4.2",
     "prettier": "^2.7.1",
-    "typescript": "5.0.0-dev.20230104"
+    "typescript": "4.9.5"
   },
   "lint-staged": {
     "*.js": "eslint  --fix",
@@ -49,8 +49,8 @@
     "prepare": "husky install",
     "lint": "pnpm run lint:code && pnpm run lint:type",
     "lint:type": "pnpm run typecheck:pkg",
-    "lint:code": "eslint packages/**/*.{ts,tsx,js,vue}",
-    "reinstall":"rm -rf node_modules && rm -rf pnpm-lock.yaml && rm -rf docs/node_modules && rm -rf packages/node_modules && pnpm install"
+    "lint:code": "eslint 'packages/**/*.{ts,tsx,js,vue}'",
+    "reinstall": "rm -rf node_modules && rm -rf pnpm-lock.yaml && rm -rf docs/node_modules && rm -rf packages/node_modules && pnpm install"
   },
   "repository": {
     "type": "git",

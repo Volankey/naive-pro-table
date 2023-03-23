@@ -1,7 +1,14 @@
 <template>
   <ProTable
     ref="proTableRef"
-    :columns="proTableColumnsRef"
+    :columns="proTableColumnsRef as any"
+    :pagination="{
+      showSizePicker: true,
+      showQuickJumper: true,
+      defaultPageSize: 2,
+      defaultPage: 1,
+      pageSizes: [1, 2, 3]
+    }"
     :api-request="apiRequest"
   ></ProTable>
   <Draggable v-model="configurableColumnsRef" :sort="true" item-key="key">
@@ -40,15 +47,11 @@ type Column = {
   address: string
   age: number
 }
-const createSourceData = (
-  params: unknown,
-  sort: any,
-  filter: any,
-  page: number,
+const createSourceData = (): {
   pageSize: number
-): { pageSize: number; itemCount: number; data: Column[] } => {
-  console.log(params, sort, filter, page, pageSize)
-
+  itemCount: number
+  data: Column[]
+} => {
   const data: Column[] = [
     {
       name: 'John Brown',
