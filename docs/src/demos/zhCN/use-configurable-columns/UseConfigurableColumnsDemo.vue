@@ -2,16 +2,9 @@
   <ProTable
     ref="proTableRef"
     :columns="proTableColumnsRef as any"
-    :pagination="{
-      showSizePicker: true,
-      showQuickJumper: true,
-      defaultPageSize: 2,
-      defaultPage: 1,
-      pageSizes: [1, 2, 3]
-    }"
     :api-request="apiRequest"
   ></ProTable>
-  <Draggable v-model="configurableColumnsRef" :sort="true" item-key="key">
+  <Draggable :list="configurableColumnsRef as any" :sort="true" item-key="key">
     <template #item="{ element }">
       <div>
         <n-checkbox v-model:checked="element.visible"></n-checkbox>
@@ -47,11 +40,15 @@ type Column = {
   address: string
   age: number
 }
-const createSourceData = (): {
+const createSourceData = (
+  params: unknown,
+  sort: any,
+  filter: any,
+  page: number,
   pageSize: number
-  itemCount: number
-  data: Column[]
-} => {
+): { pageSize: number; itemCount: number; data: Column[] } => {
+  console.log(params, sort, filter, page, pageSize)
+
   const data: Column[] = [
     {
       name: 'John Brown',
@@ -97,7 +94,7 @@ const columns: ConfigurableInitColumn[] = [
     dataIndex: 'gender'
   },
   {
-    title: () => h('span', { style: 'color:red;' }, 'Name'),
+    title: () => h('span', { style: 'color:red;' }, 'Name') as any,
     dataIndex: 'name'
   },
 
