@@ -94,7 +94,7 @@ const columns: ConfigurableInitColumn[] = [
     dataIndex: 'gender'
   },
   {
-    title: () => h('span', { style: 'color:red;' }, 'Name') as any,
+    title: () => h('span', { style: 'color:red;' }, 'Name'),
     dataIndex: 'name'
   },
 
