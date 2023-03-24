@@ -1,10 +1,10 @@
 <template>
   <ProTable
     ref="proTableRef"
-    :columns="proTableColumnsRef as any"
+    :columns="proTableColumnsRef"
     :api-request="apiRequest"
   ></ProTable>
-  <Draggable :list="configurableColumnsRef as any" :sort="true" item-key="key">
+  <Draggable :list="configurableColumnsRef" :sort="true" item-key="key">
     <template #item="{ element }">
       <div>
         <n-checkbox v-model:checked="element.visible"></n-checkbox>
