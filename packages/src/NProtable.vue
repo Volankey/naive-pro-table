@@ -82,6 +82,10 @@ const paramsStoreRef = computed(
       onUpdateQuery: handleUpdateQuery
     })
 )
+/**当 paramsStoreRef 更新的时候，解决分页丢失的问题*/
+watch(paramsStoreRef, (newParamStore, odlParamStore) => {
+  if (odlParamStore) newParamStore.queryRef.value = odlParamStore.queryRef.value
+})
 const handleCustomParamsUpdate = (
   customParams: Record<string, any>,
   init = false
@@ -188,13 +192,12 @@ const handleFetchTableData = debounce(
 defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
-
+initDefaultSortAndFilterQuery(paramsStoreRef.value)
+paramsStoreRef.value.initQuery(
+  syncFromRouter(props.queryPrefix),
+  mergedPaginationWithPropsRef
+)
 onMounted(() => {
-  initDefaultSortAndFilterQuery(paramsStoreRef.value)
-  paramsStoreRef.value.initQuery(
-    syncFromRouter(props.queryPrefix),
-    mergedPaginationWithPropsRef
-  )
   handleFetchTableData()
 })
 </script>
