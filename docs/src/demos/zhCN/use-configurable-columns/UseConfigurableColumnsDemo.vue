@@ -4,7 +4,7 @@
     :columns="proTableColumnsRef"
     :api-request="apiRequest"
   ></ProTable>
-  <Draggable v-model="configurableColumnsRef" :sort="true" item-key="key">
+  <Draggable :list="configurableColumnsRef" :sort="true" item-key="key">
     <template #item="{ element }">
       <div>
         <n-checkbox v-model:checked="element.visible"></n-checkbox>

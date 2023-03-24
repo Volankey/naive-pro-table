@@ -189,14 +189,12 @@ defineExpose<ProTableIns>({
   refresh: handleFetchTableData
 })
 
-initDefaultSortAndFilterQuery(paramsStoreRef.value)
-
-paramsStoreRef.value.initQuery(
-  syncFromRouter(props.queryPrefix),
-  mergedPaginationWithPropsRef
-)
-
 onMounted(() => {
+  initDefaultSortAndFilterQuery(paramsStoreRef.value)
+  paramsStoreRef.value.initQuery(
+    syncFromRouter(props.queryPrefix),
+    mergedPaginationWithPropsRef
+  )
   handleFetchTableData()
 })
 </script>
@@ -209,7 +207,7 @@ onMounted(() => {
     :pagination="mergedPagination"
     :data="tableDataRef"
     :loading="loadingRef"
-    :columns="mergedColumnsRef"
+    :columns="mergedColumnsRef as any"
     :onUpdateFilters="handleFilterChange"
     :onUpdateSorter="handleSortChange"
     :onUpdatePageSize="handlePageSizeChange"

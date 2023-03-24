@@ -2,6 +2,8 @@ import { expect, vi, test } from 'vitest'
 import { flushPromises } from '@vue/test-utils'
 import { createTest } from './utils'
 import { NPagination } from 'naive-ui'
+import { useConfigurableColumns } from '../src'
+import { createCommonColsRef } from './common'
 
 // use mock lodash-es/debounce to make vitest and lodash/setTimeout in the same loop
 vi.mock('lodash-es/debounce', () => ({
@@ -122,6 +124,33 @@ test('syncRoutePageSize name set to false', async () => {
   await router.push('/')
   await flushPromises()
 
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:pageSize'])) {
+    pagination.vm?.['onUpdate:pageSize'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query).toEqual({
+    'page.page': '1'
+  })
+  expect(result.pageSize).toEqual(2)
+})
+
+test('test page with dynamic columns', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...renderProps,
+    syncRoutePageSize: false
+  })
+
+  await router.push('/')
+  const { proTableColumnsRef } = useConfigurableColumns(
+    createCommonColsRef().value
+  )
+  wrapper.setProps({
+    ...renderProps,
+    syncRoutePageSize: false,
+    columns: proTableColumnsRef
+  })
   const pagination = wrapper.getComponent(NPagination)
   if (!Array.isArray(pagination.vm?.['onUpdate:pageSize'])) {
     pagination.vm?.['onUpdate:pageSize'](2)
