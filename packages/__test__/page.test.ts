@@ -10,25 +10,28 @@ vi.mock('lodash-es/debounce', () => ({
   default: vi.fn((fn) => fn),
   __esModule: true
 }))
-
-const renderProps = {
-  pagination: {
-    defaultPageSize: 15,
-    defaultPage: 1,
-    itemCount: 0,
-    showSizePicker: true,
-    pageSizes: [15, 20, 50]
+function getRenderProps() {
+  const renderProps = {
+    pagination: {
+      defaultPageSize: 15,
+      defaultPage: 1,
+      itemCount: 0,
+      showSizePicker: true,
+      pageSizes: [15, 20, 50]
+    }
   }
+  return renderProps
 }
+
 const createPageTest = createTest
 test('default pageSize = 15', async () => {
-  const { result } = await createPageTest(renderProps)
+  const { result } = await createPageTest(getRenderProps())
   await flushPromises()
   expect(result.pageSize).equal(15)
 })
 test('init url page = 2', async () => {
   const { result } = await createPageTest(
-    renderProps,
+    getRenderProps(),
     undefined,
     '/?page.page=2'
   )
@@ -36,8 +39,28 @@ test('init url page = 2', async () => {
   expect(result.pageSize).equal(15)
   expect(result.page).equal(2)
 })
+test('syncRoutePage name set to false', async () => {
+  const { wrapper, router, result } = await createPageTest({
+    ...getRenderProps(),
+    syncRoutePage: false
+  })
+  await router.push('/')
+  await flushPromises()
+
+  const pagination = wrapper.getComponent(NPagination)
+  if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
+    pagination.vm?.['onUpdate:page'](2)
+  }
+  await flushPromises()
+  const route = router.currentRoute.value
+  expect(route.query).toEqual({
+    'pageSize.pageSize': '15'
+  })
+  expect(result.page).toEqual(2)
+})
 test('change page = 2 then the pageSize = 20', async () => {
-  const { wrapper, result, router } = await createPageTest(renderProps)
+  const { wrapper, result, router } = await createPageTest(getRenderProps())
+  await router.push('/')
   const pagination = wrapper.getComponent(NPagination)
   if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
     pagination.vm?.['onUpdate:page'](2)
@@ -62,7 +85,7 @@ test('change page = 2 then the pageSize = 20', async () => {
 
 test('syncRoutePage name set to p', async () => {
   const { wrapper, router, result } = await createPageTest({
-    ...renderProps,
+    ...getRenderProps(),
     syncRoutePage: {
       name: 'p'
     }
@@ -79,27 +102,9 @@ test('syncRoutePage name set to p', async () => {
   expect(result.page).toEqual(2)
 })
 
-test('syncRoutePage name set to false', async () => {
-  const { wrapper, router, result } = await createPageTest({
-    ...renderProps,
-    syncRoutePage: false
-  })
-  await router.push('/')
-  await flushPromises()
-
-  const pagination = wrapper.getComponent(NPagination)
-  if (!Array.isArray(pagination.vm?.['onUpdate:page'])) {
-    pagination.vm?.['onUpdate:page'](2)
-  }
-  await flushPromises()
-  const route = router.currentRoute.value
-  expect(route.query).toEqual({})
-  expect(result.page).toEqual(2)
-})
-
 test('syncRoutePage name set to s', async () => {
   const { wrapper, router, result } = await createPageTest({
-    ...renderProps,
+    ...getRenderProps(),
     syncRoutePageSize: {
       name: 's'
     }
@@ -118,7 +123,7 @@ test('syncRoutePage name set to s', async () => {
 
 test('syncRoutePageSize name set to false', async () => {
   const { wrapper, router, result } = await createPageTest({
-    ...renderProps,
+    ...getRenderProps(),
     syncRoutePageSize: false
   })
   await router.push('/')
@@ -138,7 +143,7 @@ test('syncRoutePageSize name set to false', async () => {
 
 test('test page with dynamic columns', async () => {
   const { wrapper, router, result } = await createPageTest({
-    ...renderProps,
+    ...getRenderProps(),
     syncRoutePageSize: false
   })
 
@@ -147,7 +152,7 @@ test('test page with dynamic columns', async () => {
     createCommonColsRef().value
   )
   wrapper.setProps({
-    ...renderProps,
+    ...getRenderProps(),
     syncRoutePageSize: false,
     columns: proTableColumnsRef
   })

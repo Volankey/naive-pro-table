@@ -63,7 +63,8 @@ describe('test one status to false', async () => {
     let route = router.currentRoute.value
     expect(route.query).toEqual({
       'tableCopy.age.sort': 'descend',
-      'table.page.page': '1'
+      'table.page.page': '1',
+      'tableCopy.page.page': '1'
     })
     expect(sorter.html()).not.toContain('n-data-table-sorter--desc')
     expect(sorter.html()).not.toContain('n-data-table-sorter--asc')
@@ -82,7 +83,9 @@ describe('test one status to false', async () => {
     route = router.currentRoute.value
     expect(route.query).toEqual({
       'table.age.sort': 'descend',
-      'tableCopy.age.sort': 'ascend'
+      'tableCopy.age.sort': 'ascend',
+      'table.page.page': '1',
+      'tableCopy.page.page': '1'
     })
   })
 })
