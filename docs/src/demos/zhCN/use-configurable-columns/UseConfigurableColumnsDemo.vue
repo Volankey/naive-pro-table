@@ -1,7 +1,7 @@
 <template>
   <ProTable
     ref="proTableRef"
-    :columns="proTableColumnsRef as any"
+    :columns="proTableColumnsRef"
     :api-request="apiRequest"
   ></ProTable>
   <Draggable :list="configurableColumnsRef" :sort="true" item-key="key">
@@ -94,7 +94,7 @@ const columns: ConfigurableInitColumn[] = [
     dataIndex: 'gender'
   },
   {
-    title: () => h('span', { style: 'color:red;' }, 'Name') as any,
+    title: () => h('span', { style: 'color:red;' }, 'Name'),
     dataIndex: 'name'
   },
 
