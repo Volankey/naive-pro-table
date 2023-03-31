@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
 
 export const numberPreset = {
-  render(value: number | undefined | null) {
+  transformToQuery(value: number | undefined | null) {
     return value?.toString()
   },
-  getFromQuery(routerQuery: string | undefined) {
+  transformFromQuery(routerQuery: string | undefined) {
     if (routerQuery?.length) {
       return parseInt(routerQuery)
     }
@@ -13,26 +13,28 @@ export const numberPreset = {
 }
 
 export const datePreset = {
-  render(value: number | undefined) {
+  transformToQuery(value: number | undefined) {
     if (value) {
       const temp = dayjs(value).format('YYYY-MM-DD')
       return temp
     }
   },
-  getFromQuery(routerQuery: string | undefined) {
+  transformFromQuery(routerQuery: string | undefined) {
     if (
       routerQuery?.length &&
       dayjs(routerQuery, 'YYYY-MM-DD', true).isValid()
     ) {
       return dayjs(routerQuery, 'YYYY-MM-DD').valueOf()
     }
-    console.error(routerQuery, '路由日期不合法，返回undefined')
+    if (routerQuery?.length) {
+      throw new Error(routerQuery + ',路由日期不合法')
+    }
     return undefined
   }
 }
 
 export const dateRangePreset = {
-  render(value: [number, number] | undefined) {
+  transformToQuery(value: [number, number] | undefined) {
     if (value) {
       const tempDate = value?.map((item: number) =>
         dayjs(item).format('YYYY-MM-DD')
@@ -40,7 +42,7 @@ export const dateRangePreset = {
       return JSON.stringify(tempDate)
     }
   },
-  getFromQuery(routerQuery: string | undefined) {
+  transformFromQuery(routerQuery: string | undefined) {
     let res = undefined
     try {
       res = routerQuery?.length
@@ -52,22 +54,23 @@ export const dateRangePreset = {
           })
         : undefined
     } catch {
-      console.error('路由日期不合法，返回undefined')
-      return undefined
+      throw new Error(routerQuery + '路由时间解析失败')
     }
-    if (!Number.isInteger(res?.[0]) || !Number.isInteger(res?.[1])) {
-      console.error(routerQuery + '路由时间解析失败，返回undefined')
-      return undefined
+    if (
+      routerQuery?.length &&
+      (!Number.isInteger(res?.[0]) || !Number.isInteger(res?.[1]))
+    ) {
+      throw new Error(routerQuery + '路由时间解析失败')
     }
     return res
   }
 }
 
 export const booleanPreset = {
-  render(value: boolean | undefined) {
+  transformToQuery(value: boolean | undefined) {
     return value ? 'true' : 'false'
   },
-  getFromQuery(routerQuery: string | undefined) {
+  transformFromQuery(routerQuery: string | undefined) {
     if (routerQuery?.length) {
       return routerQuery !== 'false' //路由解析当false或者undefined的时候为false，其他都为true
     }
@@ -76,18 +79,22 @@ export const booleanPreset = {
 }
 
 export const stringArrayPreset = {
-  render(value: string[] | undefined) {
+  transformToQuery(value: string[] | undefined) {
     if (value) {
       return JSON.stringify(value)
     }
   },
-  getFromQuery(routerQuery: string | undefined) {
+  transformFromQuery(routerQuery: string | undefined) {
     if (routerQuery?.length) {
-      const parse = JSON.parse(routerQuery)
-      if (!(parse instanceof Array)) {
-        throw new Error('非数组')
+      try {
+        const parse = JSON.parse(routerQuery)
+        if (!(parse instanceof Array)) {
+          throw new Error(routerQuery + '非数组')
+        }
+        return parse as string[]
+      } catch {
+        throw new Error(routerQuery + '非数组')
       }
-      return parse as string[]
     }
   }
 }

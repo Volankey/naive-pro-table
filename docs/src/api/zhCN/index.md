@@ -293,7 +293,7 @@ function useConfigurableColumns(
 
 > 该 hook 返回 一个 `reactive` 变量
 
-初始化的时候，我们需要传入类型申明来支持 ts。该类型申明代表你将要返回的 `reactive` 变量的类型，具体可看下面的示例。
+初始化的时候，我们需要传入类型声明来支持 ts。该类型声明代表你将要返回的 `reactive` 变量的类型，具体可看下面的示例。
 
 为了提高开发效率，提供了多种常见的预设模式[预设类型参考](#useCustomRouterQuery-type-declarations)，具体表现可看<n-a href="/example/use-custom-router-query">最佳实践</n-a>
 
@@ -340,7 +340,7 @@ const reactiveData = useCustomRouterQuery<{
             .join('')}`
         }
       },
-      getFromQuery(routerQuery: string | undefined) {
+      transformFromQuery(routerQuery: string | undefined) {
         //该函数会路由query上面的字符串转换成自己需要的值
         if (routerQuery?.length) {
           return (routerQuery.match(/🐑/g) || []).length
@@ -367,7 +367,7 @@ type Param<T> = {
   [K in keyof T]: {
     defaultValue?: T[K]
     render?: (value: undefined | T[K]) => string | undefined
-    getFromQuery?: (routerValue: string | undefined) => T[K]
+    transformFromQuery?: (routerValue: string | undefined) => T[K]
     preset?: PresetType
   }
 }

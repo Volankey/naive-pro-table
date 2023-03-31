@@ -8,29 +8,23 @@ import {
   stringArrayPreset
 } from './preset'
 
-type PresetType = 'number' | 'date' | 'dateRange' | 'boolean' | 'stringArray'
-
-type Param<T> = {
-  [K in keyof T]: {
-    defaultValue?: T[K]
-    render?: (value: undefined | T[K]) => string | undefined
-    getFromQuery?: (routerValue: string | undefined) => T[K]
-    preset?: PresetType
-  }
-}
-
-const presetMap: Record<
-  PresetType,
-  {
-    render(value: any): string | undefined
-    getFromQuery(routerQuery: string): any
-  }
-> = {
+const presetMap = {
   dateRange: dateRangePreset,
   date: datePreset,
   number: numberPreset,
   boolean: booleanPreset,
   stringArray: stringArrayPreset
+} as const
+
+type PresetType = keyof typeof presetMap
+
+type Param<T> = {
+  [K in keyof T]: {
+    defaultValue?: T[K]
+    transformToQuery?: (value: undefined | T[K]) => string | undefined
+    transformFromQuery?: (routerValue: string | undefined) => T[K]
+    preset?: PresetType
+  }
 }
 
 let queue: Record<string, any> = {}
@@ -43,22 +37,22 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
   }
 ) {
   const reactiveData = reactive<T>({} as any)
+  const defaultTransformToQuery = (value: undefined | any) => {
+    return value?.toString?.() ?? ''
+  }
+  const defaultTransformFromQuery = (routerValue: string) => {
+    return routerValue
+  }
   for (const key in items) {
     const item = items[key]
-    const defaultRender = (value: undefined | any) => {
-      return value?.toString?.() ?? ''
-    }
-    const defaultGetFromQuery = (routerValue: string) => {
-      return routerValue
-    }
-    const render =
-      presetMap[item.preset as PresetType]?.render ??
-      item.render ??
-      defaultRender
-    const getFromQuery =
-      presetMap[item.preset as PresetType]?.getFromQuery ??
-      item.getFromQuery ??
-      defaultGetFromQuery
+    const transformToQuery =
+      presetMap[item.preset as PresetType]?.transformToQuery ??
+      item.transformToQuery ??
+      defaultTransformToQuery
+    const transformFromQuery =
+      presetMap[item.preset as PresetType]?.transformFromQuery ??
+      item.transformFromQuery ??
+      defaultTransformFromQuery
 
     // 取自于vueuse/router https://github.com/vueuse/vueuse/blob/main/packages/router/useRouteQuery/index.ts
     const routeQueryRef = computed<any>({
@@ -82,10 +76,10 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
     reactiveData[key as keyof typeof reactiveData] = computed({
       get: () => {
         if (routeQueryRef.value == null) return item.defaultValue
-        return getFromQuery(routeQueryRef.value)
+        return transformFromQuery(routeQueryRef.value)
       }, //如果存给routeQueryRef是undefined的话直接取的时候会取得默认值
       set: (setValue) => {
-        routeQueryRef.value = render(setValue) ?? ''
+        routeQueryRef.value = transformToQuery(setValue) ?? ''
       }
     }) as any
   }

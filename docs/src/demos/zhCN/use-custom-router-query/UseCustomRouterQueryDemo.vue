@@ -115,7 +115,7 @@ const reactiveData = useCustomRouterQuery<{
     },
     customNum: {
       defaultValue: 2,
-      render(value: number | undefined) {
+      transformToQuery(value: number | undefined) {
         //该函数会将真实的值value以字符串的形式渲染到路由query上面
         if (value) {
           return `你可以通过修改数字或者修改右侧羊的数量看看变化${Array(value)
@@ -123,8 +123,8 @@ const reactiveData = useCustomRouterQuery<{
             .join('')}`
         }
       },
-      getFromQuery(routerQuery: string | undefined) {
-        //该函数会路由query上面的字符串转换成自己需要的值
+      transformFromQuery(routerQuery: string | undefined) {
+        //该函数会将路由query上面的字符串转换成自己需要的值
         if (routerQuery?.length) {
           return (routerQuery.match(/🐑/g) || []).length
         }

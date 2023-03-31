@@ -12,78 +12,88 @@ import { createTest } from './utils'
 import { flushPromises } from '@vue/test-utils'
 
 describe('test hook use-custom-router-query', async () => {
-  it('test number preset render', () => {
-    expect(numberPreset.render(123)).toBe('123')
-    expect(numberPreset.render(-1)).toBe('-1')
-    expect(numberPreset.render(0)).toBe('0')
+  it('test number preset transformToQuery', () => {
+    expect(numberPreset.transformToQuery(123)).toBe('123')
+    expect(numberPreset.transformToQuery(-1)).toBe('-1')
+    expect(numberPreset.transformToQuery(0)).toBe('0')
   })
-  it('test number preset getFromRouter', () => {
-    expect(numberPreset.getFromQuery('123')).toBe(123)
-    expect(numberPreset.getFromQuery('hello')).toBe(NaN)
-    expect(numberPreset.getFromQuery('')).toBe(undefined)
-    expect(numberPreset.getFromQuery(undefined)).toBe(undefined)
+  it('test number preset transformFromQuery', () => {
+    expect(numberPreset.transformFromQuery('123')).toBe(123)
+    expect(numberPreset.transformFromQuery('hello')).toBe(NaN)
+    expect(numberPreset.transformFromQuery('')).toBe(undefined)
+    expect(numberPreset.transformFromQuery(undefined)).toBe(undefined)
   })
 
-  it('test date preset render', () => {
-    expect(datePreset.render(Date.now())).toBe(
+  it('test date preset transformToQuery', () => {
+    expect(datePreset.transformToQuery(Date.now())).toBe(
       dayjs(Date.now()).format('YYYY-MM-DD')
     )
-    expect(datePreset.render(-1)).toBe(dayjs(-1).format('YYYY-MM-DD'))
-    expect(datePreset.render(undefined)).toBe(undefined)
+    expect(datePreset.transformToQuery(-1)).toBe(dayjs(-1).format('YYYY-MM-DD'))
+    expect(datePreset.transformToQuery(undefined)).toBe(undefined)
   })
-  it('test date preset getFromRouter', () => {
-    expect(datePreset.getFromQuery('2023-03-20')).toBe(
+  it('test date preset transformFromQuery', () => {
+    expect(datePreset.transformFromQuery('2023-03-20')).toBe(
       dayjs('2023-03-20', 'YYYY-MM-DD').valueOf()
     )
-    expect(datePreset.getFromQuery('')).toBe(undefined)
-    expect(datePreset.getFromQuery(undefined)).toBe(undefined)
+    expect(() => {
+      datePreset.transformFromQuery('dsacw22r1')
+    }).toThrowError('dsacw22r1' + ',路由日期不合法')
+    expect(datePreset.transformFromQuery('')).toBe(undefined)
+    expect(datePreset.transformFromQuery(undefined)).toBe(undefined)
   })
 
-  it('test dateRange preset render', () => {
-    expect(dateRangePreset.render([1234567, 1298765])).toBe(
+  it('test dateRange preset transformToQuery', () => {
+    expect(dateRangePreset.transformToQuery([1234567, 1298765])).toBe(
       JSON.stringify([
         dayjs(1234567).format('YYYY-MM-DD'),
         dayjs(1298765).format('YYYY-MM-DD')
       ])
     )
-    expect(dateRangePreset.render(undefined)).toBe(undefined)
+    expect(dateRangePreset.transformToQuery(undefined)).toBe(undefined)
   })
-  it('test dateRange preset getFromRouter', () => {
+  it('test dateRange preset transformFromQuery', () => {
     expect(
-      dateRangePreset.getFromQuery('["2023-03-19","2023-03-20"]')
+      dateRangePreset.transformFromQuery('["2023-03-19","2023-03-20"]')
     ).toStrictEqual([
       dayjs('2023-03-19', 'YYYY-MM-DD').valueOf(),
       dayjs('2023-03-20', 'YYYY-MM-DD').valueOf()
     ])
-    expect(dateRangePreset.getFromQuery('')).toBe(undefined)
-    expect(dateRangePreset.getFromQuery(undefined)).toBe(undefined)
+    expect(dateRangePreset.transformFromQuery('')).toBe(undefined)
+    expect(dateRangePreset.transformFromQuery(undefined)).toBe(undefined)
+    expect(() => {
+      dateRangePreset.transformFromQuery('[213213-sa23]')
+    }).toThrowError('[213213-sa23]' + '路由时间解析失败')
   })
 
-  it('test boolean preset render', () => {
-    expect(booleanPreset.render(false)).toBe('false')
-    expect(booleanPreset.render(true)).toBe('true')
-    expect(booleanPreset.render(undefined)).toBe('false')
+  it('test boolean preset transformToQuery', () => {
+    expect(booleanPreset.transformToQuery(false)).toBe('false')
+    expect(booleanPreset.transformToQuery(true)).toBe('true')
+    expect(booleanPreset.transformToQuery(undefined)).toBe('false')
   })
-  it('test boolean preset getFromRouter', () => {
-    expect(booleanPreset.getFromQuery('true')).toBe(true)
-    expect(booleanPreset.getFromQuery('false')).toBe(false)
-    expect(booleanPreset.getFromQuery('')).toBe(false)
-    expect(booleanPreset.getFromQuery(undefined)).toBe(false)
+  it('test boolean preset transformFromQuery', () => {
+    expect(booleanPreset.transformFromQuery('true')).toBe(true)
+    expect(booleanPreset.transformFromQuery('false')).toBe(false)
+    expect(booleanPreset.transformFromQuery('')).toBe(false)
+    expect(booleanPreset.transformFromQuery(undefined)).toBe(false)
   })
 
-  it('test string array preset render', () => {
-    expect(stringArrayPreset.render(['1', '2', '3'])).toBe(
+  it('test string array preset transformToQuery', () => {
+    expect(stringArrayPreset.transformToQuery(['1', '2', '3'])).toBe(
       JSON.stringify(['1', '2', '3'])
     )
-    expect(stringArrayPreset.render([])).toBe(JSON.stringify([]))
-    expect(stringArrayPreset.render(undefined)).toBe(undefined)
+    expect(stringArrayPreset.transformToQuery([])).toBe(JSON.stringify([]))
+    expect(stringArrayPreset.transformToQuery(undefined)).toBe(undefined)
   })
-  it('test string array preset getFromRouter', () => {
+  it('test string array preset transformFromQuery', () => {
     expect(
-      stringArrayPreset.getFromQuery(JSON.stringify(['a', 'h']))
+      stringArrayPreset.transformFromQuery(JSON.stringify(['a', 'h']))
     ).toStrictEqual(['a', 'h'])
-    expect(stringArrayPreset.getFromQuery('')).toBe(undefined)
-    expect(stringArrayPreset.getFromQuery(undefined)).toBe(undefined)
+
+    expect(() => {
+      stringArrayPreset.transformFromQuery('213213ds')
+    }).toThrowError('213213ds' + '非数组')
+    expect(stringArrayPreset.transformFromQuery('')).toBe(undefined)
+    expect(stringArrayPreset.transformFromQuery(undefined)).toBe(undefined)
   })
 
   const { router } = await createTest(undefined, undefined, '')
