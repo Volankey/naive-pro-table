@@ -43,9 +43,8 @@ export const dateRangePreset = {
     }
   },
   transformFromQuery(routerQuery: string | undefined) {
-    let res = undefined
     try {
-      res = routerQuery?.length
+      const res = routerQuery?.length
         ? JSON.parse(routerQuery)?.map((item: string) => {
             if (dayjs(item, 'YYYY-MM-DD', true).isValid()) {
               return dayjs(item, 'YYYY-MM-DD').valueOf()
@@ -53,16 +52,18 @@ export const dateRangePreset = {
             return undefined
           })
         : undefined
+      if (
+        routerQuery?.length &&
+        (res?.length < 2 ||
+          !Number.isInteger(res?.[0]) ||
+          !Number.isInteger(res?.[1]))
+      ) {
+        throw new Error(routerQuery + '路由时间解析失败')
+      }
+      return res
     } catch {
       throw new Error(routerQuery + '路由时间解析失败')
     }
-    if (
-      routerQuery?.length &&
-      (!Number.isInteger(res?.[0]) || !Number.isInteger(res?.[1]))
-    ) {
-      throw new Error(routerQuery + '路由时间解析失败')
-    }
-    return res
   }
 }
 

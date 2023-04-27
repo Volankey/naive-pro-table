@@ -63,6 +63,9 @@ describe('test hook use-custom-router-query', async () => {
     expect(() => {
       dateRangePreset.transformFromQuery('[213213-sa23]')
     }).toThrowError('[213213-sa23]' + '路由时间解析失败')
+    expect(() => {
+      dateRangePreset.transformFromQuery('[213213]')
+    }).toThrowError('[213213]' + '路由时间解析失败')
   })
 
   it('test boolean preset transformToQuery', () => {
@@ -92,6 +95,9 @@ describe('test hook use-custom-router-query', async () => {
     expect(() => {
       stringArrayPreset.transformFromQuery('213213ds')
     }).toThrowError('213213ds' + '非数组')
+    expect(() => {
+      stringArrayPreset.transformFromQuery('123')
+    }).toThrowError('123' + '非数组')
     expect(stringArrayPreset.transformFromQuery('')).toBe(undefined)
     expect(stringArrayPreset.transformFromQuery(undefined)).toBe(undefined)
   })
@@ -194,6 +200,31 @@ describe('test hook use-custom-router-query', async () => {
       isTrue: false,
       multipleString: ['hello', 'world']
     })
+  })
+
+  it('test defaultTransformToQuery and defaultTransformFromQuery', async () => {
+    router.push({
+      query: {
+        testString: '342'
+      }
+    })
+    await flushPromises()
+
+    const reactiveData = useCustomRouterQuery<{
+      testString?: string
+    }>(
+      {
+        testString: { defaultValue: '0' }
+      },
+      {
+        route: router.currentRoute.value,
+        router: router
+      }
+    )
+    expect(reactiveData.testString).toBe('342')
+    reactiveData.testString = '123'
+    await flushPromises()
+    expect(router.currentRoute.value.query.testString).toBe('123')
   })
 
   it('test changing reactiveData to change router', async () => {
