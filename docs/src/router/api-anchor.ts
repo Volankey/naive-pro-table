@@ -57,6 +57,11 @@ export const apiAnchors = [
         key: 'useConfigurableColumns',
         path: '#useConfigurableColumns',
         label: 'useConfigurableColumns'
+      },
+      {
+        key: 'useCustomRouterQuery',
+        path: '#useCustomRouterQuery',
+        label: 'useCustomRouterQuery'
       }
     ]
   }

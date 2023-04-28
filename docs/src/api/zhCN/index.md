@@ -288,3 +288,96 @@ function useConfigurableColumns(
 ```
 
 </n-card>
+
+#### useCustomRouterQuery
+
+> 该 hook 返回 一个 `reactive` 变量
+
+初始化的时候，我们需要传入类型声明来支持 ts。该类型声明代表你将要返回的 `reactive` 变量的类型，具体可看下面的示例。
+
+为了提高开发效率，提供了多种常见的预设模式[预设类型参考](#useCustomRouterQuery-type-declarations)，具体表现可看<n-a href="/example/use-custom-router-query">最佳实践</n-a>
+
+同样提供了默认值属性 `defaultValue` ，当我们进入网页链接中没有 query 信息的时候，初始化的响应式变量将会以默认值为初始值。默认为 `undefined`
+
+如果预设模式满足不了你的需求，你可以通过 `render` 和 `getFromRouter` 来自定义自己的响应式数据，这里的 `render` 和 vue3 中 `computed` 中的 set 类似， `getFromRouter` 与 `get` 类似。
+
+<span style="color:red;">注意：</span>存在 preset 的时候优先以 preset 为主 <span id='useConfigurableColumns-usage'></span>
+
+##### Usage
+
+最佳实践请看<n-a href="/example/use-custom-router-query">同步路由 Demo</n-a>
+
+<n-card>
+
+```typescript
+<script setup lang="ts">
+import { useRoute, useRouter } from 'vue-router'
+import { useCustomRouterQuery } from 'naive-ui-protable'
+const routerData = {
+  router: useRouter(),
+  route: useRoute()
+}
+
+const reactiveData = useCustomRouterQuery<{
+  searchValue?: string
+  numberValue?:number
+  customNum?: number
+}>(
+  {
+    searchValue: {
+      defaultValue: undefined
+    },
+    numberValue: {
+      preset: 'number'
+    },
+    customNum: {
+      defaultValue: 2,
+      render(value: number | undefined) {
+        //该函数会将真实的值value以字符串的形式渲染到路由query上面
+        if (value) {
+          return `你可以通过修改数字或者修改右侧羊的数量看看变化${Array(value)
+            .fill('🐑')
+            .join('')}`
+        }
+      },
+      transformFromQuery(routerQuery: string | undefined) {
+        //该函数会路由query上面的字符串转换成自己需要的值
+        if (routerQuery?.length) {
+          return (routerQuery.match(/🐑/g) || []).length
+        }
+      }
+    }
+  },
+  routerData
+)
+</script>
+
+```
+
+</n-card>
+<span id='useCustomRouterQuery-type-declarations'></span>
+
+##### Type Declarations
+
+<n-card>
+
+```typescript
+type PresetType = 'number' | 'date' | 'dateRange' | 'boolean' | 'stringArray'
+type Param<T> = {
+  [K in keyof T]: {
+    defaultValue?: T[K]
+    render?: (value: undefined | T[K]) => string | undefined
+    transformFromQuery?: (routerValue: string | undefined) => T[K]
+    preset?: PresetType
+  }
+}
+export declare function useCustomRouterQuery<T extends Record<string, any>>(
+  items: Param<T>,
+  reactiveRouteOptions: {
+    route: RouteLocationNormalizedLoaded
+    router: Router
+  }
+): import('vue').UnwrapNestedRefs<T>
+```
+
+</n-card>

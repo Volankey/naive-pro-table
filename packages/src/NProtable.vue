@@ -52,7 +52,7 @@ const props = withDefaults(
     configurable: false
   }
 )
-const mergedColumnsRef = ref<DataTableColumns>(
+const mergedColumnsRef = ref<DataTableColumns<any>>(
   (props.columns as ProColumnBaseColumn[]).map(mergedHandleColumn)
 )
 const syncRouteRuleColumnRef = ref(
