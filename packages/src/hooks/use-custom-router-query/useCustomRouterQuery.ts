@@ -21,7 +21,9 @@ type PresetType = keyof typeof presetMap
 type Param<T> = {
   [K in keyof T]: {
     defaultValue?: T[K]
-    transformToQuery?: (value: undefined | T[K]) => string | undefined
+    transformToQuery?: (
+      value: undefined | null | T[K]
+    ) => string | undefined | null
     transformFromQuery?: (routerValue: string | undefined) => T[K]
     preset?: PresetType
   }
@@ -37,8 +39,8 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
   }
 ) {
   const reactiveData = reactive<T>({} as any)
-  const defaultTransformToQuery = (value: undefined | any) => {
-    return value?.toString?.() ?? ''
+  const defaultTransformToQuery = (value: any) => {
+    return value
   }
   const defaultTransformFromQuery = (routerValue: string) => {
     return routerValue
@@ -79,7 +81,7 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         return transformFromQuery(routeQueryRef.value)
       }, //如果存给routeQueryRef是undefined的话直接取的时候会取得默认值
       set: (setValue) => {
-        routeQueryRef.value = transformToQuery(setValue) ?? ''
+        routeQueryRef.value = transformToQuery(setValue)
       }
     }) as any
   }
