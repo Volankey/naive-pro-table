@@ -36,6 +36,9 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
   reactiveRouteOptions: {
     route: RouteLocationNormalizedLoaded
     router: Router
+  },
+  options?: {
+    immediate?: boolean
   }
 ) {
   const reactiveData = reactive<T>({} as any)
@@ -75,6 +78,9 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         })
       }
     })
+    if (options?.immediate) {
+      routeQueryRef.value = transformToQuery(item.defaultValue)
+    }
     reactiveData[key as keyof typeof reactiveData] = computed({
       get: () => {
         if (routeQueryRef.value == null) return item.defaultValue

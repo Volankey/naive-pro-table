@@ -1,5 +1,14 @@
 <template>
   <n-space vertical>
+    <div>
+      进入时同步：<n-switch
+        v-model:value="immediate"
+        @update:value="handleImmediateUpdate"
+      />
+      <span style="font-size: 12px; color: #ccc; padding-left: 16px"
+        >设置修改后点击“重置路由并刷新”按钮查看结果</span
+      >
+    </div>
     <n-space :align="'center'">
       使用数字预设的变量:
       <n-input-number
@@ -63,8 +72,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCustomRouterQuery } from 'naive-ui-protable-alpha'
+
+const immediate = ref(localStorage.syncRouteImmediate === 'true')
 
 const opt = [
   {
@@ -131,10 +143,17 @@ const reactiveData = useCustomRouterQuery<{
       }
     }
   },
-  routerData
+  routerData,
+  {
+    immediate: immediate.value
+  }
 )
 
 async function handleClearQuery() {
   location.href = location.pathname
+}
+
+function handleImmediateUpdate() {
+  localStorage.syncRouteImmediate = immediate.value
 }
 </script>
