@@ -67,7 +67,7 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         return data
       },
       set(v) {
-        queue[key] = v === item.defaultValue || v === null ? undefined : v
+        queue[key] = v === null ? undefined : v
 
         nextTick(() => {
           reactiveRouteOptions.router.replace({
@@ -79,7 +79,9 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
       }
     })
     if (options?.immediate) {
-      routeQueryRef.value = transformToQuery(item.defaultValue)
+      const curVal = transformFromQuery(routeQueryRef.value)
+      const value = curVal === undefined ? item.defaultValue : curVal
+      routeQueryRef.value = transformToQuery(value)
     }
     reactiveData[key as keyof typeof reactiveData] = computed({
       get: () => {

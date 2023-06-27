@@ -249,7 +249,7 @@ describe('test hook use-custom-router-query', async () => {
     expect(router.currentRoute.value.query.numValue).toBe('123')
   })
 
-  it('test immediate option', async () => {
+  it('test immediate option to set default value to router', async () => {
     router.push('')
     await flushPromises()
 
@@ -272,5 +272,33 @@ describe('test hook use-custom-router-query', async () => {
     )
     await flushPromises()
     expect(router.currentRoute.value.query.numValue).toBe('1000')
+  })
+
+  it('test immediate option to get value from router', async () => {
+    router.push({
+      query: {
+        numValue: '342'
+      }
+    })
+    await flushPromises()
+
+    const reactiveData = useCustomRouterQuery<{
+      numValue?: number
+    }>(
+      {
+        numValue: {
+          preset: 'number',
+          defaultValue: 1000
+        }
+      },
+      {
+        route: router.currentRoute.value,
+        router: router
+      },
+      {
+        immediate: true
+      }
+    )
+    expect(reactiveData.numValue).toBe(342)
   })
 })

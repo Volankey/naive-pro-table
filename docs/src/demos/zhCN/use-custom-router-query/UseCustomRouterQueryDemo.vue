@@ -115,7 +115,7 @@ const reactiveData = useCustomRouterQuery<{
       preset: 'date'
     },
     searchValue: {
-      defaultValue: undefined
+      defaultValue: 'seatch something'
     },
     isTrue: {
       defaultValue: false,
