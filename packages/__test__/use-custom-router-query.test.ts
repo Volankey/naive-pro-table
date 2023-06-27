@@ -273,4 +273,23 @@ describe('test hook use-custom-router-query', async () => {
     await flushPromises()
     expect(router.currentRoute.value.query.numValue).toBe('1000')
   })
+
+  it('test value change then get value immediately', async () => {
+    router.push('')
+    await flushPromises()
+
+    const reactiveData = useCustomRouterQuery<{
+      stringValue?: string
+    }>(
+      {
+        stringValue: {}
+      },
+      {
+        route: router.currentRoute.value,
+        router: router
+      }
+    )
+    reactiveData.stringValue = '123321'
+    expect(reactiveData.stringValue).toBe('123321')
+  })
 })

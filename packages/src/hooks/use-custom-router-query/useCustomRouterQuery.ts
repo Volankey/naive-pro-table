@@ -1,4 +1,4 @@
-import { reactive, computed, nextTick } from 'vue'
+import { reactive, computed, nextTick, customRef } from 'vue'
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import {
   booleanPreset,
@@ -29,8 +29,6 @@ type Param<T> = {
   }
 }
 
-let queue: Record<string, any> = {}
-
 export function useCustomRouterQuery<T extends Record<string, any>>(
   items: Param<T>,
   reactiveRouteOptions: {
@@ -41,6 +39,10 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
     immediate?: boolean
   }
 ) {
+  const _query = new Map<string, any>()
+  Object.entries(reactiveRouteOptions.route.query).forEach(([name, value]) => {
+    _query.set(name, value)
+  })
   const reactiveData = reactive<T>({} as any)
   const defaultTransformToQuery = (value: any) => {
     return value
@@ -60,24 +62,25 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
       defaultTransformFromQuery
 
     // 取自于vueuse/router https://github.com/vueuse/vueuse/blob/main/packages/router/useRouteQuery/index.ts
-    const routeQueryRef = computed<any>({
+    const routeQueryRef = customRef<any>((track, trigger) => ({
       get() {
-        const data = reactiveRouteOptions.route.query[key]
-        if (Array.isArray(data)) return data.filter(Boolean)
+        track()
+        const data = _query.get(key)
         return data
       },
       set(v) {
+        const queue: Record<string, any> = {}
         queue[key] = v === item.defaultValue || v === null ? undefined : v
-
+        _query.set(key, v === item.defaultValue || v === null ? undefined : v)
+        trigger()
         nextTick(() => {
           reactiveRouteOptions.router.replace({
             ...reactiveRouteOptions.route,
             query: { ...reactiveRouteOptions.route.query, ...queue }
           })
-          nextTick(() => (queue = {}))
         })
       }
-    })
+    }))
     if (options?.immediate) {
       routeQueryRef.value = transformToQuery(item.defaultValue)
     }
