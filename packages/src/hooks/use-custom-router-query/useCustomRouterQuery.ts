@@ -28,7 +28,7 @@ type Param<T> = {
     preset?: PresetType
   }
 }
-
+const _cache = new WeakMap()
 export function useCustomRouterQuery<T extends Record<string, any>>(
   items: Param<T>,
   reactiveRouteOptions: {
@@ -39,7 +39,10 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
     immediate?: boolean
   }
 ) {
-  const _query = new Map<string, any>()
+  if (!_cache.has(reactiveRouteOptions.route))
+    _cache.set(reactiveRouteOptions.route, new Map())
+
+  const _query: Map<string, any> = _cache.get(reactiveRouteOptions.route)
   Object.entries(reactiveRouteOptions.route.query).forEach(([name, value]) => {
     _query.set(name, value)
   })
@@ -50,6 +53,7 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
   const defaultTransformFromQuery = (routerValue: string) => {
     return routerValue
   }
+  let isInit = false
   for (const key in items) {
     const item = items[key]
     const transformToQuery =
@@ -69,21 +73,24 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         return data
       },
       set(v) {
-        const queue: Record<string, any> = {}
-        queue[key] = v === item.defaultValue || v === null ? undefined : v
-        _query.set(key, v === item.defaultValue || v === null ? undefined : v)
+        let nextVal = v === null ? undefined : v
+        if (options?.immediate && !isInit) {
+          nextVal = v
+        }
+        _query.set(key, nextVal)
         trigger()
         nextTick(() => {
           reactiveRouteOptions.router.replace({
             ...reactiveRouteOptions.route,
-            query: { ...reactiveRouteOptions.route.query, ...queue }
+            query: {
+              ...reactiveRouteOptions.route.query,
+              ...Object.fromEntries(_query.entries())
+            }
           })
         })
       }
     }))
-    if (options?.immediate) {
-      routeQueryRef.value = transformToQuery(item.defaultValue)
-    }
+
     reactiveData[key as keyof typeof reactiveData] = computed({
       get: () => {
         if (routeQueryRef.value == null) return item.defaultValue
@@ -93,6 +100,13 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
         routeQueryRef.value = transformToQuery(setValue)
       }
     }) as any
+    if (options?.immediate) {
+      routeQueryRef.value = transformToQuery(
+        reactiveData[key as keyof typeof reactiveData]
+      )
+    }
   }
+  isInit = true
+
   return reactiveData
 }

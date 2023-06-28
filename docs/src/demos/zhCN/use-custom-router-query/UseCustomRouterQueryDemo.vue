@@ -67,6 +67,7 @@
     </n-space>
     <n-space :align="'center'">
       <n-button @click="handleClearQuery">重置路由并刷新</n-button>
+      <n-button @click="handleChange"> change</n-button>
     </n-space>
   </n-space>
 </template>
@@ -115,7 +116,7 @@ const reactiveData = useCustomRouterQuery<{
       preset: 'date'
     },
     searchValue: {
-      defaultValue: undefined
+      defaultValue: 'search'
     },
     isTrue: {
       defaultValue: false,
@@ -148,6 +149,11 @@ const reactiveData = useCustomRouterQuery<{
     immediate: immediate.value
   }
 )
+
+function handleChange() {
+  reactiveData.numValue = 3
+  reactiveData.searchValue = '111'
+}
 
 async function handleClearQuery() {
   location.href = location.pathname
