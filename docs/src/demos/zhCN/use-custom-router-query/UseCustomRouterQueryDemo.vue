@@ -68,6 +68,7 @@
     <n-space :align="'center'">
       <n-button @click="handleClearQuery">重置路由并刷新</n-button>
       <n-button @click="handleChange"> change</n-button>
+      <n-button @click="handlePush"> router push</n-button>
     </n-space>
   </n-space>
 </template>
@@ -94,7 +95,10 @@ const routerData = {
   router: useRouter(),
   route: useRoute()
 }
-
+const router = useRouter()
+function handlePush() {
+  router.push('/example/empty-table')
+}
 const reactiveData = useCustomRouterQuery<{
   numValue?: number
   dateRange?: number[]

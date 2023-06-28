@@ -1,4 +1,11 @@
-import { reactive, computed, nextTick, customRef } from 'vue'
+import {
+  reactive,
+  computed,
+  nextTick,
+  customRef,
+  getCurrentScope,
+  onScopeDispose
+} from 'vue'
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import {
   booleanPreset,
@@ -43,6 +50,11 @@ export function useCustomRouterQuery<T extends Record<string, any>>(
     _cache.set(reactiveRouteOptions.route, new Map())
 
   const _query: Map<string, any> = _cache.get(reactiveRouteOptions.route)
+  if (getCurrentScope()) {
+    onScopeDispose(() => {
+      _query.clear()
+    })
+  }
   Object.entries(reactiveRouteOptions.route.query).forEach(([name, value]) => {
     _query.set(name, value)
   })
