@@ -10,7 +10,7 @@ Protable for NaiveUI, easy to use query route sync.
 pnpm add naive-ui-protable-alpha -D
 ```
 
-[Document](http://nprotable.dev/)
+[Document](https://naive-pro-table.vercel.app/)
 
 ## TODO
 
